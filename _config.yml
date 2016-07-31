@@ -1,0 +1,9 @@
+baseurl: ""
+markdown: redcarpet
+redcarpet:
+    extensions: [tables]
+safe: false
+pygments: true
+excerpt_separator: "\n\n\n"
+paginate: 5
+sitemapurl: "http://whaozl.github.io"
