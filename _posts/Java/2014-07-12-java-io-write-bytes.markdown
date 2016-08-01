@@ -2,7 +2,7 @@
 layout: post
 title: OpenJDK源码阅读之Java I/O字节流输出
 category: Java
-tags: [JavaIO,OpenJDK,Java]
+tags: [JavaIO,OpenJDK]
 comments: true
 keywords: 
 description: 

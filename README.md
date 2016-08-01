@@ -1,3 +1,3 @@
-button属性修改在bootstrap.css里面
-button显示修改在-include/footer.html和base.js里面
-
+###注意事项
+1. category和tag的命名不能相同，否则在tag标签中点击无响应，因他们的链接是相同的
+2. 文章写法模板详见位置

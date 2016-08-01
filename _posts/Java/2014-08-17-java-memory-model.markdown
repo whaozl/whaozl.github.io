@@ -2,7 +2,7 @@
 layout: post
 title: 对Java内存模型的理解
 category: Java
-tags: Java
+tags: Java内存
 comments: true
 keywords: 
 description: 
