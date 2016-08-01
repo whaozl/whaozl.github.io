@@ -1,15 +1,12 @@
 ---
 layout: post
-title: 对 Java 内存模型的理解
+title: 对Java内存模型的理解
 category: Java
-tags: LaTeX
+tags: Java
 comments: true
 keywords: 
 description: 
 ---
-
-
-# 对 Java 内存模型的理解
 
 ## Java 内存模型
 

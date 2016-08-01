@@ -1,8 +1,8 @@
 ---
 layout: post
-title: OpenJDK 源码阅读之 Java 输入输出(I/O) 之 字节流输出
+title: OpenJDK源码阅读之Java I/O字节流输出
 category: Java
-tags: LaTeX
+tags: JavaIO
 comments: true
 keywords: 
 description: 
@@ -15,7 +15,7 @@ description:
 
 ### 字节流输出
 
-![java_io_write_bytes](/assets/blog-images/java_io_write_bytes.png)
+![java_io_write_bytes](/assets/Java/java_io_write_bytes.png)
 
 图1 Java 字节输出类
 

@@ -1,16 +1,12 @@
 ---
 layout: post
-title: OpenJDK 源码阅读之 Java 输入输出(I/O) 之 字节流输入
+title: OpenJDK源码阅读之Java I/O字节流输入
 category: Java
-tags: LaTeX
+tags: JavaIO
 comments: true
 keywords: 
 description: 
 ---
-
-# OpenJDK 源码阅读之 Java 输入输出(I/O) 之 字节流输入
-
-标签（空格分隔）： 源代码阅读 Java 封神之路
 
 Java 的输入输出总是给人一种很混乱的感觉，要想把这个问题搞清楚，必须对各种与输入输出相关的类之间的关系有所了解。只有你了解了他们之间的关系，知道设计这个类的目的是什么，才能更从容的使用他们。
 
@@ -36,7 +32,7 @@ Java 的输入输出，主要分为以下几个部分：
 ### 字节流输入
 
 
-![java_io_read_bytes](/assets/blog-images/java_io_read_bytes.png)
+![java_io_read_bytes](/assets/Java/java_io_read_bytes.png)
 
 图1 Java 字节输入类
 
