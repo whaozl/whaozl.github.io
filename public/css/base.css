@@ -7,7 +7,8 @@ body, html {
   margin: 0px;
   height: 100%;
   overflow: hidden; 
-  background-color: #303030;
+  background-color: #FFF;
+  font-family: 微软雅黑, Arial, Helvetica, sans-serif;
 }
 .row {
   height: 100%;
@@ -99,11 +100,11 @@ body, html {
   padding-right: 40px;
 */  
   padding: 0 5% 0 5%;
-  color: #656565;
+  color: #000;
   line-height: 1.42857143;
 }
 #content {
-  font-size: 18px;
+  font-size: 16px;
 }
 #content h2, h3 {
   line-height: 2;
