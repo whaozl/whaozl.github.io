@@ -25,7 +25,7 @@ favicon: /public/img/deer3.png
 # google analytics 设置
 ga:
   id: UA-54262064-1 
-  url: painterlin.com
+  url: whaozl.github.io
 
 # disqus 设置
 #disqus:
@@ -37,11 +37,6 @@ comments :
 
 # 主题设置，自动激活某个标签
 active: 读书
-
-# 首页除了最新文章外显示分类
-cates: 
-  - Optimization
-  - LaTeX
 
 # 中文本地化
 locals:
