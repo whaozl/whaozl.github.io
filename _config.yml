@@ -10,7 +10,7 @@ author:
   weibo: http://weibo.com/zhulinniao
   github: http://github.com/whaozl
   music: http://site.douban.com/whaozl
-  linkedin: www.linkedin.com/in/whaozl
+  linkedin: http://www.linkedin.com/in/whaozl
 
 # 站点信息
 title: 郝竹林的博客
@@ -28,8 +28,12 @@ ga:
   url: painterlin.com
 
 # disqus 设置
-disqus:
-  shortname: whaozl
+#disqus:
+#  shortname: whaozl
+comments :
+  provider : duoshuo
+  duoshuo :
+    short_name : whaozl
 
 # 主题设置，自动激活某个标签
 active: 读书
