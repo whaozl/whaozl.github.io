@@ -1,0 +1,1207 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.useso.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android, 消息推送, 服务器， 实时聊天" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.5.0" />
+
+
+
+
+
+
+<meta name="description" content="Androidpn 开源项目托管地址：http://sourceforge.net/projects/androidpn/
+Androidpn 开源项目自身描述：This is an open source project to provide push notification support for Android, a xmpp based notification server and a">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Androidpn 消息推送总结">
+<meta property="og:url" content="http://www.ezlippi.com/blog/2014/10/androidDP-project.html">
+<meta property="og:site_name" content="Lippi-浮生志">
+<meta property="og:description" content="Androidpn 开源项目托管地址：http://sourceforge.net/projects/androidpn/
+Androidpn 开源项目自身描述：This is an open source project to provide push notification support for Android, a xmpp based notification server and a">
+<meta property="og:updated_time" content="2016-02-29T12:35:27.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Androidpn 消息推送总结">
+<meta name="twitter:description" content="Androidpn 开源项目托管地址：http://sourceforge.net/projects/androidpn/
+Androidpn 开源项目自身描述：This is an open source project to provide push notification support for Android, a xmpp based notification server and a">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> Androidpn 消息推送总结 | Lippi-浮生志 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?340874ba9357cbe81570aa4ac1185941";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner">
+<script>
+(function(){
+    var bp = document.createElement('script');
+    bp.src = '//push.zhanzhang.baidu.com/push.js';
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+            
+<div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Lippi-浮生志</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu menu-left">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+      
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'fLM9qfxyerC6njvM7usy','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Androidpn 消息推送总结
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2014-10-31T00:00:00+08:00" content="2014-10-31">
+              2014-10-31
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/web/" itemprop="url" rel="index">
+                    <span itemprop="name">web</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/blog/2014/10/androidDP-project.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="/blog/2014/10/androidDP-project.html" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+        </div>
+      </header>
+    
+
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Androidpn 开源项目托管地址：<a href="http://sourceforge.net/projects/androidpn/" target="_blank" rel="external">http://sourceforge.net/projects/androidpn/</a></p>
+<p>Androidpn 开源项目自身描述：This is an open source project to provide push notification support for Android, a xmpp based notification server and a client tool kit.<br><a id="more"></a></p>
+<h1 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h1><p>在程序的入口 DemoAppActivity 中设置通知的 icon 并开启消息接收服务，代码如下：</p>
+<pre><code>Number：1-1 
+ServiceManager serviceManager = new ServiceManager(this);
+serviceManager.setNotificationIcon(R.drawable.notification);
+serviceManager.startService();
+</code></pre><p>在上面的代码中可以看到程序对 ServiceManager 进行了初始化操作，在 ServiceManager 类的构造函数中我们可以看到程序对传递过来的 context 进行了判断，如果这个 context 是一个 Activity 实例，紧接着会获取对应的包名和类名。之后再去加载 res/raw/androidpn.properties 配置文件中的参数信息，并将读取到的信息和之前从 context 中获取的包名和类名一起存入首选项中。</p>
+<pre><code>Number：2-1 
+public ServiceManager(Context context) {
+this.context = context;
+
+if (context instanceof Activity) {
+Activity callbackActivity = (Activity) context;
+callbackActivityPackageName = callbackActivity.getPackageName();
+callbackActivityClassName = callbackActivity.getClass().getName();
+}
+
+props = loadProperties();
+apiKey = props.getProperty(&quot;apiKey&quot;, &quot;&quot;);
+xmppHost = props.getProperty(&quot;xmppHost&quot;, &quot;127.0.0.1&quot;);
+xmppPort = props.getProperty(&quot;xmppPort&quot;, &quot;5222&quot;);
+
+sharedPrefs = context.getSharedPreferences(Constants.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE);
+Editor editor = sharedPrefs.edit();
+editor.putString(Constants.API_KEY, apiKey);
+editor.putString(Constants.VERSION, version);
+editor.putString(Constants.XMPP_HOST, xmppHost);
+editor.putInt(Constants.XMPP_PORT, Integer.parseInt(xmppPort));
+editor.putString(Constants.CALLBACK_ACTIVITY_PACKAGE_NAME, callbackActivityPackageName);
+editor.putString(Constants.CALLBACK_ACTIVITY_CLASS_NAME, callbackActivityClassName);
+editor.commit();
+}
+</code></pre><p>完成上述操作之后，紧接着调用 <code>ServiceManager.startService()</code> 方法来开启服务，实际上 ServiceManager 只是一个普通的类，方法 ServiceManager.startService() 只是开启一个子线程来开启真正的服务类 NotificationService ，许多人认为开一个线程不停的去开启服务会不会消耗相当一部分资源？答案是不会的，因为服务的生命周期决定了onCreate() 方法在服务被创建时调用，该方法只会被调用一次，无论调用多少次 startService() 方法，服务也只被创建一次，细心的读者会发现 Androidpn 的作者在 NotificationService 类的 <code>onStart(Intent intent, int startId)</code> 方法中没有做任何事，而是在onCreate() 方法中完成了诸多操作。</p>
+<pre><code>Number：3-1
+public void startService() {
+Thread serviceThread = new Thread(new Runnable() {
+public void run() {
+Intent intent = NotificationService.getIntent();
+context.startService(intent);
+}
+});
+serviceThread.start();
+}
+</code></pre><p>下面我们来看 NotificationService 类的onCreate() 方法中都完成什么操作？</p>
+<pre><code>Number：4-1
+public void onCreate() {
+telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+sharedPrefs = getSharedPreferences(Constants.SHARED_PREFERENCE_NAME, Context.MODE_PRIVATE);
+
+deviceId = telephonyManager.getDeviceId();
+Editor editor = sharedPrefs.edit();
+editor.putString(Constants.DEVICE_ID, deviceId);
+editor.commit();
+
+if (deviceId == null || deviceId.trim().length() == 0 || deviceId.matches(&quot;0+&quot;)) {
+if (sharedPrefs.contains(&quot;EMULATOR_DEVICE_ID&quot;)) {
+deviceId = sharedPrefs.getString(Constants.EMULATOR_DEVICE_ID, &quot;&quot;);
+} else {
+deviceId = (new StringBuilder(&quot;EMU&quot;)).append((new Random(System.currentTimeMillis())).nextLong()).toString();
+editor.putString(Constants.EMULATOR_DEVICE_ID, deviceId);
+editor.commit();
+}
+}
+xmppManager = new XmppManager(this);
+taskSubmitter.submit(new Runnable() {
+public void run() {
+NotificationService.this.start();
+}
+});
+}
+</code></pre><p>在上面的方法中作者获取了设备号并将设备号存入了首选项中，同时还对在模拟器下运行的情况做了处理，这些操作是次要的。真正的核心的操作是 taskSubmitter 里调用了NotificationService.this.start()，这里的 NotificationService.this 完成了 NotificationService 的实例化，我们可以看到 NotificationService 类的构造方法中完成了 NotificationReceiver、ConnectivityReceiver、PhoneStateChangeListener、Executors、TaskSubmitter、TaskTracker 等类的实例化。</p>
+<pre><code>Number：5-1
+public NotificationService() {
+notificationReceiver = new NotificationReceiver();
+connectivityReceiver = new ConnectivityReceiver(this);
+phoneStateListener = new PhoneStateChangeListener(this);
+executorService = Executors.newSingleThreadExecutor();
+taskSubmitter = new TaskSubmitter(this);
+taskTracker = new TaskTracker(this);
+}
+</code></pre><p>NotificationService 的实例化完成后调用的start() 方法中注册了一个广播接收者 NotificationReceiver 用来处理从服务器推送过来的消息；同时还注册了一个广播接收者来监听网络连接状况，如果有网络连接，则执行 xmppManager.connect()，如果没有网络连接，则执行 xmppManager.disconnect()。但是在start() 方法中最终还是会执行 xmppManager.connect()。</p>
+<pre><code>Number：6-1
+private void start() {
+registerNotificationReceiver();
+registerConnectivityReceiver();
+xmppManager.connect();
+}
+</code></pre><p>再来看看 xmppManager.connect() 方法中都做了些什么？程序在这个方法中提交了一个登录任务：submitLoginTask()，在提交的登录任务中又提交了一个注册任务：submitRegisterTask()，同时将新建的登录任务添加到任务集合中并交由 TaskTracker 来对添加的任务进行监视，此时 TaskTracker 的计数加一。</p>
+<pre><code>Number：7-1
+public void connect() {
+ submitLoginTask();
+}
+
+Number：7-2
+private void submitLoginTask() {
+ submitRegisterTask();
+ addTask(new LoginTask());
+}
+</code></pre><p>下面继续来看新添加的登录任务 new LoginTask() 具体做了什么？看 Number：8-2 代码，程序在登录任务线程的 run() 方法中首先去判断当前客户端是否已经经过身份验证，验证身份的代码请看 Number：8-1 。</p>
+<p>如果没有通过身份验证：xmppManager 会获取当前连并接携带着从首选项中读取的 username 和password 执行登录操作，登录成功后 xmppManager 会在登录成功的连接上添加连接监听器<code>PersistentConnectionListener</code>，这个监听器可以监听连接关闭和和连接错误，并在连接错误的情况下执行重连操作。接下来会在当前连接上添加包过滤器 PacketFilter packetFilter 和包监听器 <code>NotificationPacketListener packetListener</code>，包过滤器用来校验从服务器发送过来的数据包是否符合 NotificationIQ 格式，打开 NotificationIQ 类我们可以看到这个类中定义了数据包中需要封装的信息：id、apiKey、title、message、uri。包监听器则是用来真正处理从服务器发过来的数据。</p>
+<p>请看 Number：8-3 代码，在 NotificationPacketListener 类的 <code>processPacket(Packet packet)</code> 方法中程序首先会判断获得的数据包是否是 NotificationIQ 的一个实例，如果是程序会调用 NotificationIQ 的<code>getChildElementXML()</code> 方法将数据包中携带的信息拼装为一个字符串进行判断动作是否为发送广播，如果动作为发送广播，程序会将数据包的信息填充到 Intent 中并发送广播，注意这个广播中填充到 Intent 的动作名称 Constants.ACTION_SHOW_NOTIFICATION 为显示广播，这个动作被另一个广播接收者 NotificationReceiver (该广播接收者在之前的<code>NotificationService 的start()</code> 方法中已经注册)所监听。</p>
+<p>另外需要注意的是，如果客户端在登录过程中出现INVALID_CREDENTIALS_ERROR_CODE = “401” 错误，在 Number：8-2 的代码中我们可以看到程序执行了 <code>xmppManager.reregisterAccount()</code> 操作和 <code>xmppManager.startReconnectionThread()</code>操作。在 <code>xmppManager.reregisterAccount()</code> 操作中程序会删除保存在首选项中的 username 和password 并重新提交登录任务 submitLoginTask()，在这个登录任务中依次再嵌套执行注册、连接任务。这些任务执行完毕之后程序继续调用 xmppManager.startReconnectionThread() 执行重连操作。如果客户端在登录过程中出现不可预知的错误，在 Number：8-2 的代码中我们可以看到程序执直接调用 <code>xmppManager.startReconnectionThread()</code> 来执行重连操作。</p>
+<p>如果已经通过身份验证：意味着客户端已经登录成功，程序直接调用 xmppManager.runTask() 方法来执行之前添加到任务集合中的任务 new LoginTask()，同时 TaskTracker 的计数减一。</p>
+<p>Number：8-1<br>private boolean isAuthenticated() {<br>return connection != null &amp;&amp; connection.isConnected() &amp;&amp; connection.isAuthenticated();<br>}</p>
+<pre><code>Number：8-2
+private class LoginTask implements Runnable {
+final XmppManager xmppManager;
+private LoginTask() {
+this.xmppManager = XmppManager.this;
+}
+public void run() {
+if (!xmppManager.isAuthenticated()) {
+Log.d(LOGTAG, &quot;username=&quot; + username);
+Log.d(LOGTAG, &quot;password=&quot; + password);
+try {
+xmppManager.getConnection().login(xmppManager.getUsername(), xmppManager.getPassword(), XMPP_RESOURCE_NAME);
+Log.d(LOGTAG, &quot;Loggedn in successfully&quot;);
+if (xmppManager.getConnectionListener() != null) {
+xmppManager.getConnection().addConnectionListener(xmppManager.getConnectionListener());
+}
+PacketFilter packetFilter = new PacketTypeFilter(NotificationIQ.class);
+PacketListener packetListener = xmppManager.getNotificationPacketListener();
+connection.addPacketListener(packetListener, packetFilter);
+xmppManager.runTask();
+} catch (XMPPException e) {
+Log.e(LOGTAG, &quot;LoginTask.run()... xmpp error&quot;);
+Log.e(LOGTAG, &quot;Failed to login to xmpp server. Caused by: &quot; + e.getMessage());
+String INVALID_CREDENTIALS_ERROR_CODE = &quot;401&quot;;
+String errorMessage = e.getMessage();
+if (errorMessage != null &amp;&amp; errorMessage.contains(INVALID_CREDENTIALS_ERROR_CODE)) {
+xmppManager.reregisterAccount();
+return;
+}
+xmppManager.startReconnectionThread();
+} catch (Exception e) {
+Log.e(LOGTAG, &quot;LoginTask.run()... other error&quot;);
+Log.e(LOGTAG, &quot;Failed to login to xmpp server. Caused by: &quot; + e.getMessage());
+xmppManager.startReconnectionThread();
+}
+} else {
+Log.i(LOGTAG, &quot;Logged in already&quot;);
+xmppManager.runTask();
+}
+}
+}
+
+
+Number：8-3
+public class NotificationPacketListener implements PacketListener {
+
+private static final String LOGTAG = LogUtil.makeLogTag(NotificationPacketListener.class);
+
+private final XmppManager xmppManager;
+
+public NotificationPacketListener(XmppManager xmppManager) {
+this.xmppManager = xmppManager;
+}
+
+public void processPacket(Packet packet) {
+Log.d(LOGTAG, &quot;NotificationPacketListener.processPacket()...&quot;);
+Log.d(LOGTAG, &quot;packet.toXML()=&quot; + packet.toXML());
+
+if (packet instanceof NotificationIQ) {
+NotificationIQ notification = (NotificationIQ) packet;
+
+if (notification.getChildElementXML().contains(&quot;androidpn:iq:notification&quot;)) {
+String notificationId = notification.getId();
+String notificationApiKey = notification.getApiKey();
+String notificationTitle = notification.getTitle();
+String notificationMessage = notification.getMessage();
+String notificationUri = notification.getUri();
+
+Intent intent = new Intent(Constants.ACTION_SHOW_NOTIFICATION);
+intent.putExtra(Constants.NOTIFICATION_ID, notificationId);
+intent.putExtra(Constants.NOTIFICATION_API_KEY, notificationApiKey);
+intent.putExtra(Constants.NOTIFICATION_TITLE, notificationTitle);
+intent.putExtra(Constants.NOTIFICATION_MESSAGE, notificationMessage);
+intent.putExtra(Constants.NOTIFICATION_URI, notificationUri);
+
+xmppManager.getContext().sendBroadcast(intent);
+}
+}
+}
+}
+
+
+Number：8-4
+public void reregisterAccount() {
+removeAccount();
+submitLoginTask();
+runTask();
+}
+</code></pre><p>NotificationReceiver 在接收到NotificationPacketListener 中发出的广播后，先判断Intent 中携带的动作和自己所收听的动作是否一致，如果一致，则继续从Intent 中取出Intent 所携带的信息并调用 Notifier 的<code>notify(String notificationId, String apiKey, String title, String message, String uri)</code> 来发送通知。</p>
+<pre><code>Number：9-1
+public final class NotificationReceiver extends BroadcastReceiver {
+
+private static final String LOGTAG = LogUtil.makeLogTag(NotificationReceiver.class);
+
+public NotificationReceiver() {
+}
+
+public void onReceive(Context context, Intent intent) {
+Log.d(LOGTAG, &quot;NotificationReceiver.onReceive()...&quot;);
+String action = intent.getAction();
+Log.d(LOGTAG, &quot;action=&quot; + action);
+
+if (Constants.ACTION_SHOW_NOTIFICATION.equals(action)) {
+String notificationId = intent.getStringExtra(Constants.NOTIFICATION_ID);
+String notificationApiKey = intent.getStringExtra(Constants.NOTIFICATION_API_KEY);
+String notificationTitle = intent.getStringExtra(Constants.NOTIFICATION_TITLE);
+String notificationMessage = intent.getStringExtra(Constants.NOTIFICATION_MESSAGE);
+String notificationUri = intent.getStringExtra(Constants.NOTIFICATION_URI);
+
+Notifier notifier = new Notifier(context);
+notifier.notify(notificationId, notificationApiKey, notificationTitle, notificationMessage, notificationUri);
+}
+}
+}
+</code></pre><p>Notifier 在发送通知之前会先去首选项中读取用户的配置信息，如果配置信息中<code>Constants.SETTINGS_NOTIFICATION_ENABLED</code> 的值为 true，然后开始组装通知并为通知进行参数配置，这些操作完成后再调用 NotificationManager 将组装好的通知发送出去。至此，在客户端已经注册的前提下，执行的登录、接收服务器数据包、发送广播、发送通知的流程就结束了，添加在当前连接上的NotificationPacketListener 会一直监听从服务器发送过来的数据包并重复执行数据包解析、发送广播、发送通知的操作。</p>
+<p>但是需要注意的是从代码 Number：7-1 至代码 Number：9-1 的流程是以客户端已经完成注册为前提的；如果客户端是第一次执行消息推送的服务，显然不会直接进入到登录的逻辑中来，让我们继续跳到 Number：7-2 中的岔路口，程序在提交登录任务的内部嵌套着提交了一个注册任务 submitRegisterTask()，继续来看这个注册任务做了什么操作。在这个注册任务中继续将新建的注册任务添加到任务集合中并交由 TaskTracker 来对添加的任务进行监视，此时 TaskTracker 的计数加一；与此同时内嵌提交了一个连接任务<code>submitConnectTask()</code>。</p>
+<pre><code>Number：10-1
+private void submitRegisterTask() {
+submitConnectTask();
+addTask(new RegisterTask());
+}
+</code></pre><p>先来看登录任务中做了什么操作？参看代码 Number：11-1。</p>
+<p>如果没有注册：则使用UUID生成2个随机数作为 username 和 password，同时实例化 Registration，将创建的包过滤器和包监听器添加到当前连接上，然后使用 Registration 实例将生成的 username 和 password 作为属性添加到 Registration 实例上，再由当前连接调用<code>connection.sendPacket(registration)</code> 向服务器发送数据包执行注册操作。创建的包监听器会监听并处理服务器会送的数据包，PacketListener 在接收到服务器会送的数据包后，同样会判断数据包的格式是否符合包过滤器中定义的格式，只有格式匹配的情况下进行后续处理。在格式匹配的情况下，程序继续进行判断：如果服务器返回信息的类型是 <code>IQ.Type.ERROR</code> 则进行报错处理；如果服务器返回信息的类型是 <code>IQ.Type.RESULT</code>证明在服务器注册成功，这时程序会将 username 和 password 存储到首选项中，之后程序直接调用 <code>xmppManager.runTask()</code>方法来执行之前添加到任务集合中的任务 <code>new LoginTask()</code>，同时 TaskTracker 的计数减一。</p>
+<p>如果已经注册：意味着首选项中已经有了配置信息，程序直接调用 <code>xmppManager.runTask()</code>方法来执行之前添加到任务集合中的任务 <code>new LoginTask()</code>，同时 TaskTracker 的计数减一。</p>
+<pre><code>Number：11-1
+private class RegisterTask implements Runnable {
+
+final XmppManager xmppManager;
+private RegisterTask() {
+    xmppManager = XmppManager.this;
+}
+
+public void run() {
+    if (!xmppManager.isRegistered()) {
+        final String newUsername = newRandomUUID();
+        final String newPassword = newRandomUUID();
+
+        Registration registration = new Registration();
+        PacketFilter packetFilter = new AndFilter(new PacketIDFilter(registration.getPacketID()), new PacketTypeFilter(IQ.class));
+
+        PacketListener packetListener = new PacketListener() {
+
+            public void processPacket(Packet packet) {
+                Log.d(&quot;RegisterTask.PacketListener&quot;, &quot;processPacket().....&quot;);
+                Log.d(&quot;RegisterTask.PacketListener&quot;, &quot;packet=&quot; + packet.toXML());
+                if (packet instanceof IQ) {
+                    IQ response = (IQ) packet;
+                    if (response.getType() == IQ.Type.ERROR) {
+                        if (!response.getError().toString().contains(&quot;409&quot;)) {
+                            Log.e(LOGTAG, &quot;Unknown error while registering XMPP account! &quot; + response.getError().getCondition());
+                        }
+                    } else if (response.getType() == IQ.Type.RESULT) {
+                        xmppManager.setUsername(newUsername);
+                        xmppManager.setPassword(newPassword);
+                        Log.d(LOGTAG, &quot;username=&quot; + newUsername);
+                        Log.d(LOGTAG, &quot;password=&quot; + newPassword);
+                        Editor editor = sharedPrefs.edit();
+                        editor.putString(Constants.XMPP_USERNAME, newUsername);
+                        editor.putString(Constants.XMPP_PASSWORD, newPassword);
+                        editor.commit();
+                        Log.i(LOGTAG, &quot;Account registered successfully&quot;);
+                        xmppManager.runTask();
+                    }
+                }
+            }
+        };
+        connection.addPacketListener(packetListener, packetFilter);
+        registration.setType(IQ.Type.SET);
+        registration.addAttribute(&quot;username&quot;, newUsername);
+        registration.addAttribute(&quot;password&quot;, newPassword);
+        connection.sendPacket(registration);
+    } else {
+        Log.i(LOGTAG, &quot;Account registered already&quot;);
+        xmppManager.runTask();
+    }
+}
+</code></pre><p>}</p>
+<p>至此，在客户端已经连接到服务器的前提下，执行的注册、登录、接收服务器数据包、发送广播、发送通知的流程就结束了，添加在当前连接上的 <code>NotificationPacketListener</code> 会一直监听从服务器发送过来的数据包并重复执行数据包解析、发送广播、发送通知的操作。</p>
+<p>同样需要注意的是从代码 Number：10-1 至代码 Number：11-1 的流程是以客户端已经连接到服务器为前提的；如果客户端是第一次执行消息推送的服务，显然也不会直接进入到注册的逻辑中来，让我们继续跳到 Number：10-1 中的岔路口，程序在提交注册任务的内部嵌套着提交了一个连接任务 <code>submitConnectTask()</code>，继续来看这个连接任务做了什么操作。在这个连接任务中程序直接将新建的连接任务添加到任务集合中并交由 TaskTracker 来对添加的任务进行监视，此时 TaskTracker 的计数加一。</p>
+<pre><code>Number：12-1
+private void submitConnectTask() {
+addTask(new ConnectTask());
+}
+</code></pre><p>继续来看连接任务中做了什么操作？参看代码 Number：13-1。</p>
+<p>如果没有连接到服务器：程序会从首选项中读取 xmppHost 和 xmppPort 并使用 XMPPConnection 通过配置信息实例化一个连接，然后再由该连接执行连接操作。连接成功后，程序调用<code>xmppManager.runTask()</code>方法来执行之前添加到任务集合中的任务 <code>new RegisterTask()</code>，同时 TaskTracker 的计数减一。</p>
+<p>如果已经连接到服务器：程序直接调用<code>xmppManager.runTask()</code> 方法来执行之前添加到任务集合中的任务 new RegisterTask()，同时 TaskTracker 的计数减一。</p>
+<pre><code>Number：13-1
+private class ConnectTask implements Runnable {
+
+final XmppManager xmppManager;
+
+private ConnectTask() {
+    this.xmppManager = XmppManager.this;
+}
+
+public void run() {
+    if (!xmppManager.isConnected()) {
+        // Create the configuration for this new connection
+        ConnectionConfiguration connConfig = new ConnectionConfiguration(xmppHost, xmppPort);
+        connConfig.setSecurityMode(SecurityMode.required);
+        connConfig.setSASLAuthenticationEnabled(false);
+        connConfig.setCompressionEnabled(false);
+
+        XMPPConnection connection = new XMPPConnection(connConfig);
+        xmppManager.setConnection(connection);
+
+        try {
+            // Connect to the server
+            connection.connect();
+            Log.i(LOGTAG, &quot;XMPP connected successfully&quot;);
+            // packet provider
+            ProviderManager.getInstance().addIQProvider(&quot;notification&quot;, &quot;androidpn:iq:notification&quot;, new NotificationIQProvider());
+        } catch (XMPPException e) {
+            Log.e(LOGTAG, &quot;XMPP connection failed&quot;, e);
+        }
+        xmppManager.runTask();
+    } else {
+        Log.i(LOGTAG, &quot;XMPP connected already&quot;);
+        xmppManager.runTask();
+    }
+}
+</code></pre><p>}</p>
+<p>至此，在客户端执行的连接、注册、登录、接收服务器数据包、发送广播、发送通知的流程就结束了，添加在当前连接上的 <code>NotificationPacketListener</code>会一直监听从服务器发送过来的数据包并重复执行数据包解析、发送广播、发送通知的操作。</p>
+<hr>
+<h2 id="二、后续问题"><a href="#二、后续问题" class="headerlink" title="二、后续问题"></a>二、后续问题</h2><p>▐ 关于服务器重启客户端自动重连服务器的问题？</p>
+<p>▐ 在 XmppManager 的 <code>addTask(Runnable runnable)</code> 方法中添加 <code>runTask()</code>方法即可解决。</p>
+<pre><code>private void addTask(Runnable runnable) {
+taskTracker.increase();
+synchronized (taskList) {
+    if (taskList.isEmpty() &amp;&amp; !running) {
+        running = true;
+        futureTask = taskSubmitter.submit(runnable);
+        if (futureTask == null) {
+            taskTracker.decrease();
+        }
+    } else {
+        /**
+         * runTask(); 解决服务器端重启后,客户端不能成功连接  Androidpn 服务器
+         */
+        runTask();
+
+        taskList.add(runnable);
+    }
+}
+</code></pre><p>}</p>
+<p>▐ 关于使用设备ID或 MAC替换源码中的 UUID作为 username 和 password 带来的问题？</p>
+<p>如果把客户端随机生成的UUID代码，替换为设备的ID或者MAC作为用户名，服务器端会出现重复插入的错误。</p>
+<p>把客户端的数据清除(或卸载后重新安装)，那么 SharedPreferences 里的数据也会被清除，然而服务器端又有我们手机的设备 ID，这时客户端启动程序从首选项中读取不到 username 和 password 会重新拿着相同的设备 ID 提交给服务器进行注册，这时服务器端就会出现重复插入的问题。</p>
+<p>▐ 在服务器端保存用户信息的时候，检查数据库中是否存在该用户。</p>
+<p>▐ Android 消息推送的其他途径</p>
+<p>▐ 极光推送</p>
+<p>网站参考地址 : <a href="http://www.jpush.cn/" target="_blank" rel="external">http://www.jpush.cn/</a></p>
+<p>▐ Google Cloud Messaging for Android</p>
+<p>网站参考地址 : <a href="http://developer.android.com/google/gcm/index.html" target="_blank" rel="external">http://developer.android.com/google/gcm/index.html</a></p>
+<p>▐ MQTT 协议推送</p>
+<p>客户端下载地址 : <a href="https://github.com/tokudu/AndroidPushNotificationsDemo" target="_blank" rel="external">https://github.com/tokudu/AndroidPushNotificationsDemo</a></p>
+<p>服务器下载地址 : <a href="https://github.com/tokudu/PhpMQTTClient" target="_blank" rel="external">https://github.com/tokudu/PhpMQTTClient</a></p>
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/android/" rel="tag">#android</a>
+          
+            <a href="/tags/消息推送/" rel="tag">#消息推送</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/2014/10/androidDP-introduction.html" rel="next" title="AndroidPN消息推送">
+                <i class="fa fa-chevron-left"></i> AndroidPN消息推送
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/2014/10/xmpp-analise.html" rel="prev" title="XMPP协议分析-具体分析">
+                XMPP协议分析-具体分析 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="/blog/2014/10/androidDP-project.html"
+     data-title="Androidpn 消息推送总结"
+     data-content=""
+     data-url="http://www.ezlippi.com/blog/2014/10/androidDP-project.html">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  <p>热评文章</p>
+  <div class="ds-top-threads" data-range="weekly" data-num-items="4"></div>
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="/blog/2014/10/androidDP-project.html"
+           data-title="Androidpn 消息推送总结" data-url="http://www.ezlippi.com/blog/2014/10/androidDP-project.html">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="EZLippi" />
+          <p class="site-author-name" itemprop="name">EZLippi</p>
+          <p class="site-description motion-element" itemprop="description">Easy Lippi</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">65</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+          
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">72</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/EZLippi" target="_blank">
+                  
+                    <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/ouyanglip" target="_blank">
+                  
+                    <i class="fa fa-weibo"></i> weibo
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/lippi-ouyang" target="_blank">
+                  
+                    <i class="fa fa-weibo"></i> zhihu
+                  
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+            <p class="site-author-name">友情链接</p>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.woaitqs.cc/" target="_blank">Qisen Tang</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://szhshp.org" target="_blank">szhshp的博客</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://python.zhangwei.website" target="_blank">JuniorCoder</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/lippi-ouyang" target="_blank">友链出租</a>
+              </span>
+            
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#源码分析"><span class="nav-number">1.</span> <span class="nav-text">源码分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#二、后续问题"><span class="nav-number">1.1.</span> <span class="nav-text">二、后续问题</span></a></li></ol></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2014 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">EZLippi</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+   托管在 -
+  <a class="theme-link" href="https://github.com/EZLippi/EZLippi.github.io">
+    Github
+  </a>
+
+</div>
+<div class="theme-info">
+<span id="busuanzi_container_site_pv">
+    &nbsp; | &nbsp;本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+</div>
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  
+
+
+  
+
+
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=0.5.0"></script>
+
+
+
+  
+  
+
+  
+  
+<script type="text/javascript" src="/js/src/scrollspy.js?v=0.5.0"></script>
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = NexT.utils.escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    NexT.motion.middleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+
+      if (CONFIG.sidebar.display === 'post' || CONFIG.sidebar.display === 'always') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          NexT.utils.displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=0.5.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"ezlippi"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+
+  
+  
+
+
+</body>
+</html>

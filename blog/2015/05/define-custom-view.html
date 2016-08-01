@@ -1,0 +1,1116 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.useso.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="android, view," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.5.0" />
+
+
+
+
+
+
+<meta name="description" content="Android的UI元素都是基于View(屏幕中单个元素)和ViewGroup(元素的集合),Android有许多自带的组件和布局，比如Button、TextView、RelativeLayout。在app开发过程中我们需要自定义视图组件来满足我们的需求。通过继承自View或者View的子类，覆写onDraw或者onTouchEvent等方法来覆盖视图的行为。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android自定义视图教程">
+<meta property="og:url" content="http://www.ezlippi.com/blog/2015/05/define-custom-view.html">
+<meta property="og:site_name" content="Lippi-浮生志">
+<meta property="og:description" content="Android的UI元素都是基于View(屏幕中单个元素)和ViewGroup(元素的集合),Android有许多自带的组件和布局，比如Button、TextView、RelativeLayout。在app开发过程中我们需要自定义视图组件来满足我们的需求。通过继承自View或者View的子类，覆写onDraw或者onTouchEvent等方法来覆盖视图的行为。">
+<meta property="og:image" content="http://www.ezlippi.com/images/dag48.png">
+<meta property="og:image" content="http://www.ezlippi.com/images/dag49.png">
+<meta property="og:image" content="http://www.ezlippi.com/images/dag50.png">
+<meta property="og:updated_time" content="2016-03-18T10:11:51.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android自定义视图教程">
+<meta name="twitter:description" content="Android的UI元素都是基于View(屏幕中单个元素)和ViewGroup(元素的集合),Android有许多自带的组件和布局，比如Button、TextView、RelativeLayout。在app开发过程中我们需要自定义视图组件来满足我们的需求。通过继承自View或者View的子类，覆写onDraw或者onTouchEvent等方法来覆盖视图的行为。">
+<meta name="twitter:image" content="http://www.ezlippi.com/images/dag48.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> Android自定义视图教程 | Lippi-浮生志 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?340874ba9357cbe81570aa4ac1185941";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner">
+<script>
+(function(){
+    var bp = document.createElement('script');
+    bp.src = '//push.zhanzhang.baidu.com/push.js';
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+            
+<div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Lippi-浮生志</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu menu-left">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+      
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'fLM9qfxyerC6njvM7usy','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Android自定义视图教程
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2015-05-17T00:00:00+08:00" content="2015-05-17">
+              2015-05-17
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/android/" itemprop="url" rel="index">
+                    <span itemprop="name">android</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/blog/2015/05/define-custom-view.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="/blog/2015/05/define-custom-view.html" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+        </div>
+      </header>
+    
+
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Android的UI元素都是基于View(屏幕中单个元素)和ViewGroup(元素的集合),Android有许多自带的组件和布局，比如Button、TextView、RelativeLayout。在app开发过程中我们需要自定义视图组件来满足我们的需求。通过继承自View或者View的子类，覆写onDraw或者onTouchEvent等方法来覆盖视图的行为。<br><a id="more"></a></p>
+<h2 id="创建完全自定义的组件"><a href="#创建完全自定义的组件" class="headerlink" title="创建完全自定义的组件"></a>创建完全自定义的组件</h2><p>创建自定义的组件主要围绕着以下五个方面：</p>
+<ul>
+<li>绘图(Drawing)： 控制视图的渲染，通常通过覆写onDraw方法来实现</li>
+<li>交互(Interaction)： 控制用户和视图的交互方式，比如OnTouchEvent,gestures</li>
+<li>尺寸(Measurement)： 控制视图内容的维度，通过覆写onMeasure方法</li>
+<li>属性(Attributes)： 在XML中定义视图的属性，使用TypedArray来获取属性值</li>
+<li>持久化(Persistence)： 配置发生改变时保存和恢复状态，通过onSaveInstanceState和onRestoreInstanceState</li>
+</ul>
+<p>举个栗子，假设我们想创建一个图形允许用户点击的时候改变形状（方形、圆形、三角形）。如下所示：</p>
+<p><img src="/images/dag48.png" alt=""></p>
+<h3 id="定义视图类"><a href="#定义视图类" class="headerlink" title="定义视图类"></a>定义视图类</h3><p>我们创建一个ShapeSelectorView继承自View，实现必要的构造器，如下所示：</p>
+<pre><code>public class ShapeSelectorView extends View {
+  // We must provide a constructor that takes a Context and an AttributeSet.
+  // This constructor allows the UI to create and edit an instance of your view.
+  public ShapeSelectorView(Context context, AttributeSet attrs) {
+    super(context, attrs);
+    }
+}
+</code></pre><h3 id="添加视图到布局中"><a href="#添加视图到布局中" class="headerlink" title="添加视图到布局中"></a>添加视图到布局中</h3><pre><code>&lt;RelativeLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+    xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;
+    xmlns:tools=&quot;http://schemas.android.com/tools&quot;
+    android:layout_width=&quot;match_parent&quot;
+    android:layout_height=&quot;match_parent&quot; &gt;
+    &lt;com.codepath.example.customviewdemo.ShapeSelectorView
+    android:id=&quot;@+id/shapeSelector&quot;
+    android:layout_width=&quot;match_parent&quot;
+    android:layout_height=&quot;match_parent&quot;
+    android:layout_alignParentRight=&quot;true&quot;
+    android:layout_alignParentTop=&quot;true&quot;
+    android:layout_alignParentLeft=&quot;true&quot; /&gt;
+&lt;/RelativeLayout&gt;
+</code></pre><p>接下来我们定义一个命名空间app,这个命名空间允许Android自动解析而不需要指定具体的包名。</p>
+<h3 id="自定义属性"><a href="#自定义属性" class="headerlink" title="自定义属性"></a>自定义属性</h3><p>视图可以通过XML来配置属性和样式，你需要想清楚要添加那些自定义的属性，比如我们想让用户可以选择形状的颜色、是否显示形状的名称，比如我们想让视图可以像下面一样配置：</p>
+<pre><code>&lt;com.codepath.example.customviewdemo.ShapeSelectorView
+    app:shapeColor=&quot;#7f0000&quot;
+    app:displayShapeName=&quot;true&quot;
+    android:id=&quot;@+id/shapeSelector&quot;
+    ... /&gt;
+</code></pre><p>为了能够定义shapeColor和displayShapeName,我们需要在res/values/attrs.xml中配置：</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;resources&gt;
+   &lt;declare-styleable name=&quot;ShapeSelectorView&quot;&gt;
+       &lt;attr name=&quot;shapeColor&quot; format=&quot;color&quot; /&gt;
+       &lt;attr name=&quot;displayShapeName&quot; format=&quot;boolean&quot; /&gt;
+   &lt;/declare-styleable&gt;
+&lt;/resources&gt;
+</code></pre><p>对于每个你想自定义的属性你需要定义attr节点，每个节点有name和format属性，format属性是我们期望的值的类型，比如color,dimension,boolean,integer,float等。一旦定义好了属性，你可以像使用自带属性一样使用他们，唯一的区别在于你的自定义属性属于一个不同的命名空间，你可以在根视图的layout里面定义命名空间，一般情况下你只需要这样子指定：<code>http://schemas.android.com/apk/res/&lt;package_name&gt;</code>,但是你可以使用<code>http://schemas.android.com/apk/res-auto</code>自动解析命名空间。</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;RelativeLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+    xmlns:tools=&quot;http://schemas.android.com/tools&quot;
+    xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;
+    android:layout_width=&quot;match_parent&quot;
+    android:layout_height=&quot;match_parent&quot; &gt;
+    &lt;com.codepath.example.customviewdemo.ShapeSelectorView
+       app:shapeColor=&quot;#7f0000&quot;
+       app:displayShapeName=&quot;true&quot;
+       android:id=&quot;@+id/shapeSelector&quot;
+       android:layout_width=&quot;wrap_content&quot;
+       android:layout_height=&quot;wrap_content&quot;
+       android:layout_above=&quot;@+id/btnSelect&quot;
+       android:layout_alignParentLeft=&quot;true&quot;
+       android:layout_below=&quot;@+id/tvPrompt&quot; /&gt;
+&lt;/RelativeLayout&gt;
+</code></pre><h3 id="应用自定义属性"><a href="#应用自定义属性" class="headerlink" title="应用自定义属性"></a>应用自定义属性</h3><p>在前面我们定义了shapeColor和displayShapeName两个属性值，我们需要提取这两个属性值来用在自定义的视图中，可以使用TypedArray和obtainStyledAttributes方法来完成，如下所示：</p>
+<pre><code>public class ShapeSelectorView extends View {
+  private int shapeColor;
+  private boolean displayShapeName;
+
+  public ShapeSelectorView(Context context, AttributeSet attrs) {
+    super(context, attrs);
+    setupAttributes(attrs);
+  }
+
+  private void setupAttributes(AttributeSet attrs) {
+    // Obtain a typed array of attributes
+    TypedArray a = getContext().getTheme().obtainStyledAttributes(attrs, R.styleable.ShapeSelectorView, 0, 0);
+    // Extract custom attributes into member variables
+    try {
+      shapeColor = a.getColor(R.styleable.ShapeSelectorView_shapeColor, Color.BLACK);
+      displayShapeName = a.getBoolean(R.styleable.ShapeSelectorView_displayShapeName, false);
+    } finally {
+      // TypedArray objects are shared and must be recycled.
+      a.recycle();
+    }
+  }
+}
+</code></pre><p>接下来添加一些getter和setter方法：</p>
+<pre><code>public class ShapeSelectorView extends View {
+  // ...
+  public boolean isDisplayingShapeName() {
+    return displayShapeName;
+  }
+
+  public void setDisplayingShapeName(boolean state) {
+    this.displayShapeName = state;
+    invalidate();
+    requestLayout();
+  }
+
+  public int getShapeColor() {
+    return shapeColor;
+  }
+
+  public void setShapeColor(int color) {
+    this.shapeColor = color;
+    invalidate();
+    requestLayout();
+  }
+}
+</code></pre><p>当视图属性发生改变的时候可能需要重新绘图，你需要调用invalidate()和requestLayout()来刷新显示。</p>
+<h3 id="画图"><a href="#画图" class="headerlink" title="画图"></a>画图</h3><p>假设我们要使用前面的属性画一个长方形，所有的绘图都是在onDraw方法里执行，使用Canvas对象来绘图，如下所示：</p>
+<pre><code>public class ShapeSelectorView extends View {
+  // ...
+  private int shapeWidth = 100;
+  private int shapeHeight = 100;
+  private int textXOffset = 0;
+  private int textYOffset = 30;
+  private Paint paintShape;
+
+  // ...
+  public ShapeSelectorView(Context context, AttributeSet attrs) {
+    super(context, attrs);
+    setupAttributes(attrs);
+    setupPaint();
+  }
+
+  @Override
+  protected void onDraw(Canvas canvas) {
+    super.onDraw(canvas);
+    canvas.drawRect(0, 0, shapeWidth, shapeHeight, paintShape);
+    if (displayShapeName) {
+      canvas.drawText(&quot;Square&quot;, shapeWidth + textXOffset, shapeHeight + textXOffset, paintShape);
+    }
+  }
+
+  private void setupPaint() { 
+      paintShape = new Paint();
+      paintShape.setStyle(Style.FILL);
+      paintShape.setColor(shapeColor);
+      paintShape.setTextSize(30);
+   }
+}
+</code></pre><p>这段代码就会根据XML里设置的shapeColor来画图，根据displayShapeName属性来决定是否显示图形的名称，结果如下图：</p>
+<p><img src="/images/dag49.png" alt=""></p>
+<p>更多画图的教程可以参考这里<a href="http://developer.android.com/guide/topics/graphics/2d-graphics.html" target="_blank" rel="external"> Custom 2D Drawing Tutorial</a></p>
+<h3 id="计算尺寸"><a href="#计算尺寸" class="headerlink" title="计算尺寸"></a>计算尺寸</h3><p>为了更好的理解自定义视图的宽度和高度，我们需要定义onMeasure方法，这个方法根据视图的内容来决定它的宽度和高度，在这里宽度和高度是由形状和下面的文本决定的，如下所示：</p>
+<pre><code>public class ShapeSelectorView extends View {
+  @Override
+  protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    // Defines the extra padding for the shape name text
+    int textPadding = 10;
+    int contentWidth = shapeWidth;
+
+    // Resolve the width based on our minimum and the measure spec
+    int minw = contentWidth + getPaddingLeft() + getPaddingRight();
+    int w = resolveSizeAndState(minw, widthMeasureSpec, 0);
+
+    // Ask for a height that would let the view get as big as it can
+    int minh = shapeHeight + getPaddingBottom() + getPaddingTop();
+    if (displayShapeName) { 
+    minh += textYOffset + textPadding;
+    }
+    int h = resolveSizeAndState(minh, heightMeasureSpec, 0);
+
+    // Calling this method determines the measured width and height
+    // Retrieve with getMeasuredWidth or getMeasuredHeight methods later
+    setMeasuredDimension(w, h);
+  }
+}
+</code></pre><p>宽度和高度都是基于MeasureSpec来讨论的，一个MeasureSpec封装了父布局传递给子布局的布局要求，每个MeasureSpec代表了一组宽度和高度的要求。一个MeasureSpec由大小和模式组成。它有三种模式：UNSPECIFIED(未指定),父元素未给子元素施加任何束缚，子元素可以得到任意想要的大小；EXACTLY(完全)，父元素决定子元素的确切大小，子元素将被限定在给定的边界里而忽略它本身大小；AT_MOST(至多)，子元素至多达到指定大小的值。resolveSizeAndState()方法根据视图想要的大小和MeasureSpec返回一个合适的值，最后你需要调用setMeasureDimension()方法生效。</p>
+<h3 id="不同形状之间切换"><a href="#不同形状之间切换" class="headerlink" title="不同形状之间切换"></a>不同形状之间切换</h3><p>如果想实现用户点击之后改变形状，需要在onTouchEvent方法里添加自定义逻辑：</p>
+<pre><code>public class ShapeSelectorView extends View {
+  // ...
+  private String[] shapeValues = { &quot;square&quot;, &quot;circle&quot;, &quot;triangle&quot; };
+  private int currentShapeIndex = 0;
+
+  // Change the currentShapeIndex whenever the shape is clicked
+  @Override
+  public boolean onTouchEvent(MotionEvent event) {
+    boolean result = super.onTouchEvent(event);
+    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+      currentShapeIndex ++;
+      if (currentShapeIndex &gt; (shapeValues.length - 1)) {
+    currentShapeIndex = 0;
+      }
+      postInvalidate();
+      return true;
+    }
+    return result;
+  }
+}
+</code></pre><p>现在不管什么时候视图被单击，选择的形状的下标会改变，调用postInvalisate()方法后会显示一个不同的形状，接下来更新onDraw()方法来实现更改形状的逻辑：</p>
+<pre><code>public class ShapeSelectorView extends View {
+  // ...
+
+  @Override
+  protected void onDraw(Canvas canvas) {
+    super.onDraw(canvas);
+    String shapeSelected = shapeValues[currentShapeIndex];
+    if (shapeSelected.equals(&quot;square&quot;)) {
+      canvas.drawRect(0, 0, shapeWidth, shapeHeight, paintShape);
+      textXOffset = 0;
+    } else if (shapeSelected.equals(&quot;circle&quot;)) {
+      canvas.drawCircle(shapeWidth / 2, shapeHeight / 2, shapeWidth / 2, paintShape);
+      textXOffset = 12;
+    } else if (shapeSelected.equals(&quot;triangle&quot;)) {
+      canvas.drawPath(getTrianglePath(), paintShape);
+      textXOffset = 0;
+    }
+    if (displayShapeName) {
+      canvas.drawText(shapeSelected, 0 + textXOffset, shapeHeight + textYOffset, paintShape);
+    }
+  }
+
+  protected Path getTrianglePath() {
+    Point p1 = new Point(0, shapeHeight), p2 = null, p3 = null;
+    p2 = new Point(p1.x + shapeWidth, p1.y);
+    p3 = new Point(p1.x + (shapeWidth / 2), p1.y - shapeHeight);
+    Path path = new Path();
+    path.moveTo(p1.x, p1.y);
+    path.lineTo(p2.x, p2.y);
+    path.lineTo(p3.x, p3.y);
+    return path;
+  }
+
+  // ...
+}
+</code></pre><p>现在每次点击都会显示一个不同的形状，结果如下：</p>
+<p><img src="/images/dag50.png" alt=""></p>
+<p>接下来添加一个获取形状的方法：</p>
+<pre><code>public class ShapeSelectorView extends View {
+  // ...
+  // Returns selected shape name
+  public String getSelectedShape() {
+    return shapeValues[currentShapeIndex];
+  }
+}
+</code></pre><h3 id="保存视图的状态"><a href="#保存视图的状态" class="headerlink" title="保存视图的状态"></a>保存视图的状态</h3><p>当配置发生改变的时候(比如屏幕旋转)视图需要保存它们的状态，你可以实现onSaveInstanceState()和onRestoreInstanceState()方法来保存和恢复视图状态，如下所示：</p>
+<pre><code>public class ShapeSelectorView extends View {
+  // This is the view state for this shape selector
+  private int currentShapeIndex = 0;
+
+  @Override
+  public Parcelable onSaveInstanceState() {
+    // Construct bundle
+    Bundle bundle = new Bundle();
+    // Store base view state
+    bundle.putParcelable(&quot;instanceState&quot;, super.onSaveInstanceState());
+    // Save our custom view state to bundle
+    bundle.putInt(&quot;currentShapeIndex&quot;, this.currentShapeIndex);
+    // ... store any other custom state here ...
+    // Return the bundle
+    return bundle;
+  }
+
+  @Override
+  public void onRestoreInstanceState(Parcelable state) {
+    // Checks if the state is the bundle we saved
+    if (state instanceof Bundle) {
+      Bundle bundle = (Bundle) state;
+      // Load back our custom view state
+      this.currentShapeIndex = bundle.getInt(&quot;currentShapeIndex&quot;);
+      // ... load any other custom state here ...
+      // Load base view state back
+      state = bundle.getParcelable(&quot;instanceState&quot;);
+    }
+    // Pass base view state on to super
+    super.onRestoreInstanceState(state);
+  }
+}
+</code></pre><p>一旦你实现了这些保存和恢复的逻辑，当手机配置改变的时候你的视图能够自动保存状态。</p>
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/android-view/" rel="tag">#android, view</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/2015/05/gradle-dependency-management.html" rel="next" title="Gradle系列教程之依赖管理">
+                <i class="fa fa-chevron-left"></i> Gradle系列教程之依赖管理
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/2015/05/android-links.html" rel="prev" title="安卓开发者必备的42个链接">
+                安卓开发者必备的42个链接 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="/blog/2015/05/define-custom-view.html"
+     data-title="Android自定义视图教程"
+     data-content=""
+     data-url="http://www.ezlippi.com/blog/2015/05/define-custom-view.html">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  <p>热评文章</p>
+  <div class="ds-top-threads" data-range="weekly" data-num-items="4"></div>
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="/blog/2015/05/define-custom-view.html"
+           data-title="Android自定义视图教程" data-url="http://www.ezlippi.com/blog/2015/05/define-custom-view.html">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="EZLippi" />
+          <p class="site-author-name" itemprop="name">EZLippi</p>
+          <p class="site-description motion-element" itemprop="description">Easy Lippi</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">65</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+          
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">72</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/EZLippi" target="_blank">
+                  
+                    <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/ouyanglip" target="_blank">
+                  
+                    <i class="fa fa-weibo"></i> weibo
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/lippi-ouyang" target="_blank">
+                  
+                    <i class="fa fa-weibo"></i> zhihu
+                  
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+            <p class="site-author-name">友情链接</p>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.woaitqs.cc/" target="_blank">Qisen Tang</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://szhshp.org" target="_blank">szhshp的博客</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://python.zhangwei.website" target="_blank">JuniorCoder</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/lippi-ouyang" target="_blank">友链出租</a>
+              </span>
+            
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#创建完全自定义的组件"><span class="nav-number">1.</span> <span class="nav-text">创建完全自定义的组件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#定义视图类"><span class="nav-number">1.1.</span> <span class="nav-text">定义视图类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#添加视图到布局中"><span class="nav-number">1.2.</span> <span class="nav-text">添加视图到布局中</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自定义属性"><span class="nav-number">1.3.</span> <span class="nav-text">自定义属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#应用自定义属性"><span class="nav-number">1.4.</span> <span class="nav-text">应用自定义属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#画图"><span class="nav-number">1.5.</span> <span class="nav-text">画图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#计算尺寸"><span class="nav-number">1.6.</span> <span class="nav-text">计算尺寸</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#不同形状之间切换"><span class="nav-number">1.7.</span> <span class="nav-text">不同形状之间切换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#保存视图的状态"><span class="nav-number">1.8.</span> <span class="nav-text">保存视图的状态</span></a></li></ol></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2014 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">EZLippi</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+   托管在 -
+  <a class="theme-link" href="https://github.com/EZLippi/EZLippi.github.io">
+    Github
+  </a>
+
+</div>
+<div class="theme-info">
+<span id="busuanzi_container_site_pv">
+    &nbsp; | &nbsp;本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+</div>
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  
+
+
+  
+
+
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=0.5.0"></script>
+
+
+
+  
+  
+
+  
+  
+<script type="text/javascript" src="/js/src/scrollspy.js?v=0.5.0"></script>
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = NexT.utils.escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    NexT.motion.middleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+
+      if (CONFIG.sidebar.display === 'post' || CONFIG.sidebar.display === 'always') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          NexT.utils.displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=0.5.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"ezlippi"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+
+  
+  
+
+
+</body>
+</html>

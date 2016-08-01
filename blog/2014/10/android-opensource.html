@@ -1,0 +1,996 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.useso.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android, openSource" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.5.0" />
+
+
+
+
+
+
+<meta name="description" content="1、volley项目地址https://github.com/smanikandan14/Volley-demo
+
+(1)  JSON，图像等的异步下载；
+(2)  网络请求的排序（scheduling）
+(3)  网络请求的优先级处理
+(4)  缓存
+(5)  多级别取消请求
+(6)  和Activity和生命周期的联动（Activity结束时同时取消所有网络请求）">
+<meta property="og:type" content="article">
+<meta property="og:title" content="值得推荐的android开源框架">
+<meta property="og:url" content="http://www.ezlippi.com/blog/2014/10/android-opensource.html">
+<meta property="og:site_name" content="Lippi-浮生志">
+<meta property="og:description" content="1、volley项目地址https://github.com/smanikandan14/Volley-demo
+
+(1)  JSON，图像等的异步下载；
+(2)  网络请求的排序（scheduling）
+(3)  网络请求的优先级处理
+(4)  缓存
+(5)  多级别取消请求
+(6)  和Activity和生命周期的联动（Activity结束时同时取消所有网络请求）">
+<meta property="og:updated_time" content="2016-02-29T12:34:42.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="值得推荐的android开源框架">
+<meta name="twitter:description" content="1、volley项目地址https://github.com/smanikandan14/Volley-demo
+
+(1)  JSON，图像等的异步下载；
+(2)  网络请求的排序（scheduling）
+(3)  网络请求的优先级处理
+(4)  缓存
+(5)  多级别取消请求
+(6)  和Activity和生命周期的联动（Activity结束时同时取消所有网络请求）">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> 值得推荐的android开源框架 | Lippi-浮生志 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?340874ba9357cbe81570aa4ac1185941";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner">
+<script>
+(function(){
+    var bp = document.createElement('script');
+    bp.src = '//push.zhanzhang.baidu.com/push.js';
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+            
+<div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Lippi-浮生志</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu menu-left">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+      
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'fLM9qfxyerC6njvM7usy','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                值得推荐的android开源框架
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2014-10-01T00:00:00+08:00" content="2014-10-01">
+              2014-10-01
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/blog/2014/10/android-opensource.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="/blog/2014/10/android-opensource.html" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+        </div>
+      </header>
+    
+
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="1、volley"><a href="#1、volley" class="headerlink" title="1、volley"></a>1、volley</h2><p>项目地址<a href="https://github.com/smanikandan14/Volley-demo" target="_blank" rel="external">https://github.com/smanikandan14/Volley-demo</a></p>
+<ul>
+<li>(1)  JSON，图像等的异步下载；</li>
+<li>(2)  网络请求的排序（scheduling）</li>
+<li>(3)  网络请求的优先级处理</li>
+<li>(4)  缓存</li>
+<li>(5)  多级别取消请求</li>
+<li>(6)  和Activity和生命周期的联动（Activity结束时同时取消所有网络请求）<a id="more"></a>
+<h2 id="2、android-async-http"><a href="#2、android-async-http" class="headerlink" title="2、android-async-http"></a>2、android-async-http</h2>项目地址：<a href="https://github.com/loopj/android-async-http" target="_blank" rel="external">https://github.com/loopj/android-async-http</a></li>
+</ul>
+<p>文档介绍：<a href="http://loopj.com/android-async-http/" target="_blank" rel="external">http://loopj.com/android-async-http/ </a></p>
+<ul>
+<li>(1) 在匿名回调中处理请求结果</li>
+<li>(2) 在UI线程外进行http请求</li>
+<li>(3) 文件断点上传</li>
+<li>(4) 智能重试</li>
+<li>(5) 默认gzip压缩</li>
+<li>(6) 支持解析成Json格式</li>
+<li>(7) 可将Cookies持久化到SharedPreferences</li>
+</ul>
+<h2 id="3、Afinal框架"><a href="#3、Afinal框架" class="headerlink" title="3、Afinal框架"></a>3、Afinal框架</h2><p>项目地址：<a href="https://github.com/yangfuhai/afinal" target="_blank" rel="external">https://github.com/yangfuhai/afinal</a></p>
+<p>主要有四大模块：</p>
+<ul>
+<li>(1) 数据库模块：android中的orm框架，使用了线程池对sqlite进行操作。<ul>
+<li>(2) 注解模块：android中的ioc框架，完全注解方式就可以进行UI绑定和事件绑定。无需findViewById和setClickListener等。</li>
+<li>(3) 网络模块：通过httpclient进行封装http数据请求，支持ajax方式加载，支持下载、上传文件功能。</li>
+<li>(4) 图片缓存模块：通过FinalBitmap，imageview加载bitmap的时候无需考虑bitmap加载过程中出现的oom和android容器快速滑动时候出现的图片错位等现象。</li>
+</ul>
+</li>
+</ul>
+<p>FinalBitmap可以配置线程加载线程数量，缓存大小，缓存路径，加载显示动画等。FinalBitmap的内存管理使用lru算法，<br>没有使用弱引用（android2.3以后google已经不建议使用弱引用，android2.3后强行回收软引用和弱引用，详情查看android官方文档），<br>更好的管理bitmap内存。</p>
+<p>FinalBitmap可以自定义下载器，用来扩展其他协议显示网络图片，比如ftp等。同时可以自定义bitmap显示器，<br>在imageview显示图片的时候播放动画等（默认是渐变动画显示）。</p>
+<h2 id="4、xUtils框架"><a href="#4、xUtils框架" class="headerlink" title="4、xUtils框架"></a>4、xUtils框架</h2><p>项目地址：<a href="https://github.com/wyouflf/xUtils" target="_blank" rel="external">https://github.com/wyouflf/xUtils</a></p>
+<p>主要有四大模块：</p>
+<p> (1) 数据库模块：android中的orm框架，一行代码就可以进行增删改查；</p>
+<ul>
+<li>支持事务，默认关闭；</li>
+<li>可通过注解自定义表名，列名，外键，唯一性约束，NOT NULL约束，CHECK约束等（需要混淆的时候请注解表名和列名）；</li>
+<li>支持绑定外键，保存实体时外键关联实体自动保存或更新；</li>
+<li>自动加载外键关联实体，支持延时加载；</li>
+<li>支持链式表达查询，更直观的查询语义，参考下面的介绍或sample中的例子. </li>
+</ul>
+<p> (2) 注解模块：android中的ioc框架，完全注解方式就可以进行UI，资源和事件绑定；</p>
+<ul>
+<li>新的事件绑定方式，使用混淆工具混淆后仍可正常工作；</li>
+<li>目前支持常用的20种事件绑定，参见ViewCommonEventListener类和包com.lidroid.xutils.view.annotation.event。</li>
+</ul>
+<p>(3) 网络模块：支持同步，异步方式的请求；</p>
+<ul>
+<li>支持大文件上传，上传大文件不会oom；</li>
+<li>支持GET，POST，PUT，MOVE，COPY，DELETE，HEAD，OPTIONS，TRACE，CONNECT请求；</li>
+<li>下载支持301/302重定向，支持设置是否根据Content-Disposition重命名下载的文件；</li>
+<li><p>返回文本内容的请求(默认只启用了GET请求)支持缓存，可设置默认过期时间和针对当前请求的过期时间。  </p>
+<p>(4) 图片缓存模块：加载bitmap的时候无需考虑bitmap加载过程中出现的oom和android容器快速滑动时候出现的图片错位等现象；</p>
+</li>
+<li><p>支持加载网络图片和本地图片；</p>
+</li>
+<li>内存管理使用lru算法，更好的管理bitmap内存；</li>
+<li>可配置线程加载线程数量，缓存大小，缓存路径，加载显示动画等…</li>
+</ul>
+<h2 id="5、ThinkAndroid"><a href="#5、ThinkAndroid" class="headerlink" title="5、ThinkAndroid"></a>5、ThinkAndroid</h2><p>项目地址：<a href="https://github.com/white-cat/ThinkAndroid" target="_blank" rel="external">https://github.com/white-cat/ThinkAndroid</a></p>
+<p>主要有以下模块：</p>
+<ul>
+<li>(1)  MVC模块：实现视图与模型的分离。</li>
+<li>(2)  ioc模块：android中的ioc模块，完全注解方式就可以进行UI绑定、res中的资源的读取、以及对象的初始化。 </li>
+<li>(3)  数据库模块：android中的orm框架，使用了线程池对sqlite进行操作。  </li>
+<li>(4)  http模块：通过httpclient进行封装http数据请求，支持异步及同步方式加载。</li>
+<li>(5)  缓存模块：通过简单的配置及设计可以很好的实现缓存，对缓存可以随意的配置</li>
+<li>(6)  图片缓存模块：imageview加载图片的时候无需考虑图片加载过程中出现的oom和android容器快速滑动时候出现的图片错位等现象。</li>
+<li>(7)  配置器模块：可以对简易的实现配对配置的操作，目前配置文件可以支持Preference、Properties对配置进行存取。</li>
+<li>(8)  日志打印模块：可以较快的轻易的是实现日志打印，支持日志打印的扩展，目前支持对sdcard写入本地打印、以及控制台打印</li>
+<li>(9)  下载器模块:可以简单的实现多线程下载、后台下载、断点续传、对下载进行控制、如开始、暂停、删除等等。</li>
+<li>(10) 网络状态检测模块：当网络状态改变时，对其进行检</li>
+</ul>
+<h2 id="6、LoonAndroid"><a href="#6、LoonAndroid" class="headerlink" title="6、LoonAndroid"></a>6、LoonAndroid</h2><p>项目地址：<a href="https://github.com/gdpancheng/LoonAndroid" target="_blank" rel="external">https://github.com/gdpancheng/LoonAndroid</a></p>
+<p>主要有以下模块：</p>
+<ul>
+<li>(1)  自动注入框架（只需要继承框架内的application既可）<ul>
+<li>(2)  图片加载框架（多重缓存，自动回收，最大限度保证内存的安全性）</li>
+<li>(3)  网络请求模块（继承了基本上现在所有的http请求）</li>
+<li>(4)  eventbus（集成一个开源的框架）</li>
+<li>(5)  验证框架（集成开源框架）</li>
+<li>(6)  json解析（支持解析成集合或者对象）</li>
+<li>(7)  数据库（不知道是哪位写的 忘记了）</li>
+<li>(8)  多线程断点下载（自动判断是否支持多线程，判断是否是重定向）</li>
+<li>(9)  自动更新模块</li>
+<li>(10) 一系列工具类</li>
+</ul>
+</li>
+</ul>
+<p>其中的 volley扩展性非常好，个人比较喜欢的风格。其他如 android-async-http、Afinal 也相当不错。 </p>
+<h2 id="7、AndroidAnnotations"><a href="#7、AndroidAnnotations" class="headerlink" title="7、AndroidAnnotations"></a>7、AndroidAnnotations</h2><p>项目地址：</p>
+<p><a href="http://androidannotations.org/" target="_blank" rel="external">AndroidAnnotations首页</a></p>
+<p><a href="https://github.com/excilys/androidannotations/wiki" target="_blank" rel="external">github上的项目地址</a></p>
+<p>主要有以下特点：</p>
+<ul>
+<li>使用依赖注入(DI)、控制反转(IOC)来简化开发过程</li>
+<li>简化的线程模型（Simplified  threading model)  </li>
+<li>事件绑定（Event binding）</li>
+<li>REST Client</li>
+<li>No Magic  </li>
+<li>类似框架：<a href="http://jakewharton.github.io/butterknife/" target="_blank" rel="external">Bufferknife</a></li>
+</ul>
+<h2 id="8、RoboGuice"><a href="#8、RoboGuice" class="headerlink" title="8、RoboGuice"></a>8、RoboGuice</h2><p>项目地址：<a href="https://github.com/roboguice/roboguice" target="_blank" rel="external">https://github.com/roboguice/roboguice</a></p>
+<p>RoboGuice 使得进行Android开发更加方便，使得开发变得更加简单也更有乐趣。当你调用getIntent().getExtras()是不是经常检查是否为null？RoboGuice可以帮助你。想想调用findViewById()并映射到TextView确实有必要么？RoboGuice也可以帮你。</p>
+<p>RoboGuice 可以帮助解决这类的判断工作。你再也不用记住，是通过调用bindService获取一个用户service，调用getSystemService获取一个系统service。注入你的view、service、或者其他对象，然后让RoboGuice来处理剩下的事宜。</p>
+<p>RoboGuice 精简了你的应用代码。更少的代码意味着bug也会更少。也使得阅读代码更加容易，不在纠缠于Android平台的各种特性，而是关注于应用实际的业务逻辑。</p>
+<p>没什么很难的，你所需要做的仅仅是配置RoboGuice。</p>
+<p>##　9、Dagger ##</p>
+<p>项目地址<a href="https://github.com/square/dagger" target="_blank" rel="external">https://github.com/square/dagger</a></p>
+<p>android的依赖注入框架（DI框架），感觉跟Spring 的IOC差不多吧。这个框架它的好处是它没有采用反射技术（Spring是用反射的）,而是用预编译技术，因为基于反射的DI非常地耗用资源（空间，时间）</p>
+<h2 id="10、Fresco"><a href="#10、Fresco" class="headerlink" title="10、Fresco　"></a>10、Fresco　</h2><p>中文文档<a href="http://fresco-cn.org/" target="_blank" rel="external">http://fresco-cn.org/</a><br>项目地址<a href="https://github.com/facebook/fresco" target="_blank" rel="external">https://github.com/facebook/fresco</a></p>
+<p>Fresco 是一个强大的图片加载组件。</p>
+<p>Fresco 中设计有一个叫做 image pipeline 的模块。它负责从网络，从本地文件系统，本地资源加载图片。为了最大限度节省空间和CPU时间，它含有3级缓存设计（2级内存，1级文件）。</p>
+<p>Fresco 中设计有一个叫做 Drawees 模块，方便地显示loading图，当图片不再显示在屏幕上时，及时地释放内存和空间占用。</p>
+<p>特性：</p>
+<ul>
+<li>内存管理</li>
+<li>图片的渐进式呈现</li>
+<li>支持加载Gif图，支持WebP格式</li>
+</ul>
+<h2 id="11、ActiveAndroid"><a href="#11、ActiveAndroid" class="headerlink" title="11、ActiveAndroid"></a>11、ActiveAndroid</h2><p>项目地址：<a href="https://github.com/pardom/ActiveAndroid" target="_blank" rel="external">https://github.com/pardom/ActiveAndroid</a></p>
+<p>ActiveAndroid是一个活跃的记录风格的ORM（对象关系映射）库。ActiveAndroid可以让您保存和检索的SQLite数据库记录而没有写一个SQL语句。每个数据库记录被整齐包裹成一个model类,像保存方法（）和delete（）。</p>
+<h2 id="12、Android-Universal-Image-Loader"><a href="#12、Android-Universal-Image-Loader" class="headerlink" title="12、Android-Universal-Image-Loader"></a>12、Android-Universal-Image-Loader</h2><p>项目地址：<a href="https://github.com/nostra13/Android-Universal-Image-Loader" target="_blank" rel="external">https://github.com/nostra13/Android-Universal-Image-Loader</a></p>
+<p>Android-Universal-Image-Loader是一个开源的UI组件程序，该项目的目的是提供一个可重复使用的仪器为异步图像加载，缓存和显示。所以，如果你的程序里需要这个功能的话，那么不妨试试它。因为已经封装好了一些类和方法。我们 可以直接拿来用了。而不用重复去写了。其实，写一个这方面的程序还是比较麻烦的，要考虑多线程，缓存，内存溢出等很多方面。但是，你也可以参考这个例子来自己写出更好的程序。 </p>
+<h2 id="12、KJFrameForAndroid"><a href="#12、KJFrameForAndroid" class="headerlink" title="12、KJFrameForAndroid"></a>12、KJFrameForAndroid</h2><p>项目地址：<a href="https://github.com/kymjs/KJFrameForAndroid" target="_blank" rel="external">https://github.com/kymjs/KJFrameForAndroid</a><br>一个强大的Android开发库，KJFrameForAndroid的设计思想是通过封装Android原生SDK中复杂的复杂操作而达到简化Android应用级开发，最终实现快速而又安全的开发APP。功能包含</p>
+<ul>
+<li>数据库： javabean直接转换为sqlite表存储  </li>
+<li>Activity继承链：用最快捷的方法实现MVC分层  </li>
+<li>KJHttp：自带缓存功能的网络请求库，同时可选用HttpurlConnection(默认)或HttpClient实现</li>
+<li>KJBitmap：加载网络图片只需要一行代码，使用内存+磁盘双缓存，完美适配任何版本系统不会出现OOM。</li>
+</ul>
+<h2 id="13、CJFrameForAndroid"><a href="#13、CJFrameForAndroid" class="headerlink" title="13、CJFrameForAndroid"></a>13、CJFrameForAndroid</h2><p>项目地址：<a href="https://github.com/kymjs/CJFrameForAndroid" target="_blank" rel="external">https://github.com/kymjs/CJFrameForAndroid</a><br>一个完善的Android插件化开发框架的开源实现，只需要一行代码就可以启动一个存在于asset目录或sd卡上的没有安装的apk。<br>对于插件apk没有任何的编码限制。</p>
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/android/" rel="tag">#android</a>
+          
+            <a href="/tags/开源/" rel="tag">#开源</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/2014/09/returning-null.html" rel="next" title="关于返回 Null 值的问题">
+                <i class="fa fa-chevron-left"></i> 关于返回 Null 值的问题
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/2014/10/how-http-works.html" rel="prev" title="当我们打开网页时发生了什么">
+                当我们打开网页时发生了什么 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="/blog/2014/10/android-opensource.html"
+     data-title="值得推荐的android开源框架"
+     data-content=""
+     data-url="http://www.ezlippi.com/blog/2014/10/android-opensource.html">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  <p>热评文章</p>
+  <div class="ds-top-threads" data-range="weekly" data-num-items="4"></div>
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="/blog/2014/10/android-opensource.html"
+           data-title="值得推荐的android开源框架" data-url="http://www.ezlippi.com/blog/2014/10/android-opensource.html">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="EZLippi" />
+          <p class="site-author-name" itemprop="name">EZLippi</p>
+          <p class="site-description motion-element" itemprop="description">Easy Lippi</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">65</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+          
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">72</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/EZLippi" target="_blank">
+                  
+                    <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/ouyanglip" target="_blank">
+                  
+                    <i class="fa fa-weibo"></i> weibo
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/lippi-ouyang" target="_blank">
+                  
+                    <i class="fa fa-weibo"></i> zhihu
+                  
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+            <p class="site-author-name">友情链接</p>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.woaitqs.cc/" target="_blank">Qisen Tang</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://szhshp.org" target="_blank">szhshp的博客</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://python.zhangwei.website" target="_blank">JuniorCoder</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/lippi-ouyang" target="_blank">友链出租</a>
+              </span>
+            
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1、volley"><span class="nav-number">1.</span> <span class="nav-text">1、volley</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2、android-async-http"><span class="nav-number">2.</span> <span class="nav-text">2、android-async-http</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3、Afinal框架"><span class="nav-number">3.</span> <span class="nav-text">3、Afinal框架</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4、xUtils框架"><span class="nav-number">4.</span> <span class="nav-text">4、xUtils框架</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5、ThinkAndroid"><span class="nav-number">5.</span> <span class="nav-text">5、ThinkAndroid</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6、LoonAndroid"><span class="nav-number">6.</span> <span class="nav-text">6、LoonAndroid</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7、AndroidAnnotations"><span class="nav-number">7.</span> <span class="nav-text">7、AndroidAnnotations</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8、RoboGuice"><span class="nav-number">8.</span> <span class="nav-text">8、RoboGuice</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#10、Fresco"><span class="nav-number">9.</span> <span class="nav-text">10、Fresco　</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#11、ActiveAndroid"><span class="nav-number">10.</span> <span class="nav-text">11、ActiveAndroid</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#12、Android-Universal-Image-Loader"><span class="nav-number">11.</span> <span class="nav-text">12、Android-Universal-Image-Loader</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#12、KJFrameForAndroid"><span class="nav-number">12.</span> <span class="nav-text">12、KJFrameForAndroid</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#13、CJFrameForAndroid"><span class="nav-number">13.</span> <span class="nav-text">13、CJFrameForAndroid</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2014 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">EZLippi</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+   托管在 -
+  <a class="theme-link" href="https://github.com/EZLippi/EZLippi.github.io">
+    Github
+  </a>
+
+</div>
+<div class="theme-info">
+<span id="busuanzi_container_site_pv">
+    &nbsp; | &nbsp;本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+</div>
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  
+
+
+  
+
+
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=0.5.0"></script>
+
+
+
+  
+  
+
+  
+  
+<script type="text/javascript" src="/js/src/scrollspy.js?v=0.5.0"></script>
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = NexT.utils.escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    NexT.motion.middleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+
+      if (CONFIG.sidebar.display === 'post' || CONFIG.sidebar.display === 'always') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          NexT.utils.displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=0.5.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"ezlippi"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+
+  
+  
+
+
+</body>
+</html>

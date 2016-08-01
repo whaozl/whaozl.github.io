@@ -1,0 +1,1036 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.useso.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Gradle" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.5.0" />
+
+
+
+
+
+
+<meta name="description" content="Gradle有两个最基本的概念：project和task,Gradle里面的所有东西都基于这两个概念。project通常指一个项目，而task指构建过程中的任务。一次构建可以有1到n个project，每个project有1到n个task，这篇文章主要介绍Gradle任务的创建和管理。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Gradle系列教程之任务管理">
+<meta property="og:url" content="http://www.ezlippi.com/blog/2015/04/gradle-task-management.html">
+<meta property="og:site_name" content="Lippi-浮生志">
+<meta property="og:description" content="Gradle有两个最基本的概念：project和task,Gradle里面的所有东西都基于这两个概念。project通常指一个项目，而task指构建过程中的任务。一次构建可以有1到n个project，每个project有1到n个task，这篇文章主要介绍Gradle任务的创建和管理。">
+<meta property="og:image" content="http://www.ezlippi.com/images/dag26.png">
+<meta property="og:image" content="http://www.ezlippi.com/images/4-1.png">
+<meta property="og:image" content="http://www.ezlippi.com/images/4-2.png">
+<meta property="og:image" content="http://www.ezlippi.com/images/4-3.png">
+<meta property="og:image" content="http://www.ezlippi.com/images/4-4.png">
+<meta property="og:updated_time" content="2016-03-18T10:23:01.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Gradle系列教程之任务管理">
+<meta name="twitter:description" content="Gradle有两个最基本的概念：project和task,Gradle里面的所有东西都基于这两个概念。project通常指一个项目，而task指构建过程中的任务。一次构建可以有1到n个project，每个project有1到n个task，这篇文章主要介绍Gradle任务的创建和管理。">
+<meta name="twitter:image" content="http://www.ezlippi.com/images/dag26.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> Gradle系列教程之任务管理 | Lippi-浮生志 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?340874ba9357cbe81570aa4ac1185941";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner">
+<script>
+(function(){
+    var bp = document.createElement('script');
+    bp.src = '//push.zhanzhang.baidu.com/push.js';
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+            
+<div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Lippi-浮生志</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu menu-left">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+      
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'fLM9qfxyerC6njvM7usy','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Gradle系列教程之任务管理
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2015-04-30T00:00:00+08:00" content="2015-04-30">
+              2015-04-30
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/Gradle/" itemprop="url" rel="index">
+                    <span itemprop="name">Gradle</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/blog/2015/04/gradle-task-management.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="/blog/2015/04/gradle-task-management.html" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+        </div>
+      </header>
+    
+
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Gradle有两个最基本的概念：project和task,Gradle里面的所有东西都基于这两个概念。project通常指一个项目，而task指构建过程中的任务。一次构建可以有1到n个project，每个project有1到n个task，这篇文章主要介绍Gradle任务的创建和管理。<br><a id="more"></a></p>
+<h2 id="管理任务"><a href="#管理任务" class="headerlink" title="管理任务"></a>管理任务</h2><p>每个新创建的任务都是org.gradle.api.DefaultTask类型，org.gradle.api.Task的标准实现，DefaultTask所有的域都是私有的，意味着他们只能通过setter和getter方法来访问，庆幸的是Groovy提供了一些语法糖来允许你通过名字来使用域。</p>
+<h3 id="管理项目的版本"><a href="#管理项目的版本" class="headerlink" title="管理项目的版本"></a>管理项目的版本</h3><p>许多公司或者开源组织有他们自己的发布版本的措施，一般用主版本号和次版本号来表示，也会用SNAPSHOT来表示项目正在开发中，版本号是通过String类型来表示，如果你想准确获得项目的主版本号，那应该怎么办？使用正则表达式匹配点号然后过滤得到主版本号和次版本号？如果我们用一个类来表示是不是更简单？</p>
+<p>你可以很简单的通过类的域来设置、查询和修改你的版本号的某个部分，甚至你可以把版本信息直接保存在一个文件里，比如一个文件或者数据库里，避免通过修改构建脚本来更改版本号，如下图所示：</p>
+<p><img src="/images/dag26.png" alt=""></p>
+<p>通过编程来控制版本表单对于自动化项目生命周期很有必要，比如：你的代码通过了单元测试准备交付了，当前的版本是1.3-SNAPSHOT,在打包成war文件之前你想把它变成发布版本1.3然后自动部署到服务器中，这些步骤可以划分为多个任务：一个用来修改项目的版本号另一个用于打包WAR文件。</p>
+<h3 id="声明任务的动作-actions"><a href="#声明任务的动作-actions" class="headerlink" title="声明任务的动作(actions)"></a>声明任务的动作(actions)</h3><p>动作就是在你的任务中放置构建逻辑的地方，Task接口提供了两个接口来声明任务的动作：<br>doFirst和doLast，当任务执行的时候，定义在闭包里的动作逻辑就按顺序执行。</p>
+<p>接下来我们会写一个简单的任务printVersion,任务的作用就是打印项目的版本号，在任务<br>的最后一个动作定义这个逻辑。</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">version = <span class="string">'0.1-SNAPSHOT'</span></span><br><span class="line"></span><br><span class="line">task printVersion &#123;</span><br><span class="line">	doLast &#123;</span><br><span class="line">	println <span class="string">"Version: $version"</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>前面我们讲过左移操作符是方法doLast的快捷键，他们的作用是一样的，当你执行gradle printVersion,你应该得到下面的输出：<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">gradle printVersion</span><br><span class="line">:printVersion</span><br><span class="line"><span class="string">Version:</span> <span class="number">0.1</span>-SNAPSHOT</span><br></pre></td></tr></table></figure></p>
+<p>如果你用doFirst方法的话输出的结果是一样的：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">task printVersion &#123;</span><br><span class="line">	doFirst &#123;</span><br><span class="line">	println <span class="string">"Version: $version"</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="给已经存在的任务添加动作"><a href="#给已经存在的任务添加动作" class="headerlink" title="给已经存在的任务添加动作"></a>给已经存在的任务添加动作</h3><p>到目前为止，你只是给printVersion这个任务添加了单个动作，要么是第一个或者最后一个，对于每个任务可以有多个动作，实际上，当任务创建的时候你可以添加任意多个动作，每一个任务都有一个动作清单，他们在运行的时候是执行的，接下来我们来修改之前的例子：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">task printVersion &#123;</span><br><span class="line"><span class="comment">//任务的初始声明可以添加first和last动作</span></span><br><span class="line">	doFirst &#123;</span><br><span class="line">	println <span class="string">"Before reading the project version"</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	doLast &#123;</span><br><span class="line">	println <span class="string">"Version: $version"</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>//你可以在任务的动作列表的最前面添加其他任务，比如：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">printVersion.doFirst &#123; println <span class="string">"First action"</span> &#125;</span><br></pre></td></tr></table></figure>
+<p>由此可知，我们可以添加额外的动作给已经存在的任务，当你想添加动作的那个任务不是你自己写的时候这会非常有用，你可以添加一些自定义的逻辑，比如你可以添加doFirst动作到compile-Java任务来检查项目是否包含至少一个source文件。</p>
+<h3 id="访问任务属性"><a href="#访问任务属性" class="headerlink" title="访问任务属性"></a>访问任务属性</h3><p>接下来我们来改善一下输出版本号的方法，Gradle提供一个基于SLF4J库的日子实现，除了实现了基本的日子级别（DEBUG, ERROR, INFO, TRACE, WARN)）外，还添加了额外的级别，日子实例可以通过任务的方法来直接访问，接下来，你将用QUIET级别打印项目的版本号：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">task printVersion &lt;&lt; &#123;</span><br><span class="line">	logger.quiet <span class="string">"Version: $version"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>访问任务的属性是不是很容易？接下来我将给你展示两个其他的属性，group和description，两个都是documentation任务的一部分，description属性简短的表示任务的目的，group表示任务的逻辑分组。</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">task printVersion(<span class="string">group:</span> <span class="string">'versioning'</span>, <span class="string">description:</span> 	<span class="string">'Prints project version.'</span>) &lt;&lt; &#123;</span><br><span class="line">	logger.quiet <span class="string">"Version: $version"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>你也可以通过setter方法来设置属性：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">task printVersion &#123;</span><br><span class="line">	group = <span class="string">'versioning'</span></span><br><span class="line">	description = <span class="string">'Prints project version.'</span></span><br><span class="line">	doLast &#123;</span><br><span class="line">	logger.quiet <span class="string">"Version: $version"</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当你运行gradle tasks,你会看到任务显示在正确的分组里和它的描述信息：</p>
+<pre><code>gradle tasks
+:tasks
+...
+Versioning tasks
+----------------
+printVersion - Prints project version.
+...
+</code></pre><h3 id="定义任务依赖"><a href="#定义任务依赖" class="headerlink" title="定义任务依赖"></a>定义任务依赖</h3><p>dependsOn方法用来声明一个任务依赖于一个或者多个任务，接下来通过一个例子来讲解运用不同的方法来应用依赖：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">task first &lt;&lt; &#123; println <span class="string">"first"</span> &#125;</span><br><span class="line">task second &lt;&lt; &#123; println <span class="string">"second"</span> &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//声明多个依赖</span></span><br><span class="line">task printVersion(<span class="string">dependsOn:</span> [second, first]) &lt;&lt; &#123;</span><br><span class="line">logger.quiet <span class="string">"Version: $version"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">task third &lt;&lt; &#123; println <span class="string">"third"</span> &#125;</span><br><span class="line"><span class="comment">//通过任务名称来声明依赖</span></span><br><span class="line">third.dependsOn(<span class="string">'printVersion'</span>)</span><br></pre></td></tr></table></figure>
+<p>你可以通过命令行调用third任务来执行这个任务依赖链：</p>
+<pre><code>$ gradle -q third
+first
+second
+Version: 0.1-SNAPSHOT
+third
+</code></pre><p>仔细看这个执行顺序，你有没用发现printVersion声明了对second和first任务的依赖，但是first在second任务前执行了，Gradle里面任务的执行顺序并不是确定的。</p>
+<h3 id="任务依赖执行顺序"><a href="#任务依赖执行顺序" class="headerlink" title="任务依赖执行顺序"></a>任务依赖执行顺序</h3><p>Gradle并不保证依赖的任务能够按顺序执行，dependsOn方法只是定义这些任务应该在这个任务之前执行，但是这些依赖的任务具体怎么执行它并不关心，如果你习惯用命令式的构建工具来定义依赖（比如ant）这可能会难以理解。在Gradle里面，执行顺序是由任务的输入输出特性决定的，这样做有很多优点，比如你想修改构建逻辑的时候你不需要去了解整个任务依赖链，另一方面，因为任务不是顺序执行的，就可以并发的执行来提高性能。</p>
+<h3 id="终结者任务"><a href="#终结者任务" class="headerlink" title="终结者任务"></a>终结者任务</h3><p>在实际情况中，你可能需要在一个任务执行之后进行一些清理工作，一个典型的例子就是Web容器在部署应用之后要进行集成测试，Gradle提供了一个finalizer任务来实现这个功能，你可以用finalizedBy方法来结束一个指定的任务：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">task first &lt;&lt; &#123; println <span class="string">"first"</span> &#125;</span><br><span class="line">task second &lt;&lt; &#123; println <span class="string">"second"</span> &#125;</span><br><span class="line"><span class="comment">//声明first结束后执行second任务</span></span><br><span class="line">first.finalizedBy second</span><br></pre></td></tr></table></figure>
+<p>你会发现任务first结束后自动触发任务second：</p>
+<pre><code>$ gradle -q first
+first
+second
+</code></pre><h3 id="添加随意的代码"><a href="#添加随意的代码" class="headerlink" title="添加随意的代码"></a>添加随意的代码</h3><p>接下来我们来学习怎么在build脚本中定义一些随机的代码，在实际情况下，如果你熟悉Groovy的语法你可以编写一些类或者方法，接下来你将会创建一个表示版本的类，在Java中一个class遵循bean的约定（POJO），就是添加setter和getter方法来访问类的域，到后面发现手工写这些方法很烦人，Groovy有个对应的概念叫POGO(plain-old Groovy object),他们的setter和getter方法在生成字节码的时候自动添加，因此运行的时候可以直接访问，看下面这个例子：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">version = <span class="keyword">new</span> ProjectVersion(<span class="number">0</span>, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ProjectVersion</span> &#123;</span></span><br><span class="line">	Integer major</span><br><span class="line">	Integer minor</span><br><span class="line">	Boolean release</span><br><span class="line"></span><br><span class="line">	ProjectVersion(Integer major, Integer minor) &#123;</span><br><span class="line">		<span class="keyword">this</span>.major = major</span><br><span class="line">		<span class="keyword">this</span>.minor = minor</span><br><span class="line">		<span class="keyword">this</span>.release = Boolean.FALSE</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	ProjectVersion(Integer major, Integer minor, 	Boolean release) &#123;</span><br><span class="line">		<span class="keyword">this</span>(major, minor)</span><br><span class="line">		<span class="keyword">this</span>.release = release</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	String toString() &#123;</span><br><span class="line">		<span class="comment">//只有release为false的时候才添加后缀SNAPSHOT</span></span><br><span class="line">		<span class="string">"$major.$minor$&#123;release ? '' : '-SNAPSHOT'&#125;"</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当运行这个修改的脚本之后，你可以看到printVersion的输出和之前一样，但是你还是得手工修改build脚本来更改版本号，接下来你将学习如何把版本号存储在一个文件里然后配置你的脚本去读取这个配置。</p>
+<h3 id="任务的配置"><a href="#任务的配置" class="headerlink" title="任务的配置"></a>任务的配置</h3><p>在你写代码之前，你要新建一个属性文件version.properties,内容如下：</p>
+<pre><code>major = 0
+minor = 1
+release = false
+</code></pre><h3 id="添加任务配置块"><a href="#添加任务配置块" class="headerlink" title="添加任务配置块"></a>添加任务配置块</h3><p>接下来我们将声明一个任务loadVersion来从属性文件中读取版本号并赋给ProjectVersion实例，第一眼看起来和其他定义的任务一样，仔细一看你会主要到你没有定义动作或者使用左移操作符，在Gradle里称之为task configuration。</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">ext.versionFile = file(<span class="string">'version.properties'</span>)</span><br><span class="line"><span class="comment">//配置任务没有左移操作符</span></span><br><span class="line">task loadVersion &#123;</span><br><span class="line">project.version = readVersion()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">ProjectVersion readVersion() &#123;</span><br><span class="line">	logger.quiet <span class="string">'Reading the version file.'</span></span><br><span class="line">	<span class="comment">//如果文件不存在抛出异常</span></span><br><span class="line">	<span class="keyword">if</span>(!versionFile.exists()) &#123;</span><br><span class="line">		<span class="keyword">throw</span> <span class="keyword">new</span> GradleException(<span class="string">"Required version file does not exist:$versionFile.canonicalPath"</span>)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">Properties versionProps = <span class="keyword">new</span> Properties()</span><br><span class="line"></span><br><span class="line"><span class="comment">//groovy的file实现了添加方法通过新创建的流来读取</span></span><br><span class="line"></span><br><span class="line">versionFile.withInputStream &#123; stream -&gt;</span><br><span class="line">versionProps.load(stream)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//在Groovy中如果这是最后一个语句你可以省略return关键字</span></span><br><span class="line"><span class="keyword">new</span> ProjectVersion(versionProps.major.toInteger(),</span><br><span class="line"> versionProps.minor.toInteger(), versionProps.release.toBoolean())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>接下来运行printVersion，你会看到loadVersion任务先执行了：</p>
+<pre><code>$ gradle printVersion
+Reading the version file.
+:printVersion
+Version: 0.1-SNAPSHOT
+</code></pre><p>你也许会很奇怪这个任务是怎么调用的，你没有声明依赖，也没有在命令行中调用它。<strong>任务配置块总是在任务动作之前执行的</strong>，理解这个行为的关键就是Gradle的构建生命周期，我们来看下Gradle的构建阶段：</p>
+<p><img src="/images/4-1.png" alt=""></p>
+<h3 id="Gradle的构建生命周期"><a href="#Gradle的构建生命周期" class="headerlink" title="Gradle的构建生命周期"></a>Gradle的构建生命周期</h3><p>无论你什么时候执行一个gradle build,都会经过三个不同的阶段：初始化、配置和执行。</p>
+<p>在初始化阶段，Gradle给你的项目创建一个Project实例，你的构建脚本只定义了单个项目，在多项目构建的上下文环境中，构建的阶段更为重要。根据你正在执行的项目，Gradle找出这个项目的依赖。</p>
+<p>下一个阶段就是配置阶段，Gradle构建一些在构建过程中需要的一些模型数据，当你的项目或者指定的任务需要一些配置的时候这个阶段很有帮助。</p>
+<h3 id="记住不管你执行哪个build哪怕是gradle-tasks配置代码都会执行"><a href="#记住不管你执行哪个build哪怕是gradle-tasks配置代码都会执行" class="headerlink" title="记住不管你执行哪个build哪怕是gradle tasks配置代码都会执行"></a>记住不管你执行哪个build哪怕是gradle tasks配置代码都会执行</h3><p>在执行阶段任务按顺序执行，执行顺序是通过依赖关系决定的，标记为up-to-date的任务会跳过，比如任务B依赖于任务A，当你运行gradle B的时候执行顺序将是A-&gt;B。</p>
+<h3 id="声明任务的输入和输出"><a href="#声明任务的输入和输出" class="headerlink" title="声明任务的输入和输出"></a>声明任务的输入和输出</h3><p>Gradle通过比较两次build之间输入和输出有没有变化来确定这个任务是否是最新的，如果从上一个执行之后这个任务的输入和输出没有发生改变这个任务就标记为up-to-date，跳过这个任务。</p>
+<p><img src="/images/4-2.png" alt=""></p>
+<p>输入可以是一个目录、一个或者多个文件或者随机的属性，任务的输出可以是路径或者文件，输入和输出在DefaultTask类中用域来表示。假设你想创建一个任务把项目的版本由SNAPSHOT改为release，下面的代码定义一个新任务给release变量赋值为true，然后把改变写入到文件中。</p>
+<pre><code>task makeReleaseVersion(group: &apos;versioning&apos;, description: &apos;Makes project a release version.&apos;) &lt;&lt; {
+    version.release = true
+    //ant的propertyfile任务提供很方便的方法来修改属性文件
+    ant.propertyfile(file: versionFile) {
+        entry(key: &apos;release&apos;, type:&apos;string&apos;,operation: &apos;=&apos;, value: &apos;true&apos;)
+    }
+}
+</code></pre><p>运行这个任务会修改版本属性并写入到文件中。</p>
+<pre><code>$ gradle makeReleaseVersion
+:makeReleaseVersion
+
+$ gradle printVersion
+:printVersion
+Version: 0.1
+</code></pre><h3 id="编写自定义的任务"><a href="#编写自定义的任务" class="headerlink" title="编写自定义的任务"></a>编写自定义的任务</h3><p>makeReleaseVersion的逻辑比较简单，你可能不用考虑代码维护的问题，随着构建逻辑越来越复杂，你添加了越来越多的简单的任务，这时候你就有需要用类和方法来结构化你的代码，你可以把你编写源代码的那一套代码实践搬过来。</p>
+<h3 id="编写自定义任务类"><a href="#编写自定义任务类" class="headerlink" title="编写自定义任务类"></a>编写自定义任务类</h3><p>之前提到过，Gradle会给每一个任务创建一个DefaultTask类型的实例，当你要创建一个自定义的任务时，你需要创建一个继承自DefaultTask的类，看看下面这个例子：</p>
+<pre><code>class ReleaseVersionTask extends DefaultTask {
+    //通过注解声明任务的输入和输出    
+    @Input Boolean release
+    @OutputFile File destFile
+
+    ReleaseVersionTask() {
+        //在构造器里设置任务的分组和描述
+        group = &apos;versioning&apos;
+        description = &apos;Makes project a release version.&apos;
+    }
+    //通过注解声明要执行的任务
+    @TaskAction
+    void start() {
+        project.version.release = true
+        ant.propertyfile(file: destFile) {
+        entry(key: &apos;release&apos;, type: &apos;string&apos;, operation: &apos;=&apos;, value: &apos;true&apos;)
+    }
+    }
+}
+</code></pre><h3 id="通过注解来表达输入和输出"><a href="#通过注解来表达输入和输出" class="headerlink" title="通过注解来表达输入和输出"></a>通过注解来表达输入和输出</h3><p>任务输入和输出注解给你的实现添加了语法糖，他们和调用TasksInputs和TaskOutputs方法是一样的效果，你一眼就知道任务期望什么样的输入数据以及会产生什么输出。我们使用@Input注解来声明输入属性release，用@OutputFile来定义输出文件。</p>
+<h3 id="使用自定义的任务"><a href="#使用自定义的任务" class="headerlink" title="使用自定义的任务"></a>使用自定义的任务</h3><p>上面我们实现了自定义的动作方法，但是我们怎么使用这个方法，你需要在build脚本中创建一个ReleaseVersionTask类型的任务，通过给属性赋值来设定输入和输出：</p>
+<pre><code>//定义一个ReleaseVersionTask类型的任务
+task makeReleaseVersion(type: ReleaseVersionTask) {
+    //设定任务属性
+    release = version.release
+    destFile = versionFile
+}
+</code></pre><h3 id="复用自定义的任务"><a href="#复用自定义的任务" class="headerlink" title="复用自定义的任务"></a>复用自定义的任务</h3><p>假设你在另一个项目中想使用前面这个自定义的任务，在另一个项目中需求又不太一样，用来表示版本的POGO有不同的域，比如下面这个：</p>
+<pre><code>class ProjectVersion {
+    Integer min
+    Integer maj
+    Boolean prodReady
+
+    @Override
+    String toString() {
+    &quot;$maj.$min${prodReady? &apos;&apos; : &apos;-SNAPSHOT&apos;}&quot;
+    }
+}
+</code></pre><p>此外，你还想把版本文件名改为project-version.properties,需要怎么做才能复用上面那个自定义的任务呢？</p>
+<pre><code>task makeReleaseVersion(type: ReleaseVersionTask) {
+    release = version.prodReady
+    //不同的版本文件
+    destFile = file(&apos;project-version.properties&apos;)
+}
+</code></pre><h3 id="Gradle自带的任务类型"><a href="#Gradle自带的任务类型" class="headerlink" title="Gradle自带的任务类型"></a>Gradle自带的任务类型</h3><p>Gradle自带的任务类型继承自DefaultTask，Gradle提供了很多自带的任务类型，这里我只介绍两个，Zip和copy用在发布项目中。</p>
+<pre><code>//eg.使用任务类型来备份发布版本
+
+task createDistribution(type: Zip, dependsOn:     makeReleaseVersion) {
+    //引用war任务的输出
+    from war.outputs.files
+    //把所有文件放进ZIP文件的src目录
+    from(sourceSets*.allSource) {
+    into &apos;src&apos;
+    }
+    //添加版本文件
+    from(rootDir) {
+    include versionFile.name
+    }
+}
+
+task backupReleaseDistribution(type: Copy) {
+        //引用createDistribution的输出
+        from createDistribution.outputs.files
+        into &quot;$buildDir/backup&quot;
+    }
+
+    task release(dependsOn: backupReleaseDistribution)     &lt;&lt; {
+        logger.quiet &apos;Releasing the project...&apos;
+}
+</code></pre><h3 id="任务依赖推导"><a href="#任务依赖推导" class="headerlink" title="任务依赖推导"></a>任务依赖推导</h3><p>你可能注意到上面通过dependsOn方法来显示声明两个任务之间的依赖，可是，一些任务并不是直接依赖于其他任务(比如上面createDistribution依赖于war)。Gradle怎么知道在任务之前执行哪个任务？通过使用一个任务的输出作为另一个任务的输入，依赖就推导出来了，结果依赖的任务自动执行了，我们来看一下完整的执行图：</p>
+<pre><code>$ gradle release
+:makeReleaseVersion
+:compileJava
+:processResources UP-TO-DATE
+:classes
+:war
+:createDistribution
+:backupReleaseDistribution
+:release
+Releasing the project...
+</code></pre><p>运行build之后你可以在build/distribution目录找到生成的ZIP文件，这是打包任务的默认输出目录，下面这个图是生成的目录树：</p>
+<p><img src="/images/4-3.png" alt=""></p>
+<h3 id="在buildSrc目录创建代码"><a href="#在buildSrc目录创建代码" class="headerlink" title="在buildSrc目录创建代码"></a>在buildSrc目录创建代码</h3><p>在前面我们创建了两个类，ProjectVersion和ReleaseVersionTask，这些类可以移动到你项目的buildSrc目录，buildSrc目录是一个放置源代码的可选目录，你可以很容易的管理你的代码。Gradle采用了标准的项目布局，java代码在src/main/java目录，Groovy代码应该在src/main/groovy目录，在这些目录的任何代码都会自动编译然后放置到项目的classpath目录。这里你是在处理class，你可以把他们放到指定的包里面，假如com.manning.gia,下面显示了Groovy类在项目中的目录结构：</p>
+<p><img src="/images/4-4.png" alt=""></p>
+<p>不过要记住把这些类放在源代码目录需要额外的工作，这和在脚本文件中定义有点不一样，你需要导入Gradle的API，看看下面这个例子：<br><figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.manning.gia</span><br><span class="line"><span class="keyword">import</span> org.gradle.api.DefaultTask</span><br><span class="line"><span class="keyword">import</span> org.gradle.api.tasks.Input</span><br><span class="line"><span class="keyword">import</span> org.gradle.api.tasks.OutputFile</span><br><span class="line"><span class="keyword">import</span> org.gradle.api.tasks.TaskAction</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ReleaseVersionTask</span> <span class="keyword">extends</span> <span class="title">DefaultTask</span> &#123;</span></span><br><span class="line">	(...)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>反过来，你的构建脚本需要从buildSrc中导入编译的classes(比如 <code>com.manning.gia.ReleaseVersionTask</code>)，下面这个是编译任务输出：</p>
+<pre><code>$ gradle makeReleaseVersion
+:buildSrc:compileJava UP-TO-DATE
+:buildSrc:compileGroovy
+:buildSrc:processResources UP-TO-DATE
+:buildSrc:classes
+:buildSrc:jar
+:buildSrc:assemble
+:buildSrc:compileTestJava UP-TO-DATE
+:buildSrc:compileTestGroovy UP-TO-DATE
+:buildSrc:processTestResources UP-TO-DATE
+:buildSrc:testClasses UP-TO-DATE
+:buildSrc:test
+:buildSrc:check
+:buildSrc:build
+:makeReleaseVersion UP-TO-DATE
+</code></pre><p>到此为止你学习了简单任务的创建，自定义的task类，指定Gradle API提供的task类型，查看了任务动作和任务配置的区别，以及他们的使用情形，任务配置和任务动作是在不同阶段执行的。</p>
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Gradle/" rel="tag">#Gradle</a>
+          
+            <a href="/tags/项目构建/" rel="tag">#项目构建</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/2015/04/java-virtual-mechine.html" rel="next" title="Java虚拟机简介">
+                <i class="fa fa-chevron-left"></i> Java虚拟机简介
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/2015/05/gradle-dependency-management.html" rel="prev" title="Gradle系列教程之依赖管理">
+                Gradle系列教程之依赖管理 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="/blog/2015/04/gradle-task-management.html"
+     data-title="Gradle系列教程之任务管理"
+     data-content=""
+     data-url="http://www.ezlippi.com/blog/2015/04/gradle-task-management.html">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  <p>热评文章</p>
+  <div class="ds-top-threads" data-range="weekly" data-num-items="4"></div>
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="/blog/2015/04/gradle-task-management.html"
+           data-title="Gradle系列教程之任务管理" data-url="http://www.ezlippi.com/blog/2015/04/gradle-task-management.html">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="EZLippi" />
+          <p class="site-author-name" itemprop="name">EZLippi</p>
+          <p class="site-description motion-element" itemprop="description">Easy Lippi</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">65</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+          
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">72</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/EZLippi" target="_blank">
+                  
+                    <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/ouyanglip" target="_blank">
+                  
+                    <i class="fa fa-weibo"></i> weibo
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/lippi-ouyang" target="_blank">
+                  
+                    <i class="fa fa-weibo"></i> zhihu
+                  
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+            <p class="site-author-name">友情链接</p>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.woaitqs.cc/" target="_blank">Qisen Tang</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://szhshp.org" target="_blank">szhshp的博客</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://python.zhangwei.website" target="_blank">JuniorCoder</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/lippi-ouyang" target="_blank">友链出租</a>
+              </span>
+            
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#管理任务"><span class="nav-number">1.</span> <span class="nav-text">管理任务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#管理项目的版本"><span class="nav-number">1.1.</span> <span class="nav-text">管理项目的版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#声明任务的动作-actions"><span class="nav-number">1.2.</span> <span class="nav-text">声明任务的动作(actions)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#给已经存在的任务添加动作"><span class="nav-number">1.3.</span> <span class="nav-text">给已经存在的任务添加动作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#访问任务属性"><span class="nav-number">1.4.</span> <span class="nav-text">访问任务属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#定义任务依赖"><span class="nav-number">1.5.</span> <span class="nav-text">定义任务依赖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#任务依赖执行顺序"><span class="nav-number">1.6.</span> <span class="nav-text">任务依赖执行顺序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#终结者任务"><span class="nav-number">1.7.</span> <span class="nav-text">终结者任务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#添加随意的代码"><span class="nav-number">1.8.</span> <span class="nav-text">添加随意的代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#任务的配置"><span class="nav-number">1.9.</span> <span class="nav-text">任务的配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#添加任务配置块"><span class="nav-number">1.10.</span> <span class="nav-text">添加任务配置块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Gradle的构建生命周期"><span class="nav-number">1.11.</span> <span class="nav-text">Gradle的构建生命周期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#记住不管你执行哪个build哪怕是gradle-tasks配置代码都会执行"><span class="nav-number">1.12.</span> <span class="nav-text">记住不管你执行哪个build哪怕是gradle tasks配置代码都会执行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#声明任务的输入和输出"><span class="nav-number">1.13.</span> <span class="nav-text">声明任务的输入和输出</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编写自定义的任务"><span class="nav-number">1.14.</span> <span class="nav-text">编写自定义的任务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编写自定义任务类"><span class="nav-number">1.15.</span> <span class="nav-text">编写自定义任务类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通过注解来表达输入和输出"><span class="nav-number">1.16.</span> <span class="nav-text">通过注解来表达输入和输出</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用自定义的任务"><span class="nav-number">1.17.</span> <span class="nav-text">使用自定义的任务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#复用自定义的任务"><span class="nav-number">1.18.</span> <span class="nav-text">复用自定义的任务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Gradle自带的任务类型"><span class="nav-number">1.19.</span> <span class="nav-text">Gradle自带的任务类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#任务依赖推导"><span class="nav-number">1.20.</span> <span class="nav-text">任务依赖推导</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#在buildSrc目录创建代码"><span class="nav-number">1.21.</span> <span class="nav-text">在buildSrc目录创建代码</span></a></li></ol></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2014 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">EZLippi</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+   托管在 -
+  <a class="theme-link" href="https://github.com/EZLippi/EZLippi.github.io">
+    Github
+  </a>
+
+</div>
+<div class="theme-info">
+<span id="busuanzi_container_site_pv">
+    &nbsp; | &nbsp;本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+</div>
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  
+
+
+  
+
+
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=0.5.0"></script>
+
+
+
+  
+  
+
+  
+  
+<script type="text/javascript" src="/js/src/scrollspy.js?v=0.5.0"></script>
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = NexT.utils.escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    NexT.motion.middleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+
+      if (CONFIG.sidebar.display === 'post' || CONFIG.sidebar.display === 'always') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          NexT.utils.displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=0.5.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"ezlippi"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+
+  
+  
+
+
+</body>
+</html>

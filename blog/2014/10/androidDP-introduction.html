@@ -1,0 +1,999 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.useso.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Smack, 消息推送, 服务器， 实时聊天" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.5.0" />
+
+
+
+
+
+
+<meta name="description" content="Androidpn是韩国Sehwan No写的开源消息推送项目，很多大公司都用这个消息推送方式构建自己的消息推送服务，缺点是导致客户端比较耗电。通信机制分别由客户端和服务器完成。
+客户端采用基于java的XMPP协议包asmack（该包依赖于openfire下的开源项目smack）。通过该协议包提供的XMPPConnetcion类与服务器建立持久连接，并通过该连接进行用户注册和登录认证，以及接受服">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AndroidPN消息推送">
+<meta property="og:url" content="http://www.ezlippi.com/blog/2014/10/androidDP-introduction.html">
+<meta property="og:site_name" content="Lippi-浮生志">
+<meta property="og:description" content="Androidpn是韩国Sehwan No写的开源消息推送项目，很多大公司都用这个消息推送方式构建自己的消息推送服务，缺点是导致客户端比较耗电。通信机制分别由客户端和服务器完成。
+客户端采用基于java的XMPP协议包asmack（该包依赖于openfire下的开源项目smack）。通过该协议包提供的XMPPConnetcion类与服务器建立持久连接，并通过该连接进行用户注册和登录认证，以及接受服">
+<meta property="og:updated_time" content="2016-02-29T12:35:13.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="AndroidPN消息推送">
+<meta name="twitter:description" content="Androidpn是韩国Sehwan No写的开源消息推送项目，很多大公司都用这个消息推送方式构建自己的消息推送服务，缺点是导致客户端比较耗电。通信机制分别由客户端和服务器完成。
+客户端采用基于java的XMPP协议包asmack（该包依赖于openfire下的开源项目smack）。通过该协议包提供的XMPPConnetcion类与服务器建立持久连接，并通过该连接进行用户注册和登录认证，以及接受服">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> AndroidPN消息推送 | Lippi-浮生志 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?340874ba9357cbe81570aa4ac1185941";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner">
+<script>
+(function(){
+    var bp = document.createElement('script');
+    bp.src = '//push.zhanzhang.baidu.com/push.js';
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+            
+<div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Lippi-浮生志</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu menu-left">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+      
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'fLM9qfxyerC6njvM7usy','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                AndroidPN消息推送
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2014-10-30T00:00:00+08:00" content="2014-10-30">
+              2014-10-30
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/web/" itemprop="url" rel="index">
+                    <span itemprop="name">web</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/blog/2014/10/androidDP-introduction.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="/blog/2014/10/androidDP-introduction.html" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+        </div>
+      </header>
+    
+
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Androidpn是韩国Sehwan No写的开源消息推送项目，很多大公司都用这个消息推送方式构建自己的消息推送服务，缺点是导致客户端比较耗电。通信机制分别由客户端和服务器完成。</p>
+<p>客户端采用基于java的XMPP协议包asmack（该包依赖于openfire下的开源项目smack）。通过该协议包提供的XMPPConnetcion类与服务器建立持久连接，并通过该连接进行用户注册和登录认证，以及接受服务器消息。<br><a id="more"></a><br>   服务器是基于开源的openfire工程，采用java语言实现和Spring框架提供Web服务。主要有两个部分，一个是侦听在5222端口上的XMPP服务，负责与客户端的XMPPConnection类进行通信，作用是用户注册和身份认证，并推送消息。另外是Web服务器，采用一个轻量级的HTTP服务器，负责接收用户的Web请求。</p>
+<p>   整个基于XMPP的通信中，服务器端和客户端的通信是基于一个session（会话）过程，会话开始，首先客户端会指定端口号，然后把准备的连接信息发送到服务器端，客户端通过XMPP协议做的只有接收消息，其他的管理连接和保存消息等都由服务器负责。消息的传递是以根节点<stream>为起始，以</stream>为结束。</p>
+<p>   服务器和客户端建立Tcp连接过程如下。首先，建立会话协商，Client 准备connecting to server (127.0.0.1:5222)。其次，服务器询问Client所支持的安全认证。再者，Client发送给服务器要注册的用户。然后，Client根据服务器的要求提交用户信息。最后，Client关闭注册的STREAM元素。</p>
+<hr>
+<h1 id="客户端"><a href="#客户端" class="headerlink" title="客户端"></a>客户端</h1><p>Client这边包含有消息的收发，解析以及持久连接的发起，重连等功能呢，十分强大，我们开发时完全不用管底层的连接，也不用担心断线，可以专注于业务部分的开发。</p>
+<h2 id="控制器"><a href="#控制器" class="headerlink" title="控制器"></a>控制器</h2><p>XmppManager是Client的主控制器，主要用来管理连接信息，包括XMPP端口、IP地址、登录的用户名和密码，以及对连接的维护。</p>
+<h2 id="消息解析处理"><a href="#消息解析处理" class="headerlink" title="消息解析处理"></a>消息解析处理</h2><p>NotificationIQ、NotificationPackerListener以及NotificationIQProvider三个类负责对收到的Notification格式的消息进行解析和处理。</p>
+<h2 id="手机状态监听"><a href="#手机状态监听" class="headerlink" title="手机状态监听"></a>手机状态监听</h2><p>PersistentConnetcionListener、PhoneStateChangeListener以及ReconnectionThread三个类负责监听手机状态和断线重连。</p>
+<p>同时，代码结构也很简单。去除android的Service和BroadCast类以及一些工具类和常量类不谈：</p>
+<p>1.NotificationIQ,NotificationIQProvider,NotificationPacketListener三个类负责对收到的Notification格式的消息进行解析和处理，</p>
+<p>2.XmppManager是主控制器，NotificationService通过这个类，在后台维护androidpn连接。</p>
+<p>3.PersistentConnectionListener，PhoneStateChangeListener，ReconnectionThread.java三个类则负责监听手机的状态并进行断线重连。</p>
+<p>我们自定义消息时需要定义3个类：在NotificationIQ中定义消息的实体，在NotificationIQProvider中将消息转化为NotificationIQ实体，在NotificationPacketListener中对实体进行处理，具体的实现可参考NotificationIQ,NotificationIQProvider,NotificationPacketListener三个类。在定义这些类之后，还需要在XmppManager中将这3个类中注册到connection中，代码如下：</p>
+<pre><code>connection.connect();
+Log.i(LOGTAG, &quot;XMPP connected successfully&quot;);
+// packet provider
+ProviderManager.getInstance().addIQProvider(&quot;message&quot;,
+Constants.NOTIFICATION_NAMESPACE,
+new NotificationIQProvider());
+//packet filter
+PacketFilter packetFilter = new PacketTypeFilter(
+NotificationIQ.class);
+// packet listener
+PacketListener packetListener = xmppManager.getNotificationPacketListener();
+connection.addPacketListener(packetListener, packetFilter);
+</code></pre><p>需要注意的是，注册NotificationIQProvider时，传入的namespace需要和服务端组装消息时使用的namespace一致，才能正确的收到。</p>
+<h2 id="注册"><a href="#注册" class="headerlink" title="注册"></a>注册</h2><p>Client在与服务器建立connection后，首先会提交注册任务，在Androidpn项目中，用户注册是采用UUID（通用唯一标识码）来实现的，其每次登录都会利用这个UUID.randomUUID()来产生一个用户名和密码，而且不会重复。</p>
+<p>注册方法根据Server的格式要求组装注册消息，发送到服务器，同时使用在connection中添加监听，来获取服务器返回的消息packet。Client会根据消息的类型来判断是否注册成功。</p>
+<p>服务端收到Client的注册请求，会通过路由类router来转发到相应的Handler处理，router首先会读取Client发来包Packet的Namespace部分，根据XMPP RFC协议注册packet的namespace为jabber:iq:register，授权packet的namespace为jabber:iq:auth，由此转发到IQRegisterHandler处理注册请求。</p>
+<p>如果注册成功，Client会把相应的用户名、密码通过SharePerence保存在Client的共享文件AndroidpnClient中。此外，AndroidpnClient还保存了当前应用的包名、类名、服务器地址、端口、客户端版本、设备ID等。</p>
+<h2 id="登录"><a href="#登录" class="headerlink" title="登录"></a>登录</h2><p>Client的登录是在注册之后进行的，在Client的XmppManager类中，建立连接的时候首先会提交登录任务，然而在提交登录任务的时候都有一个submitRegisterTask()方法，可知，每次登录都会首先提交一个注册任务。</p>
+<p>登录的时候，要先通过isAuthenticated()方法判断是否授权，授权处理同样会通过connection发送到服务端，服务端会根据packet的namespace部分进行解析，然后路由类router会根据namespace转发到IQAuthHandler处理。</p>
+<p>Client收到服务端返回的消息packet，会使用connection的监听器异步接收消息，并通过XmppManager的context的sendBroadcast(Intentintent)以广播发送出去。</p>
+<p>基于tomcat的项目源码<a href="http://pan.baidu.com/s/1kTDUQWJ" target="_blank" rel="external">http://pan.baidu.com/s/1kTDUQWJ</a></p>
+<hr>
+<h1 id="服务器"><a href="#服务器" class="headerlink" title="服务器"></a>服务器</h1><p>服务端架构依赖spring、mina框架，spring完成java Ben管理，mina完成网络通信。另外，服务端还通过jetty潜入了Admin Console Web界面功能。对于spring的依赖导致要把androidpn-server整合潜入项目中时，要考虑和自己项目本身spring环境的整合问题，可能要改造androidpn-server源代码，具体要看项目中spring的环境。对于mina的依赖不存在这个问题，因为mina是类库型框架，而spring是容器型框架。androidpn-server对jetty的使用不是可选的，而是和jetty绑定的，所以要不使用jetty就必须对androidpn-server的源代码进行改造。</p>
+<p>另外，对数据的存储使用hibernate框架，androidpn-server在使用hibernate时配置通过ehcache实现二级缓存。官方默认使用的数据库是HSQLDB数据库，你可以改用其他数据库。HSQLDB是用java语言实现的数据库，对其使用请自己学习。Androidpn-server通过In-Process模式（作为应用程序的一部分潜入应用程序）使用HSQLDB的。</p>
+<p>  服务器主要由以下几个包组成：</p>
+<ul>
+<li><p>org.androidpn.server.xmpp异常类型定义，包含程序入口类XmppServer。</p>
+</li>
+<li><p>org.androidpn.server.util加载配置文件，获取主机和端口等信息。</p>
+</li>
+<li><p>org.androidpn.server.xmpp.codec是XMPP协议的XML文件解析包，server  </p>
+</li>
+</ul>
+<p>收到和发送的消息都要通过这个包来进行xmpp协议编码和解码。</p>
+<ul>
+<li><p>org.androidpn.server.xmpp.handler负责对不同类型的消息进行处理</p>
+</li>
+<li><p>org.androidpn.server.xmpp.net负责维护与client之间的持久连接，并实现了一些传输方式供发送xmpp消息时使用。</p>
+</li>
+<li><p>org.androidpn.server.xmpp.ssl是对连接进行ssl认证的工具包。</p>
+</li>
+<li><p>org.androidpn.server.xmpp.router包负责将收到的信息包发送到相应的handler进行处理，是一个路由包。</p>
+</li>
+<li><p>org.androidpn.server.xmpp.presence里面只包含PresenceManager类，用来维护client的在线状态。</p>
+</li>
+<li><p>org.androidpn.server.xmpp.push包里面的NotificationManager类包含有向client发送消息的接口。</p>
+<p><strong>服务器中使用ServerStarter类启动服务，服务启动后使用XmppServer来管理连接、加载配置等。</strong></p>
+</li>
+</ul>
+<p>服务器接收处理消息流程</p>
+<p>① connection接收到来着Client的packet，使用包codec解码。</p>
+<p>② 路由包router根据packet的namespace等信息，将packet路由到相应的Handler。</p>
+<p>③ Handler开始处理。</p>
+<p>开发中只要根据client发送消息的格式，定义自己的router和handler类，然后在PacketRouter中注册router，在IQRouter中注册handler即可。</p>
+<p><strong>服务器发送消息的流程</strong></p>
+<p>① 使用NotificationManager接口的push方法。</p>
+<p>② 使用SessionManager在Session集合查找相应的client连接。</p>
+<p>③ 定义和组装XMPP消息，通过session向client发送。</p>
+<p>在这个流程中我们需要修改的是步骤3，也就是需要定义和组装自己的xmpp消息，以便于将适当的信息传到客户端并便于客户端解析。一个简单的消息组装例子如下：</p>
+<pre><code>private IQ  createMessageIQ(String title, String message, String userId,String json) {
+Element notification =  DocumentHelper.createElement(QName.get(
+&quot;message&quot;,  INQURIE_NAMESPACE));
+notification.addElement(&quot;title&quot;).setText(title);
+notification.addElement(&quot;text&quot;).setText(message);
+notification.addElement(&quot;userId&quot;).setText(userId);
+notification.addElement(&quot;json&quot;).setText(json);
+IQ iq = new IQ();
+iq.setType(IQ.Type.set);
+iq.setChildElement(notification);
+return iq;
+}
+</code></pre><p>要注意的是在创建element的时候，传入的namespace要和client解析使用的namespace相匹配。</p>
+<p><strong>独立部署使用</strong></p>
+<p>独立部署使用不需要对androidpn-server源代码进行任何改造，目录结构见上图，只需要修改好配置文件即可，配置文件在conf文件夹下，下面对需要注意的配置项进行说明，其他配置项目使用默认配置就可。</p>
+<p>对于config.properties的配置说明如下：</p>
+<p>apiKey=1234567890 #暂时发现没什么用处</p>
+<p>admin.console.host=127.0.0.1 #web管理控制界面jetty服务监听的地址</p>
+<p>admin.console.port=7070 #web管理控制界面jetty服务监听的端口</p>
+<p>对于spring-config.xml的配置说明：</p>
+<pre><code>&lt;bean id=&quot;ioAcceptor&quot; class=&quot;org.apache.mina.transport.socket.nio.NioSocketAcceptor&quot;init-method=&quot;bind&quot; destroy-method=&quot;unbind&quot;&gt;
+
+&lt;property name=&quot;defaultLocalAddress&quot; value=&quot;:5222&quot; /&gt; &lt;!--mina Socekt服务端监听端口，客户端配置和此配置一致--&gt;
+
+&lt;property name=&quot;handler&quot; ref=&quot;xmppHandler&quot; /&gt;
+
+&lt;property name=&quot;filterChainBuilder&quot; ref=&quot;filterChainBuilder&quot; /&gt;
+
+&lt;property name=&quot;reuseAddress&quot; value=&quot;true&quot; /&gt;
+
+&lt;/bean&gt;
+</code></pre><p>启动脚本在bin下，windowns和linux的脚本都有，需要配置系统环境变量JAVA_HOME，或者修改启动脚本将JAVA_HOME指定为你本机的具体地址，运行run脚本androidpn启动成功，通过浏览器访问<a href="http://127.0.0.1:7070/就可看到console界面。" target="_blank" rel="external">http://127.0.0.1:7070/就可看到console界面。</a></p>
+<p>其他项目通过http方式将需要发送的消息提交给androidpn-server服务，由androidpn-server完成客户端消息推送。</p>
+<p>具体应用可以通过程序代码编写方式访问<a href="http://192.168.1.24:7070/notification.do地址，将需要的参数以post方式提交。" target="_blank" rel="external">http://192.168.1.24:7070/notification.do地址，将需要的参数以post方式提交。</a></p>
+<p>嵌入项目使用<br>若要将androidpn作为应用程序的一部分潜入项目中使用，需要对androidpn-server源代码进行改造。</p>
+<p><strong>情况一：若你的项目中没有用到spring</strong></p>
+<p>这种情况不用考虑androidpn的spring和你项目中spring配置的融合问题，直接因为spring就可以了，配置文件使用androidpn默认配置文件名称spring-config.xml。配置文件都放在classpath下。</p>
+<p>需要在config.properties配置文件中增加配置server.home.dir选项，值指向一个目录，如：server.home.dir=F:\android\download\androidpn-server-0.5.0，该目录下要有子目录conf\security，目录下要放两个文件keystore和truststore，用来进行SSL安全传输用的密钥和证书，利用androdpn-server自带的就可以。</p>
+<p>接下来就是修改org.androidpn.server.xmpp. XmppServer类，将启动admin console的代码注释掉，如下截图红框框住的部分。如果你需要启动admin console的话，需要将原始androidpn中console文件夹放到合适的路径下，这个还没有试。</p>
+<p><strong>Androidpn-server主启动类</strong></p>
+<p>org.androidpn.server.xmpp.XmppServer修改完后，你就可以在你的应用程序这样调用：</p>
+<p>XmppServerserver = XmppServer.getInstance();</p>
+<p>这样XmppServer通过加载spring启动了mina监听服务，这时手机客户端应用已经可以连接服务端了。</p>
+<p>你的应用程序需要推送消息时，实例化</p>
+<p>org.androidpn.server.xmpp.push.NotificationManager，调用其提供的sendBroadcast和sendNotifcationToUser方法，如下代码调用：</p>
+<pre><code>NotificationManager notificationManager = new NotificationManager();
+notificationManager.sendBroadcast(&quot;1234567890&quot;, &quot;Hello&quot;,&quot;Hello BalanceJia!&quot;, &quot;uri&quot;);
+或
+notificationManager.sendNotifcationToUser(apiKey,username, title, message, uri);
+</code></pre><p><strong>情况二：若你的项目中用到spring</strong></p>
+<p>和你的项目中spring配置融合，需要注意spring容器不能重复启动的问题。所以要将androidpn-server的spring配置增加到你的spring配置中，需要修改XmppServer启动spring的地方，另外androidpn-server spring中配置的ben名字和你项目中的本名字不能重复，因为androidpn-server中用到的ben  id有：dataSource、dataSource、transactionManager、userDao、userService。还有数据源冲突的问题。</p>
+<p><strong>情况三：基于tomcat部署</strong></p>
+<p>1.依据ServerStart类写一个servlet，在servlet中启动时创建XmppServer实例。然后在web.xml中配置为自启动。</p>
+<p>2.将androidpn自带的配置目录conf拷贝到WEB-INF下面，并且把spring-config.xml文件从conf目录移动到WEB-INF目录。</p>
+<p>3.修改默认的spring-config.xml文件，在文件schema的头部<beans>下面加入如下内容<import resource="applicationContext.xml">，其中，加载顺序会默认先加载applicationContext文件，然后会加载spring-config文件后面的内容。</import></beans></p>
+<p>原因是spring-config文件中有个<bean id="xmppHandler" ...="">组件会在web服务启动的时候加载，该组件也会初始化XmppServer，导致与servlet的加载发生冲突。</bean></p>
+<p>由于未使用使用hibernate-cfg.xml文件，需要在spring-config文件加入如下内容：</p>
+<pre><code>&lt;bean id=&quot;sessionFactory&quot;
+   class=&quot;org.springframework.orm.hibernate3.LocalSessionFactoryBean&quot;&gt;
+   &lt;property name=&quot;dataSource&quot; ref=&quot;dataSource&quot; /&gt;
+   &lt;property name=&quot;mappingResources&quot; &gt;
+  &lt;list&gt;
+&lt;value&gt;org/androidpn/server/model/User.hbm.xml&lt;/value&gt;
+  &lt;/list&gt;
+&lt;/property&gt;
+&lt;property name=&quot;hibernateProperties&quot;&gt;
+   &lt;props&gt;
+ &lt;prop key=&quot;hibernate.dialect&quot;&gt;
+  org.hibernate.dialect.SQLServerDialect
+ &lt;/prop&gt;
+ &lt;prop key=&quot;hibernate.show_sql&quot;&gt;true&lt;/prop&gt;
+ &lt;prop key=&quot;hibernate.hbm2ddl.auto&quot;&gt;update&lt;/prop&gt;
+  &lt;/props&gt;
+ &lt;/property&gt;
+ &lt;/bean&gt;
+</code></pre><p>在spring-config.xml文件中，配置组件<bean: id="ioAcceptor">的listenrPort属性</bean:></p>
+<pre><code>&lt;bean id=&quot;listenrPort&quot; class=&quot;java.net.InetSocketAddress&quot;&gt;
+ &lt;constructor-arg value=&quot;localhost&quot;/&gt;
+ &lt;constructor-arg value=&quot;5222&quot;/&gt;
+&lt;/bean&gt;
+</code></pre><p>此外，Androidpn默认采用spring-mvc方式配置，所以需要修改action指向。修改org.androidpn.server.console.controller包下面的三个类，改为继承自struct2的ActionSupport方式，并修改默认的调用方法，然后配置struct.xml文件。</p>
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/android/" rel="tag">#android</a>
+          
+            <a href="/tags/消息推送，-server，-client/" rel="tag">#消息推送， server， client</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/2014/10/how to use smack.html" rel="next" title="Smack开发手册">
+                <i class="fa fa-chevron-left"></i> Smack开发手册
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/2014/10/androidDP-project.html" rel="prev" title="Androidpn 消息推送总结">
+                Androidpn 消息推送总结 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="/blog/2014/10/androidDP-introduction.html"
+     data-title="AndroidPN消息推送"
+     data-content=""
+     data-url="http://www.ezlippi.com/blog/2014/10/androidDP-introduction.html">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  <p>热评文章</p>
+  <div class="ds-top-threads" data-range="weekly" data-num-items="4"></div>
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="/blog/2014/10/androidDP-introduction.html"
+           data-title="AndroidPN消息推送" data-url="http://www.ezlippi.com/blog/2014/10/androidDP-introduction.html">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="EZLippi" />
+          <p class="site-author-name" itemprop="name">EZLippi</p>
+          <p class="site-description motion-element" itemprop="description">Easy Lippi</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">65</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+          
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">72</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/EZLippi" target="_blank">
+                  
+                    <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/ouyanglip" target="_blank">
+                  
+                    <i class="fa fa-weibo"></i> weibo
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/lippi-ouyang" target="_blank">
+                  
+                    <i class="fa fa-weibo"></i> zhihu
+                  
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+            <p class="site-author-name">友情链接</p>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.woaitqs.cc/" target="_blank">Qisen Tang</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://szhshp.org" target="_blank">szhshp的博客</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://python.zhangwei.website" target="_blank">JuniorCoder</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/lippi-ouyang" target="_blank">友链出租</a>
+              </span>
+            
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#客户端"><span class="nav-number">1.</span> <span class="nav-text">客户端</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#控制器"><span class="nav-number">1.1.</span> <span class="nav-text">控制器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#消息解析处理"><span class="nav-number">1.2.</span> <span class="nav-text">消息解析处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#手机状态监听"><span class="nav-number">1.3.</span> <span class="nav-text">手机状态监听</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#注册"><span class="nav-number">1.4.</span> <span class="nav-text">注册</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#登录"><span class="nav-number">1.5.</span> <span class="nav-text">登录</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#服务器"><span class="nav-number">2.</span> <span class="nav-text">服务器</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2014 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">EZLippi</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+   托管在 -
+  <a class="theme-link" href="https://github.com/EZLippi/EZLippi.github.io">
+    Github
+  </a>
+
+</div>
+<div class="theme-info">
+<span id="busuanzi_container_site_pv">
+    &nbsp; | &nbsp;本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+</div>
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  
+
+
+  
+
+
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=0.5.0"></script>
+
+
+
+  
+  
+
+  
+  
+<script type="text/javascript" src="/js/src/scrollspy.js?v=0.5.0"></script>
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = NexT.utils.escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    NexT.motion.middleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+
+      if (CONFIG.sidebar.display === 'post' || CONFIG.sidebar.display === 'always') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          NexT.utils.displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=0.5.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"ezlippi"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+
+  
+  
+
+
+</body>
+</html>

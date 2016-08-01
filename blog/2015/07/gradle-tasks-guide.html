@@ -1,0 +1,952 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.useso.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="java, gradle," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.5.0" />
+
+
+
+
+
+
+<meta name="description" content="在Gradle的build文件中，任务是构建活动最基本的单元，它是许多构建指令的集合，下面我将仔细介绍Gradle任务的细节。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="彻底理解Gradle的任务">
+<meta property="og:url" content="http://www.ezlippi.com/blog/2015/07/gradle-tasks-guide.html">
+<meta property="og:site_name" content="Lippi-浮生志">
+<meta property="og:description" content="在Gradle的build文件中，任务是构建活动最基本的单元，它是许多构建指令的集合，下面我将仔细介绍Gradle任务的细节。">
+<meta property="og:image" content="http://www.ezlippi.com/images/gradle-tasks.png">
+<meta property="og:updated_time" content="2016-02-29T13:10:22.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="彻底理解Gradle的任务">
+<meta name="twitter:description" content="在Gradle的build文件中，任务是构建活动最基本的单元，它是许多构建指令的集合，下面我将仔细介绍Gradle任务的细节。">
+<meta name="twitter:image" content="http://www.ezlippi.com/images/gradle-tasks.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> 彻底理解Gradle的任务 | Lippi-浮生志 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?340874ba9357cbe81570aa4ac1185941";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner">
+<script>
+(function(){
+    var bp = document.createElement('script');
+    bp.src = '//push.zhanzhang.baidu.com/push.js';
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+            
+<div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Lippi-浮生志</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu menu-left">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+      
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'fLM9qfxyerC6njvM7usy','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                彻底理解Gradle的任务
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2015-07-27T00:00:00+08:00" content="2015-07-27">
+              2015-07-27
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/gradle/" itemprop="url" rel="index">
+                    <span itemprop="name">gradle</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/blog/2015/07/gradle-tasks-guide.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="/blog/2015/07/gradle-tasks-guide.html" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+        </div>
+      </header>
+    
+
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在Gradle的build文件中，任务是构建活动最基本的单元，它是许多构建指令的集合，下面我将仔细介绍Gradle任务的细节。<br><a id="more"></a></p>
+<h2 id="声明一个任务"><a href="#声明一个任务" class="headerlink" title="声明一个任务"></a>声明一个任务</h2><p>声明任务很简单，你只需要一个任务名：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">task hello</span><br></pre></td></tr></table></figure>
+<p>你可以在命令行中使用<code>gradle tasks</code>来查看所有的任务：</p>
+<pre><code>------------------------------------------------------------
+Root Project
+------------------------------------------------------------
+Help tasks
+----------
+dependencies - Displays the dependencies of root project &apos;task-lab&apos;.
+help - Displays a help message
+projects - Displays the subprojects of root project &apos;task-lab&apos;.
+properties - Displays the properties of root project &apos;task-lab&apos;.
+13
+tasks - Displays the tasks in root project &apos;task-lab&apos;.
+Other tasks
+-----------
+hello
+</code></pre><h2 id="任务的动作"><a href="#任务的动作" class="headerlink" title="任务的动作"></a>任务的动作</h2><p>很显然执行<code>gradle hello</code>不会有任何结果，因为你没有给这个任务添加动作，我们可以通过左移操作符给任务添加一个动作(在Groovy语言中左移操作符可以重载成在任务的最后添加一个动作)：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">task hello &lt;&lt;&#123;</span><br><span class="line">    println <span class="string">'hello,world'</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们可以在任务的后面引用前面声明的任务:</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">task hello</span><br><span class="line"></span><br><span class="line">hello &lt;&lt; &#123;</span><br><span class="line">    print <span class="string">'hello,'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">hello &lt;&lt; &#123;</span><br><span class="line">    println <span class="string">'world'</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>接下来在命令行中运行<code>gradle hello</code>,输出如下：</p>
+<pre><code>$ gradle hello
+hello, world
+$
+</code></pre><p>##任务的配置</p>
+<p>Gradle新手可能会很容易混淆任务的动作和配置，看下面这个例子：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">task initializeDatabase</span><br><span class="line">initializeDatabase &lt;&lt; &#123; println <span class="string">'connect to database'</span> &#125;</span><br><span class="line">initializeDatabase &lt;&lt; &#123; println <span class="string">'update database schema'</span> &#125;</span><br><span class="line">initializeDatabase &#123; println <span class="string">'configuring database connection'</span> &#125;<span class="comment">//这里没有左移操作符</span></span><br></pre></td></tr></table></figure>
+<p>运行这个构建脚本，猜猜输出是什么：</p>
+<pre><code>//－b 选项用于指定gradle构建脚本文件名
+$ gradle -b scratch.gradle initializeDatabase
+configuring database connection
+:initializeDatabase
+connect to database
+update database schema
+$
+</code></pre><p>如果第三个代码块我们用的是&lt;&lt;操作浮，这个消息就是在最后而不是最先打印出来了，我把用{}扩起来的部分统称为一个闭包，上面第三个闭包并不是任务的动作，他直接使用了任务名+闭包，在这里它是一个配置块。在Gradle的构建生命周期里配置阶段是在执行阶段前运行的，所以这个块里的代码最先执行了。</p>
+<p>Gradle的构建生命周期分为三部分，初始化、配置和执行阶段。在执行阶段，任务按照他们的依赖顺序按序执行，在配置阶段所有的任务都转换成Gradle的内部对象模型，通常叫做有向无环图(DAG)。图的节点就是构建脚本里的任务，任务与任务之间可以定义依赖关系。初始化阶段是Gradle用来找出哪些项目会参与到项目构建中，这在多项目构建中很重要。</p>
+<p>和动作闭包一样，配置闭包也具有可加性，你可以像下面这样编写构建脚本：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">task initializeDatabase</span><br><span class="line">initializeDatabase &lt;&lt; &#123; println <span class="string">'connect to database'</span> &#125;</span><br><span class="line">initializeDatabase &lt;&lt; &#123; println <span class="string">'update database schema'</span> &#125;</span><br><span class="line">initializeDatabase &#123; print <span class="string">'configuring '</span> &#125;</span><br><span class="line">initializeDatabase &#123; println <span class="string">'database connection'</span> &#125;</span><br></pre></td></tr></table></figure>
+<p>配置块是用来放置变量和数据结构的地方，这些可能会在任务的执行过程中用到。</p>
+<h2 id="一切任务都是对象"><a href="#一切任务都是对象" class="headerlink" title="一切任务都是对象"></a>一切任务都是对象</h2><p>前面讲过Gradle会在任务执行之前把他们创建成内部的对象模型，每一个你声明的任务都是一个任务对象，这个对象有自己的属性和方法，就和Java语言里的对象一样，我们可以控制每个任务对象的类型。默认情况每一个新创建的任务都是DefaultTask类型，就像Java语言里的java.lang.Object一样，每一个Gradle任务都继承自DefaultTask类型，你也可以定义自己的类型。DefaultTask事实上没有做任务事情，不过它具有基本的属性和方法用来和Gradle项目模型交互。接下来我会一一介绍每个任务都有的方法和属性。</p>
+<h2 id="DefaultTask的方法"><a href="#DefaultTask的方法" class="headerlink" title="DefaultTask的方法"></a>DefaultTask的方法</h2><h3 id="dependsOn-task"><a href="#dependsOn-task" class="headerlink" title="dependsOn(task)"></a>dependsOn(task)</h3><p>用于给任务添加一个依赖的任务，被依赖的任务总是在依赖它的任务之前运行，你可以有多种方式声明这种依赖关系，如下所示：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">//最简单的方法</span></span><br><span class="line">task loadTestData &#123;</span><br><span class="line">   	dependsOn createSchema</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//使用&lt;&lt;声明依赖</span></span><br><span class="line">task loadTestData &#123;</span><br><span class="line">    dependsOn &lt;&lt; createSchema</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用单引号声明依赖</span></span><br><span class="line">task loadTestData &#123;</span><br><span class="line">    dependsOn <span class="string">'createSchema'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//显式调用dependsOn方法</span></span><br><span class="line">task loadTestData</span><br><span class="line">loadTestData.dependsOn createSchema</span><br><span class="line"></span><br><span class="line"><span class="comment">// 快捷方法</span></span><br><span class="line">task loadTestData(<span class="string">dependsOn:</span> createSchema)</span><br></pre></td></tr></table></figure>
+<p>任务可以依赖多个任务，如下所示：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">//每次声明一个任务</span></span><br><span class="line">task loadTestData &#123;</span><br><span class="line">    dependsOn &lt;&lt; compileTestClasses</span><br><span class="line">    dependsOn &lt;&lt; createSchema</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 依次传递任务名</span></span><br><span class="line">task world &#123;</span><br><span class="line">    dependsOn compileTestClasses, createSchema</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 显式调用方法</span></span><br><span class="line">task world</span><br><span class="line">world.dependsOn compileTestClasses, createSchema</span><br><span class="line"></span><br><span class="line"><span class="comment">//快捷方式</span></span><br><span class="line">task world(<span class="string">dependsOn:</span> [ compileTestClasses, createSchema ])</span><br></pre></td></tr></table></figure>
+<h3 id="doFirst-closure"><a href="#doFirst-closure" class="headerlink" title="doFirst(closure)"></a>doFirst(closure)</h3><p>在任务的最开始添加一个可执行的代码块，doFirst方法允许你添加动作到现有的任务中，这个任务是在其他插件中定义的，你没有办法修改，但是你可以多次调用doFirst方法在任务执行之前添加一些代码块。<br>你可以使用任务对象调用doFirst方法，传递一个闭包给这个方法，如下所示：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">task setupDatabaseTests &lt;&lt; &#123;</span><br><span class="line"><span class="comment">// 任务现有的代码</span></span><br><span class="line">println <span class="string">'load test data'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">setupDatabaseTests.doFirst &#123;</span><br><span class="line">println <span class="string">'create schema'</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后运行gradle setupDatabaseTests,结果如下：</p>
+<pre><code>$ gradle setupDatabaseTests
+:setupDatabaseTests
+create schema
+load test data
+$
+</code></pre><p>你也可以在任务的配置块里面调用doFirst方法，不过要记住配置块里的代码在任务的动作之前执行：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">task setupDatabaseTests &lt;&lt; &#123;</span><br><span class="line">    println <span class="string">'load test data'</span></span><br><span class="line">&#125;</span><br><span class="line">setupDatabaseTests &#123;</span><br><span class="line">doFirst &#123;</span><br><span class="line">    println <span class="string">'create schema'</span></span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>doFirst方法也是可加的，你可以多次调用这个方法在任务的最前面添加代码块，如下所示：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">task setupDatabaseTests &lt;&lt; &#123;</span><br><span class="line">    println <span class="string">'load test data'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">setupDatabaseTests.doFirst &#123;</span><br><span class="line">    println <span class="string">'create database schema'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">setupDatabaseTests.doFirst &#123;</span><br><span class="line">    println <span class="string">'drop database schema'</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行结果如下：</p>
+<pre><code>$ gradle world
+:setupDatabaseTests
+drop database schema
+create database schema
+load test data
+$
+</code></pre><h3 id="doLast-closure"><a href="#doLast-closure" class="headerlink" title="doLast(closure)"></a>doLast(closure)</h3><p>doLast方法和doFirst方法很类似，它用于在任务的最后面添加一段代码，这里就不重复了。</p>
+<h3 id="onlyIf-closure"><a href="#onlyIf-closure" class="headerlink" title="onlyIf(closure)"></a>onlyIf(closure)</h3><p>onlyIf方法用于决定是否执行一个任务，这里使用闭包返回的值来作为onlyIf的判断依据，在Groovy语言中，一个闭包的最后一个表达式用来作为这个闭包的返回值，即使你没有声明return语句，看一个例子：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">task createSchema &lt;&lt; &#123;</span><br><span class="line">    println 'create database schema'</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">task loadTestData(dependsOn: createSchema) &lt;&lt; &#123;</span><br><span class="line">    println 'load test data'</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">loadTestData.onlyIf &#123;</span><br><span class="line">    System.properties['load.data'] == 'true'//当系统属性load.data为true时这个闭包返回true</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">``` </span><br><span class="line">    </span><br><span class="line">看下下面的运行结果：</span><br><span class="line"></span><br><span class="line">	//这里没有系统属性load.data</span><br><span class="line">    $ build loadTestData</span><br><span class="line">    create database schema</span><br><span class="line">    :loadTestData SKIPPED</span><br><span class="line">    </span><br><span class="line">    //在命令行中传递系统属性</span><br><span class="line">    $ gradle -Dload.data=true loadTestData</span><br><span class="line">    :createSchema</span><br><span class="line">    create database schema</span><br><span class="line">    :loadTestData</span><br><span class="line">    load test data</span><br><span class="line">    $</span><br><span class="line"></span><br><span class="line">##DefaultTask的属性</span><br><span class="line"></span><br><span class="line">###didWork</span><br><span class="line"></span><br><span class="line">一个用来标识任务是否成功完成的boolean属性，不是所有的任务都是在完成之后设置didWork变量，一些自带的任务比如Compile,Copy和Delete会根据动作是否执行成功来设置这个变量，JavaCompiler任务的实现是只要有一个文件成功编译就返回true,你可以在你自己的任务中设置didWork属性来反映构建代码的执行结果，举例如下：</span><br><span class="line"></span><br><span class="line">``` Groovy</span><br><span class="line"></span><br><span class="line">apply plugin: 'java'</span><br><span class="line"></span><br><span class="line">task emailMe(dependsOn: compileJava) &lt;&lt; &#123;</span><br><span class="line">    if(tasks.compileJava.didWork) &#123;</span><br><span class="line">    	println 'SEND EMAIL ANNOUNCING SUCCESS'</span><br><span class="line">   	 &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行结果如下：</p>
+<pre><code>$ gradle -b didWork.gradle emailMe
+SEND EMAIL ANNOUNCING SUCCESS
+$
+</code></pre><h3 id="enabled"><a href="#enabled" class="headerlink" title="enabled"></a>enabled</h3><p>一个用来设置任务是否会执行的一个属性，你可以设置enabled为false不让它运行，但是它依赖的任务依然会运行。</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">task templates &lt;&lt; &#123;</span><br><span class="line">    println <span class="string">'process email templates'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">task sendEmails(<span class="string">dependsOn:</span> templates) &lt;&lt; &#123;</span><br><span class="line">    println <span class="string">'send emails'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">sendEmails.enabled = <span class="literal">false</span></span><br></pre></td></tr></table></figure>
+<p>运行结果如下：</p>
+<pre><code>$ gradle -b enabled.gradle sendEmails
+:templates
+process email templates
+:sendEmails SKIPPED
+$
+</code></pre><h3 id="path"><a href="#path" class="headerlink" title="path"></a>path</h3><p>一个字符串属性包含任务的全限定路径名，默认是一个冒号加上任务名，如下所示：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">task echoMyPath &lt;&lt; &#123;</span><br><span class="line">println <span class="string">"THIS TASK'S PATH IS $&#123;path&#125;"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行一下，输出如下：</p>
+<pre><code>$ gradle -b path.gradle echoMyPath
+THIS TASK&apos;S PATH IS :echoMyPath
+$
+</code></pre><p>最开始的冒号表示这个任务在最顶级的构建文件里面，由于Gradle支持多项目构建，一个项目里面可能有多个子项目，假如echoMyPath在子项目subProject构建文件中,那它的全限定路径名就是:subProject:echoMyPath。</p>
+<h3 id="description"><a href="#description" class="headerlink" title="description"></a>description</h3><p>正如它的名字一样，这个用来给一个任务添加一段容易阅读的描述，你可以使用如下几种方法给任务添加描述。</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">task helloWorld(<span class="string">description:</span> <span class="string">'Says hello to the world'</span>) &lt;&lt; &#123;</span><br><span class="line">println <span class="string">'hello, world'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">task helloWorld &lt;&lt; &#123;</span><br><span class="line">println <span class="string">'hello, world'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">helloWorld &#123;</span><br><span class="line">description = <span class="string">'Says hello to the world'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Another way to do it</span></span><br><span class="line">helloWorld.description = <span class="string">'Says hello to the world'</span></span><br></pre></td></tr></table></figure>
+<h2 id="任务的类型"><a href="#任务的类型" class="headerlink" title="任务的类型"></a>任务的类型</h2><p>我前面说过每个任务都有一个类型。除了DefaultTask之外，还有许多其他类型，你可以继承DefaultTask来声明新的类型，下面介绍几种比较重要的类型，以后可能经常会用到。</p>
+<h3 id="Copy"><a href="#Copy" class="headerlink" title="Copy"></a>Copy</h3><p>Copy任务用于把文件从一个地方复制到另一个地方，你可以设置源目录、目标目录和要复制的文件类型，如下所示：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">task copyFiles(<span class="string">type:</span> Copy) &#123;</span><br><span class="line">    from <span class="string">'resources'</span></span><br><span class="line">    into <span class="string">'target'</span></span><br><span class="line">    include <span class="string">'**/*.xml'</span>, <span class="string">'**/*.txt'</span>, <span class="string">'**/*.properties'</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果目标目录不存在,Copy任务会自动创建，上面这个任务会把resources目录下所有的xml、txt和propertied文件都复制到target目录。</p>
+<h3 id="Jar"><a href="#Jar" class="headerlink" title="Jar"></a>Jar</h3><p>Jar任务用于打包源代码生成Jar文件，Java插件就自带这种类型，任务类型就叫做jar,这个任务把源代码文件和资源文件打包成Jar文件，并保存在build/libs目录下，文件名默认是用项目的名称。</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">apply <span class="string">plugin:</span> <span class="string">'java'</span></span><br><span class="line">task customJar(<span class="string">type:</span> Jar) &#123;</span><br><span class="line">manifest &#123;</span><br><span class="line"><span class="comment">//设置一些属性值(以键值对的形式)</span></span><br><span class="line">    attributes <span class="string">firstKey:</span> <span class="string">'firstValue'</span>, <span class="string">secondKey:</span> <span class="string">'secondValue'</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//文件名</span></span><br><span class="line">archiveName = <span class="string">'hello.jar'</span></span><br><span class="line"><span class="comment">//目标路径</span></span><br><span class="line">destinationDir = file(<span class="string">"$&#123;buildDir&#125;/jars"</span>)<span class="comment">//file方法用于把一个字符串变成文件对象</span></span><br><span class="line"><span class="comment">//要打包的文件</span></span><br><span class="line">from sourceSets.main.classes</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="JavaExec"><a href="#JavaExec" class="headerlink" title="JavaExec"></a>JavaExec</h3><p>用于执行一个Java类的main()方法。举例说明：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">apply <span class="string">plugin:</span> <span class="string">'java'</span></span><br><span class="line"><span class="comment">//maven中央仓库</span></span><br><span class="line">repositories &#123;</span><br><span class="line">    mavenCentral()</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//项目依赖</span></span><br><span class="line">dependencies &#123;</span><br><span class="line">    runtime <span class="string">'commons-codec:commons-codec:1.5'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">task encode(<span class="string">type:</span> JavaExec, <span class="string">dependsOn:</span> classes) &#123;</span><br><span class="line">    </span><br><span class="line">main = <span class="string">'org.gradle.example.commandline.MetaphoneEncoder'</span></span><br><span class="line">    args = <span class="string">"The rain in Spain falls mainly in the plain"</span>.split().toList()</span><br><span class="line">    classpath sourceSets.main.classesDir</span><br><span class="line">    classpath configurations.runtime</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个构建文件声明了一个外部依赖，Apache Commons Codec库。一般情况下，在命令行运行一个class文件的步骤是编译Java源文件，然后在命令行中设置class文件的路径和依赖的库文件。我们上面encode任务声明了main函数所在的类，给他传递了命令行参数，设置classpath参数。</p>
+<h2 id="编写自定义的任务类型"><a href="#编写自定义的任务类型" class="headerlink" title="编写自定义的任务类型"></a>编写自定义的任务类型</h2><p>如果Gradle自带的任务类型不满足你的工作需求时，最简单的办法就是编写自定义的任务类型，Gradle提供了多种方法来实现，这里我介绍两种最常用的方法。</p>
+<h3 id="在Build文件中编写自定义任务类型"><a href="#在Build文件中编写自定义任务类型" class="headerlink" title="在Build文件中编写自定义任务类型"></a>在Build文件中编写自定义任务类型</h3><p>假设你的构建脚本需要对MySQL数据库执行一些随机的查询，下面我们来编写一个任务执行数据库查询：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">task createDatabase(type: MySqlTask) &#123;</span><br><span class="line">    sql = 'CREATE DATABASE IF NOT EXISTS example'</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">task createUser(type: MySqlTask, dependsOn: createDatabase) &#123;</span><br><span class="line">    sql = "GRANT ALL PRIVILEGES ON example.*</span><br><span class="line">    TO exampleuser@localhost IDENTIFIED BY 'passw0rd'"</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">task createTable(type: MySqlTask, dependsOn: createUser) &#123;</span><br><span class="line">    username = 'exampleuser'</span><br><span class="line">    password = 'passw0rd'</span><br><span class="line">    database = 'example'</span><br><span class="line">    sql = 'CREATE TABLE IF NOT EXISTS users</span><br><span class="line">    (id BIGINT PRIMARY KEY, username VARCHAR(100))'</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">class MySqlTask extends DefaultTask &#123;</span><br><span class="line">    //声明任务的属性</span><br><span class="line">    def hostname = 'localhost'</span><br><span class="line">    def port = 3306</span><br><span class="line">    def sql</span><br><span class="line">    def database</span><br><span class="line">    def username = 'root'</span><br><span class="line">    def password = 'password'</span><br><span class="line"></span><br><span class="line">//表示这是任务的动作</span><br><span class="line">@TaskAction</span><br><span class="line">def runQuery() &#123;</span><br><span class="line">	def cmd</span><br><span class="line">if(database) &#123;</span><br><span class="line">	cmd = "mysql -u $&#123;username&#125; -p$&#123;password&#125; -h 	$&#123;hostname&#125;-P $&#123;port&#125; $&#123;database&#125; -e "</span><br><span class="line">&#125;</span><br><span class="line">else &#123;</span><br><span class="line">	cmd = "mysql -u $&#123;username&#125; -p$&#123;password&#125; -h $&#123;hostname&#125; -P $&#123;port&#125; -e "</span><br><span class="line">&#125;</span><br><span class="line">project.exec &#123;</span><br><span class="line">	commandLine = cmd.split().toList() + sql</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的MySqlTask继承自DefaultTask,所有的任务都必须继承自这个类或者它的子类。任务声明了几个属性，然后声明了一个方法runQuery(),这个方法用@TaskAction注解了，表示这个方法会在任务执行的时候执行。最上面定义的三个任务都声明为MySqlTask类型，因此他们都自动继承了它的属性和方法，有些属性有默认值，你可以覆写这些默认值，来添加你的逻辑。</p>
+<h3 id="在源码树中定义自定义任务类型"><a href="#在源码树中定义自定义任务类型" class="headerlink" title="在源码树中定义自定义任务类型"></a>在源码树中定义自定义任务类型</h3><p>前面你在build文件中定义了一个自定义的MySqlTask类型，这样的缺点就是你无法在其他构建文件中使用它，只能把它的源码复制过去。我们可以在源码树的buildSrc目录下定义自定义任务类型，这个目录下的文件会被自动编译然后添加到项目的classpath中，如下所示：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">//任务MySqlTask并没有定义在构建脚本中</span><br><span class="line">task createDatabase(type: MySqlTask) &#123;</span><br><span class="line">    sql = 'CREATE DATABASE IF NOT EXISTS example'</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">task createUser(type: MySqlTask, dependsOn: createDatabase) &#123;</span><br><span class="line">    sql = "GRANT ALL PRIVILEGES ON example.*</span><br><span class="line">    TO exampleuser@localhost IDENTIFIED BY 'passw0rd'"</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">task createTable(type: MySqlTask, dependsOn: createUser) &#123;</span><br><span class="line">    username = 'exampleuser'</span><br><span class="line">    password = 'passw0rd'</span><br><span class="line">    database = 'example'</span><br><span class="line">    sql = 'CREATE TABLE IF NOT EXISTS users</span><br><span class="line">    (id BIGINT PRIMARY KEY, username VARCHAR(100))'</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在buildSrc目录下新建一个文件MysqlTask.groovy,然后添加下面的代码：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.gradle.api.DefaultTask</span><br><span class="line"><span class="keyword">import</span> org.gradle.api.tasks.TaskAction</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MySqlTask</span> <span class="keyword">extends</span> <span class="title">DefaultTask</span> &#123;</span></span><br><span class="line">    <span class="comment">//声明任务的属性</span></span><br><span class="line">    <span class="keyword">def</span> hostname = <span class="string">'localhost'</span></span><br><span class="line">    <span class="keyword">def</span> port = <span class="number">3306</span></span><br><span class="line">    <span class="keyword">def</span> sql</span><br><span class="line">    <span class="keyword">def</span> database</span><br><span class="line">    <span class="keyword">def</span> username = <span class="string">'root'</span></span><br><span class="line">    <span class="keyword">def</span> password = <span class="string">'password'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//表示这是任务的动作</span></span><br><span class="line"><span class="meta">@TaskAction</span></span><br><span class="line"><span class="keyword">def</span> runQuery() &#123;</span><br><span class="line">	<span class="keyword">def</span> cmd</span><br><span class="line"><span class="keyword">if</span>(database) &#123;</span><br><span class="line">	cmd = <span class="string">"mysql -u $&#123;username&#125; -p$&#123;password&#125; -h 	$&#123;hostname&#125;-P $&#123;port&#125; $&#123;database&#125; -e "</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span> &#123;</span><br><span class="line">	cmd = <span class="string">"mysql -u $&#123;username&#125; -p$&#123;password&#125; -h $&#123;hostname&#125; -P $&#123;port&#125; -e "</span></span><br><span class="line">&#125;</span><br><span class="line">project.exec &#123;</span><br><span class="line">	commandLine = cmd.split().toList() + sql</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>编译之后buildSrc目录树如下所示：</p>
+<p><img src="/images/gradle-tasks.png" alt="/images/gradle-tasks.png"></p>
+<p>对Gradle的任务介绍就到此为止，大家如果还有不懂的地方可以去查看Gradle的官方文档<a href="https://docs.gradle.org/current/release-notes" target="_blank" rel="external">https://docs.gradle.org/current/release-notes</a>。</p>
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java-gradle/" rel="tag">#java, gradle</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/2015/07/hibernate-cache-guide.html" rel="next" title="Hibernate缓存配置笔记">
+                <i class="fa fa-chevron-left"></i> Hibernate缓存配置笔记
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/2015/08/dagger-dependency-injection.html" rel="prev" title="Dagger依赖注入浅析">
+                Dagger依赖注入浅析 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="/blog/2015/07/gradle-tasks-guide.html"
+     data-title="彻底理解Gradle的任务"
+     data-content=""
+     data-url="http://www.ezlippi.com/blog/2015/07/gradle-tasks-guide.html">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  <p>热评文章</p>
+  <div class="ds-top-threads" data-range="weekly" data-num-items="4"></div>
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="/blog/2015/07/gradle-tasks-guide.html"
+           data-title="彻底理解Gradle的任务" data-url="http://www.ezlippi.com/blog/2015/07/gradle-tasks-guide.html">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="EZLippi" />
+          <p class="site-author-name" itemprop="name">EZLippi</p>
+          <p class="site-description motion-element" itemprop="description">Easy Lippi</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">65</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+          
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">72</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/EZLippi" target="_blank">
+                  
+                    <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/ouyanglip" target="_blank">
+                  
+                    <i class="fa fa-weibo"></i> weibo
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/lippi-ouyang" target="_blank">
+                  
+                    <i class="fa fa-weibo"></i> zhihu
+                  
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+            <p class="site-author-name">友情链接</p>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.woaitqs.cc/" target="_blank">Qisen Tang</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://szhshp.org" target="_blank">szhshp的博客</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://python.zhangwei.website" target="_blank">JuniorCoder</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/lippi-ouyang" target="_blank">友链出租</a>
+              </span>
+            
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#声明一个任务"><span class="nav-number">1.</span> <span class="nav-text">声明一个任务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#任务的动作"><span class="nav-number">2.</span> <span class="nav-text">任务的动作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一切任务都是对象"><span class="nav-number">3.</span> <span class="nav-text">一切任务都是对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DefaultTask的方法"><span class="nav-number">4.</span> <span class="nav-text">DefaultTask的方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#dependsOn-task"><span class="nav-number">4.1.</span> <span class="nav-text">dependsOn(task)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#doFirst-closure"><span class="nav-number">4.2.</span> <span class="nav-text">doFirst(closure)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#doLast-closure"><span class="nav-number">4.3.</span> <span class="nav-text">doLast(closure)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#onlyIf-closure"><span class="nav-number">4.4.</span> <span class="nav-text">onlyIf(closure)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#enabled"><span class="nav-number">4.5.</span> <span class="nav-text">enabled</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#path"><span class="nav-number">4.6.</span> <span class="nav-text">path</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#description"><span class="nav-number">4.7.</span> <span class="nav-text">description</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#任务的类型"><span class="nav-number">5.</span> <span class="nav-text">任务的类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Copy"><span class="nav-number">5.1.</span> <span class="nav-text">Copy</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Jar"><span class="nav-number">5.2.</span> <span class="nav-text">Jar</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JavaExec"><span class="nav-number">5.3.</span> <span class="nav-text">JavaExec</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编写自定义的任务类型"><span class="nav-number">6.</span> <span class="nav-text">编写自定义的任务类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#在Build文件中编写自定义任务类型"><span class="nav-number">6.1.</span> <span class="nav-text">在Build文件中编写自定义任务类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#在源码树中定义自定义任务类型"><span class="nav-number">6.2.</span> <span class="nav-text">在源码树中定义自定义任务类型</span></a></li></ol></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2014 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">EZLippi</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+   托管在 -
+  <a class="theme-link" href="https://github.com/EZLippi/EZLippi.github.io">
+    Github
+  </a>
+
+</div>
+<div class="theme-info">
+<span id="busuanzi_container_site_pv">
+    &nbsp; | &nbsp;本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+</div>
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  
+
+
+  
+
+
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=0.5.0"></script>
+
+
+
+  
+  
+
+  
+  
+<script type="text/javascript" src="/js/src/scrollspy.js?v=0.5.0"></script>
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = NexT.utils.escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    NexT.motion.middleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+
+      if (CONFIG.sidebar.display === 'post' || CONFIG.sidebar.display === 'always') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          NexT.utils.displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=0.5.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"ezlippi"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+
+  
+  
+
+
+</body>
+</html>

@@ -1,0 +1,957 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.useso.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="c语言， 优化" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.5.0" />
+
+
+
+
+
+
+<meta name="description" content="虽然对于优化C代码有很多有效的指导方针，但是对于彻底地了解编译器和你工作的机器依然无法取代，通常，加快程序的速度也会加大代码量。这些增加的代码也会影响一个程序的复杂度和可读性，这是不可接受的，比如你在一些小型的设备上编程，例如：移动设备、PDA……，这些有着严格的内存限制，于是，在优化的座右铭是:写代码在内存和速度都应该优化。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C代码优化小贴士">
+<meta property="og:url" content="http://www.ezlippi.com/blog/2014/12/c-code-opt.html">
+<meta property="og:site_name" content="Lippi-浮生志">
+<meta property="og:description" content="虽然对于优化C代码有很多有效的指导方针，但是对于彻底地了解编译器和你工作的机器依然无法取代，通常，加快程序的速度也会加大代码量。这些增加的代码也会影响一个程序的复杂度和可读性，这是不可接受的，比如你在一些小型的设备上编程，例如：移动设备、PDA……，这些有着严格的内存限制，于是，在优化的座右铭是:写代码在内存和速度都应该优化。">
+<meta property="og:updated_time" content="2016-03-18T10:02:05.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="C代码优化小贴士">
+<meta name="twitter:description" content="虽然对于优化C代码有很多有效的指导方针，但是对于彻底地了解编译器和你工作的机器依然无法取代，通常，加快程序的速度也会加大代码量。这些增加的代码也会影响一个程序的复杂度和可读性，这是不可接受的，比如你在一些小型的设备上编程，例如：移动设备、PDA……，这些有着严格的内存限制，于是，在优化的座右铭是:写代码在内存和速度都应该优化。">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> C代码优化小贴士 | Lippi-浮生志 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?340874ba9357cbe81570aa4ac1185941";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner">
+<script>
+(function(){
+    var bp = document.createElement('script');
+    bp.src = '//push.zhanzhang.baidu.com/push.js';
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+            
+<div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Lippi-浮生志</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu menu-left">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+      
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'fLM9qfxyerC6njvM7usy','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                C代码优化小贴士
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2014-12-27T00:00:00+08:00" content="2014-12-27">
+              2014-12-27
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/c/" itemprop="url" rel="index">
+                    <span itemprop="name">c</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/blog/2014/12/c-code-opt.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="/blog/2014/12/c-code-opt.html" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+        </div>
+      </header>
+    
+
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>虽然对于优化C代码有很多有效的指导方针，但是对于彻底地了解编译器和你工作的机器依然无法取代，通常，加快程序的速度也会加大代码量。这些增加的代码也会影响一个程序的复杂度和可读性，这是不可接受的，比如你在一些小型的设备上编程，例如：移动设备、PDA……，这些有着严格的内存限制，于是，在优化的座右铭是:写代码在内存和速度都应该优化。<br><a id="more"></a></p>
+<h2 id="整型数-Integers"><a href="#整型数-Integers" class="headerlink" title="整型数/Integers"></a>整型数/Integers</h2><p>在我们知道使用的数不可能是负数的时候，应该使用unsigned int取代int，一些处理器处理整数算数运算的时候unsigned int比int快，于是，在一个紧致的循环里面定义一个整型变量，最好这样写代码：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">register</span> <span class="keyword">unsigned</span> <span class="keyword">int</span> variable_name;</span><br></pre></td></tr></table></figure></p>
+<p>然而，我们不能保证编译器会注意到那个register关键字，也有可能，对某种处理器来说，有没有unsigned是一样的。这两个关键字并不是可以在所有的编译器中应用。<strong>记住，整形数运算要比浮点数运算快得多，因为处理器可以直接进行整型数运算，浮点数运算需要依赖于外部的浮点数处理器或者浮点数数学库。</strong>我们处理小数的时候要精确点些（比如我们在做一个简单的统计程序时），要限制结果不能超过100，要尽可能晚的把它转化成浮点数。<br>还有一个整形提升的问题，比如下面这个例子：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">size_t</span> n = <span class="number">10</span>;</span><br><span class="line"><span class="keyword">int</span> i ;</span><br><span class="line"><span class="keyword">for</span>(i = <span class="number">-1</span>; i &lt; n; ++i)</span><br><span class="line">&#123;</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">"%d\n"</span>,i);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这段代码实际上什么也不会输出，因为size_t是unsigned int类型，i会自动转换成unsigned int就变成了一个很大的正数，所以和n比较自然什么都不会输出。</p>
+<p>在算术运算中，char和short会自动转换成int，转换的原则就是如果int类型能过包括操作数类型的所有范围，则操作数（比如unsigned short）转换成int，否则转换成unsigned int，int和long类型运算以此类推，<strong>总是向着精度更高、位更长的类型转换。</strong></p>
+<h2 id="除法和余数-Division-and-Remainder"><a href="#除法和余数-Division-and-Remainder" class="headerlink" title="除法和余数 / Division and Remainder"></a>除法和余数 / Division and Remainder</h2><p>在标准的处理器中，根据分子和分母的不同，一个32位的除法需要20-140个时钟周期来执行完成，等于一个固定的时间加上每个位被除的时间。<br>Time (分子/ 分母) = C0 + C1<em> log&lt;2(分子/分母)= C0 + C1 </em> (log2 (分子) log2 (分母)).<br>现在的ARM处理器需要消耗20+4.3N个时钟周期，这是一个非常费时的操作，要尽可能的避免。在有些情况下，除法表达式可以用乘法表达是来重写。比方说，(a/b)&gt;c可以写成a&gt;(c<em>b),条件是我们已经知道b为非负数而且b</em>c不会超过整型数的取值范围。如果我们能够确定其中的一个操作数为unsigned，那么使用无符号除法将会更好，因为它要比有符号除法快得多。</p>
+<h2 id="合并除法运算和取余运算-Combining-division-and-remainder"><a href="#合并除法运算和取余运算-Combining-division-and-remainder" class="headerlink" title="合并除法运算和取余运算 / Combining division and remainder"></a>合并除法运算和取余运算 / Combining division and remainder</h2><p>在一些情况下，除法运算和取余运算都需要用到，在这种情况下，编译器会将除法运算和取余运算合并，因为除法运算总是同时返回商和余数。如果两个运算都要用到，我们可以将他们写到一起。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">unsigned</span> <span class="keyword">int</span> uint;</span><br><span class="line"><span class="function">uint <span class="title">div32u</span> <span class="params">(uint a)</span> </span>&#123;</span><br><span class="line">     return a / <span class="number">32</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">div32s</span> <span class="params">(<span class="keyword">int</span> a)</span> </span>&#123;</span><br><span class="line">     return a / <span class="number">32</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这两种除法都会避免调用除法函数（进行移位操作），另外，无符号的除法要比有符号的除法使用更少的指令。有符号的除法要耗费更多的时间，因为这种除法是使最终结果趋向于零的，而移位则是趋向于负无穷。</p>
+<h2 id="取模运算的替换-An-alternative-for-modulo-arithmetic"><a href="#取模运算的替换-An-alternative-for-modulo-arithmetic" class="headerlink" title="取模运算的替换 / An alternative for modulo arithmetic"></a>取模运算的替换 / An alternative for modulo arithmetic</h2><p>我们一般使用取余运算进行取模，不过，有时候使用 if 语句来重写也是可行的。考虑下面的两个例子：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">uint <span class="title">modulo_func1</span> <span class="params">(uint count)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    return (++count % <span class="number">60</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function">uint <span class="title">modulo_func2</span> <span class="params">(uint count)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (++count &gt;= <span class="number">60</span>)</span><br><span class="line">        count = <span class="number">0</span>;</span><br><span class="line">    return (count);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>第二个例子要比第一个更可取，因为由它产生的代码会更快，注意：这只是在count取值范围在0 – 59之间的时候才行。<br>但是我们可以使用如下的代码（笔者补充）实现等价的功能：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">uint <span class="title">modulo_func3</span> <span class="params">(uint count)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (++count &gt;= <span class="number">60</span>)</span><br><span class="line">        count %= <span class="number">60</span>;</span><br><span class="line">    return (count);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="使用数组索引-Using-array-indices"><a href="#使用数组索引-Using-array-indices" class="headerlink" title="使用数组索引 / Using array indices"></a>使用数组索引 / Using array indices</h2><p>假设你要依据某个变量的值，设置另一个变量的取值为特定的字符，你可能会这样做：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">switch</span>(<span class="built_in">queue</span>) &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">0</span> :   letter = W;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">1</span> :   letter = S;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">2</span> :   letter = U;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>或者这样：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(<span class="built_in">queue</span> == <span class="number">0</span>)</span><br><span class="line">    letter = W;</span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> ( queue == <span class="number">1</span> )</span><br><span class="line">    letter = S;</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    letter = U;</span><br></pre></td></tr></table></figure></p>
+<p>有一个简洁且快速的方式是简单的将变量的取值做成一个字符串索引，例如：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> <span class="keyword">char</span> *classes = WSU;</span><br><span class="line">letter = classes[<span class="built_in">queue</span>];</span><br></pre></td></tr></table></figure></p>
+<h2 id="全局变量-Global-variables"><a href="#全局变量-Global-variables" class="headerlink" title="全局变量 / Global variables"></a>全局变量 / Global variables</h2><p>全局变量不会被分配在寄存器上，修改全局变量需要通过指针或者调用函数的方式间接进行。所以编译器不会将全局变量存储在寄存器中，那样会带来额外的、不必要的负担和存储空间。所以在比较关键的循环中，我们要不使用全局变量。<br><strong>如果一个函数要频繁的使用全局变量，我们可以使用局部变量，作为全局变量的拷贝，这样就可以使用寄存器了。条件是本函数调用的任何子函数不使用这些全局变量。</strong><br>举个例子：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">f</span><span class="params">(<span class="keyword">void</span>)</span></span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">g</span><span class="params">(<span class="keyword">void</span>)</span></span>;</span><br><span class="line"><span class="keyword">int</span> errs;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test1</span><span class="params">(<span class="keyword">void</span>)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    errs += f();</span><br><span class="line">    errs += g();</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">test2</span><span class="params">(<span class="keyword">void</span>)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> localerrs = errs;</span><br><span class="line">    localerrs += f();</span><br><span class="line">    localerrs += g();</span><br><span class="line">    errs = localerrs;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>可以看到test1()中每次加法都需要读取和存储全局变量errs，而在test2()中，localerrs分配在寄存器上，只需要一条指令。</p>
+<h2 id="使用别名-Using-Aliases"><a href="#使用别名-Using-Aliases" class="headerlink" title="使用别名 / Using Aliases"></a>使用别名 / Using Aliases</h2><p>考虑下面的例子：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">func1</span><span class="params">( <span class="keyword">int</span> *data )</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i;</span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++)</span><br><span class="line">        anyfunc(*data, i);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>即使*data从来没有变化，编译器却不知道anyfunc()没有修改它，于是程序每次用到它的时候，都要把它从内存中读出来，可能它只是某些变量的别名，这些变量在程序的其他部分被修改。如果能够确定它不会被改变，我们可以这样写：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">func1</span><span class="params">( <span class="keyword">int</span> *data )</span></span><br><span class="line"></span>&#123;</span><br><span class="line"><span class="keyword">int</span> i;</span><br><span class="line"><span class="keyword">int</span> localdata;</span><br><span class="line">localdata = *data;</span><br><span class="line"><span class="keyword">for</span>(i=<span class="number">0</span>; i&lt;<span class="number">10</span>; i++)</span><br><span class="line">anyfunc(localdata, i);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这样会给编译器优化工作更多的选择余地。</p>
+<h2 id="活跃变量和泄漏-Live-variables-and-spilling"><a href="#活跃变量和泄漏-Live-variables-and-spilling" class="headerlink" title="活跃变量和泄漏 / Live variables and spilling"></a>活跃变量和泄漏 / Live variables and spilling</h2><p>寄存器的数量在每个处理器当中都是固定的，所以在程序的某个特定的位置，可以保存在寄存器中的变量的数量是有限制的。有些编译器支持“生命周期分割”（live-range splitting），也就是说在函数的不同部分，变量可以被分配到不同的寄存器或者内存中。变量的生存范围被定义成：起点是对该变量的一次空间分配，终点是在下次空间分配之前的最后一次使用之间。在这个范围内，变量的值是合法的，是活的。在生存范围之外，变量不再被使用，是死的，它的寄存器可以供其他变量使用，这样，编译器就可以安排更多的变量到寄存器当中。<br>可分配到寄存器的变量需要的寄存器数量等于经过生命范围重叠的变量的数目，如果这个数目超过可用的寄存器的数量，有些变量就必须被暂时的存储到内存中。这种处理叫做“泄漏(spilling)”。<br>编译器优先释放最不频繁使用的变量，将释放的代价降到最低。可以通过以下方式避免变量的“释放”：</p>
+<ul>
+<li>限制活跃变量的最大数目：通常可以使用简单小巧的表达式，在函数内部不使用太多的变量。把大的函数分割成更加简单的、更加小巧的多个函数，也可能会有所帮助。</li>
+<li>使用关键字register修饰最经常使用的变量：告诉编译器这个变量将会被经常用到，要求编译器使用非常高的优先级将此变量分配到寄存器中。尽管如此，在某些情况下，变量还是可能被泄漏。</li>
+</ul>
+<h2 id="变量类型-Variable-Types"><a href="#变量类型-Variable-Types" class="headerlink" title="变量类型 / Variable Types"></a>变量类型 / Variable Types</h2><p>C编译器支持基本的变量类型：char、short、int、long(signed、unsigned)、float、double。为变量定义最恰当的类型，非常重要，因为这样可以减少代码和数据的长度，可以非常显著的提高效率。</p>
+<h2 id="局部变量-Local-variables"><a href="#局部变量-Local-variables" class="headerlink" title="局部变量 / Local variables"></a>局部变量 / Local variables</h2><p>如果可能，局部变量要避免使用char和short。对于char和short类型，编译器在每次分配空间以后，都要将这种局部变量的尺寸减少到8位或16位。这对于符号变量来说称为符号扩展，对无符号变量称为无符号扩展。这种操作是通过将寄存器左移24或16位，然后再有符号（或无符号的）右移同样的位数来实现的，需要两条指令（无符号字节变量的无符号扩展需要一条指令）。<br>这些移位操作可以通过使用int和unsigned int的局部变量来避免。这对于那些首先将数据调到局部变量然后利用局部变量进行运算的情况尤其重要。即使数据以8位或16位的形式输入或输出，把他们当作32位来处理仍是有意义的。<br>我们来考虑下面的三个例子函数：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">wordinc</span> <span class="params">(<span class="keyword">int</span> a)</span></span><br><span class="line"></span>&#123; </span><br><span class="line">    return a + <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">short</span> <span class="title">shortinc</span> <span class="params">(<span class="keyword">short</span> a)</span></span><br><span class="line"></span>&#123; </span><br><span class="line">    return a + <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">char</span> <span class="title">charinc</span> <span class="params">(<span class="keyword">char</span> a)</span></span><br><span class="line"></span>&#123; </span><br><span class="line">    return a + <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>他们的运算结果是相同的，但是第一个代码片断要比其他片断运行的要快。</p>
+<h2 id="指针-Pointers"><a href="#指针-Pointers" class="headerlink" title="指针 / Pointers"></a>指针 / Pointers</h2><p>如果可能，我们应该使用结构体的引用作为参数，也就是结构体的指针，否则，整个结构体就会被压入堆栈，然后传递，这会降低速度。程序适用值传递可能需要几K字节，而一个简单的指针也可以达到同样的目的，只需要几个字节就可以了。<br>如果在函数内部不会改变结构体的内容，那么就应该将参数声明为const型的指针。举个例子：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">print_data_of_a_structure</span> <span class="params">(<span class="keyword">const</span> Thestruct  *data_pointer)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">     ...<span class="built_in">printf</span> contents of the structure...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这个例子代码告知编译器在函数内部不会改变外部结构体的内容，访问他们的时候，不需要重读。还可以确保编译器捕捉任何修改这个只读结构体的代码，给结构体以额外的保护。</p>
+<h2 id="指针链-Pointer-chains"><a href="#指针链-Pointer-chains" class="headerlink" title="指针链 / Pointer chains"></a>指针链 / Pointer chains</h2><p>指针链经常被用来访问结构体的信息，比如，下面的这段常见的代码：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> &#123; <span class="keyword">int</span> x, y, z; &#125; Point3;</span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">struct</span> &#123; Point3 *pos, *direction; &#125; Object;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">InitPos1</span><span class="params">(Object *p)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    p-&gt;pos-&gt;x = <span class="number">0</span>;</span><br><span class="line">    p-&gt;pos-&gt;y = <span class="number">0</span>;</span><br><span class="line">    p-&gt;pos-&gt;z = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>代码中，处理器在每次赋值操作的时候都要重新装载p-&gt;pos，因为编译器不知道p-&gt;pos-&gt;x不是p-&gt;pos的别名。更好的办法是将p-&gt;pos缓存成一个局部变量，如下：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">InitPos2</span><span class="params">(Object *p)</span></span><br><span class="line"></span>&#123; </span><br><span class="line">    Point3 *pos = p-&gt;pos;</span><br><span class="line">    pos-&gt;x = <span class="number">0</span>; </span><br><span class="line">    pos-&gt;y = <span class="number">0</span>;</span><br><span class="line">    pos-&gt;z = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>另一个可能的方法是将Point3结构体包含在Object结构体中，完全避免指针的使用。</p>
+<h2 id="条件的执行-Conditional-Execution"><a href="#条件的执行-Conditional-Execution" class="headerlink" title="条件的执行 / Conditional Execution"></a>条件的执行 / Conditional Execution</h2><p>条件执行主要用在if语句中，同时也会用到由关系运算(&lt;,==,&gt;等)或bool运算(&amp;&amp;, !等)组成的复杂的表达式。尽可能的保持if和else语句的简单是有好处的，这样才能很好的条件化。关系表达式应该被分成包含相似条件的若干块。<br>下面的例子演示了编译器如何使用条件执行：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">g</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b, <span class="keyword">int</span> c, <span class="keyword">int</span> d)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(a &gt; <span class="number">0</span> &amp;&amp; b &gt; <span class="number">0</span> &amp;&amp; c &lt; <span class="number">0</span> &amp;&amp; d &lt; <span class="number">0</span>)  <span class="comment">//分组化的条件被捆绑在一起</span></span><br><span class="line">        return a + b + c + d;</span><br><span class="line">    return <span class="number">-1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>条件被分组，便以其能够条件化他们。</p>
+<h2 id="Boolean表达式和范围检查-Boolean-Expressions-amp-Range-checking"><a href="#Boolean表达式和范围检查-Boolean-Expressions-amp-Range-checking" class="headerlink" title="Boolean表达式和范围检查 / Boolean Expressions &amp; Range checking"></a>Boolean表达式和范围检查 / Boolean Expressions &amp; Range checking</h2><p>有一种常见的boolean表达式被用来检查是否一个变量取值在某个特定的范围内，比方说，检查一个点是否在一个窗口内。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">PointInRectangelArea</span> <span class="params">(Point p, Rectangle *r)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    return (p.x &gt;= r-&gt;xmin &amp;&amp; p.x &lt; r-&gt;xmax &amp;&amp; p.y &gt;= r-&gt;ymin &amp;&amp; p.y &lt; r-&gt;ymax);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这里还有一个更快的方法：把(x &gt;= min &amp;&amp; x &lt; max) 转换成 (unsigned)(x-min) &lt; (max-min). 尤其是min为0时，更为有效。下面是优化后的代码：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">PointInRectangelArea</span> <span class="params">(Point p, Rectangle *r)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    return ((unsigned) (p.x - r-&gt;xmin) &lt; r-&gt;xmax &amp;&amp; (unsigned) (p.y - r-&gt;ymin) &lt; r-&gt;ymax);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="Boolean表达式-amp-与零的比较-Boolean-Expressions-amp-Compares-with-zero"><a href="#Boolean表达式-amp-与零的比较-Boolean-Expressions-amp-Compares-with-zero" class="headerlink" title="Boolean表达式&amp;与零的比较 / Boolean Expressions &amp; Compares with zero"></a>Boolean表达式&amp;与零的比较 / Boolean Expressions &amp; Compares with zero</h2><p>在比较(CMP)指令后，相应的处理器标志位就会被设置。这些标志位也可以被其他的指令设置，诸如MOV, ADD, AND, MUL, 也就是基本的数学和逻辑运算指令（数据处理指令）。假如一条数据处理指令要设置这些标志位，那么N和Z标志位的设置方法跟把数字和零比较的设置方法是一样的。N标志位表示结果是不是负数，Z标志位表示结果是不是零。<br>在C语言中，处理器中的N和Z标志位对应的有符号数的关系运算符是x &lt; 0, x &gt;= 0, x == 0, x != 0，无符号数对应的是x == 0, x != 0 (or x &gt; 0)。<br>C语言中，每用到一个关系运算符，编译器就会产生一个比较指令。如果关系运算符是上面的其中一个，在数据处理指令紧跟比较指令的情况下，编译器就会将比较指令优化掉。比如：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">aFunction</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (x + y &lt; <span class="number">0</span>)</span><br><span class="line">        return <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        return <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这样做，会在关键循环中节省比较指令，使代码长度减少，效率增加。C语言中没有借位(carry)标志位和溢出(overflow)标志位的概念，所以如果不使用内嵌汇编语言，要访问C和V标志位是不可能的。尽管如此，编译器支持借位标志位（无符号数溢出），比方说：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sum</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">     <span class="keyword">int</span> res;</span><br><span class="line">     res = x + y;</span><br><span class="line">     <span class="keyword">if</span> ((unsigned) res &lt; (unsigned) x) <span class="comment">// carry set?  //</span></span><br><span class="line">        res++;</span><br><span class="line">     return res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="惰性评估计算-Lazy-Evaluation-Exploitation"><a href="#惰性评估计算-Lazy-Evaluation-Exploitation" class="headerlink" title="惰性评估计算 / Lazy Evaluation Exploitation"></a>惰性评估计算 / Lazy Evaluation Exploitation</h2><p>在类似与这样的 if(a&gt;10 &amp;&amp; b=4) 语句中, 确保AND表达式的第一部分最有可能为false, 结果第二部分极有可能不被执行.<br>用switch() 代替if&#8230;else&#8230;，在条件选择比较多的情况下，可以用if…else…else…，像这样：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>( val == <span class="number">1</span>)</span><br><span class="line">    dostuff1();</span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> (val == <span class="number">2</span>)</span><br><span class="line">    dostuff2();</span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> (val == <span class="number">3</span>)</span><br><span class="line">    dostuff3();</span><br></pre></td></tr></table></figure></p>
+<p>使用switch可以更快：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">switch</span>( val )</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">1</span>: dostuff1(); <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">2</span>: dostuff2(); <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">3</span>: dostuff3(); <span class="keyword">break</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在if语句中，即使是最后一个条件成立，也要先判断所有前面的条件是否成立。Switch语句能够去除这些额外的工作。如果你不得不使用if…else，那就把最可能的成立的条件放在前面。</p>
+<h2 id="二分分解-Binary-Breakdown"><a href="#二分分解-Binary-Breakdown" class="headerlink" title="二分分解 / Binary Breakdown"></a>二分分解 / Binary Breakdown</h2><p>把判断条件做成二进制的风格，比如，不要使用下面的列表：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(a == <span class="number">1</span>) &#123; </span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span>(a == <span class="number">2</span>) &#123; </span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span>(a == <span class="number">3</span>) &#123; </span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span>(a == <span class="number">4</span>) &#123; </span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span>(a == <span class="number">5</span>) &#123; </span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span>(a == <span class="number">6</span>) &#123; </span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span>(a == <span class="number">7</span>) &#123; </span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span>(a == <span class="number">8</span>) &#123; </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>而采用：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(a &lt;= <span class="number">4</span>) &#123; </span><br><span class="line">    <span class="keyword">if</span>(a == <span class="number">1</span>) &#123; </span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span>(a == <span class="number">2</span>) &#123; </span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span>(a == <span class="number">3</span>) &#123; </span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span>(a == <span class="number">4</span>) &#123; </span><br><span class="line">    &#125; </span><br><span class="line">&#125; <span class="keyword">else</span> &#123; </span><br><span class="line">    <span class="keyword">if</span>(a == <span class="number">5</span>) &#123; </span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span>(a == <span class="number">6</span>) &#123; </span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span>(a == <span class="number">7</span>) &#123; </span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span>(a == <span class="number">8</span>) &#123; </span><br><span class="line">    &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>甚至：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(a &lt;= <span class="number">4</span>) &#123; </span><br><span class="line">    <span class="keyword">if</span>(a &lt;= <span class="number">2</span>) &#123; </span><br><span class="line">        <span class="keyword">if</span>(a == <span class="number">1</span>) &#123; </span><br><span class="line">                <span class="comment">/* a is 1 */</span> </span><br><span class="line">        &#125; <span class="keyword">else</span> &#123; </span><br><span class="line">                <span class="comment">/* a must be 2 */</span> </span><br><span class="line">        &#125; </span><br><span class="line">    &#125; <span class="keyword">else</span> &#123; </span><br><span class="line">        <span class="keyword">if</span>(a == <span class="number">3</span>) &#123; </span><br><span class="line">                <span class="comment">/* a is 3 */</span> </span><br><span class="line">        &#125; <span class="keyword">else</span> &#123; </span><br><span class="line">                <span class="comment">/* a must be 4 */</span> </span><br><span class="line">        &#125; </span><br><span class="line">    &#125; </span><br><span class="line">&#125; <span class="keyword">else</span> &#123; </span><br><span class="line">    <span class="keyword">if</span>(a &lt;= <span class="number">6</span>) &#123; </span><br><span class="line">        <span class="keyword">if</span>(a == <span class="number">5</span>) &#123; </span><br><span class="line">                <span class="comment">/* a is 5 */</span> </span><br><span class="line">        &#125; <span class="keyword">else</span> &#123; </span><br><span class="line">                <span class="comment">/* a must be 6 */</span> </span><br><span class="line">        &#125; </span><br><span class="line">    &#125; <span class="keyword">else</span> &#123; </span><br><span class="line">        <span class="keyword">if</span>(a == <span class="number">7</span>) &#123; </span><br><span class="line">                <span class="comment">/* a is 7 */</span> </span><br><span class="line">        &#125; <span class="keyword">else</span> &#123; </span><br><span class="line">                <span class="comment">/* a must be 8 */</span> </span><br><span class="line">        &#125; </span><br><span class="line">    &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>慢速、低效：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">c = getch();</span><br><span class="line"><span class="keyword">switch</span>(c)&#123;</span><br><span class="line">    <span class="keyword">case</span> A: &#123;</span><br><span class="line">        <span class="keyword">do</span> something;  </span><br><span class="line">        <span class="keyword">break</span>;  </span><br><span class="line">    &#125; </span><br><span class="line">    <span class="keyword">case</span> H: &#123;</span><br><span class="line">        <span class="keyword">do</span> something;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;  </span><br><span class="line">    <span class="keyword">case</span> Z: &#123; </span><br><span class="line">        <span class="keyword">do</span> something; </span><br><span class="line">        <span class="keyword">break</span>; </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>快速、高效：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">c = getch();</span><br><span class="line"><span class="keyword">switch</span>(c) &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">0</span>: &#123;</span><br><span class="line">        <span class="keyword">do</span> something;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125;  </span><br><span class="line">    <span class="keyword">case</span> <span class="number">1</span>: &#123;</span><br><span class="line">        <span class="keyword">do</span> something; </span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    &#125; </span><br><span class="line">    <span class="keyword">case</span> <span class="number">2</span>: &#123;</span><br><span class="line">        <span class="keyword">do</span> something; </span><br><span class="line">        <span class="keyword">break</span>; </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>以上是两个case语句之间的比较</p>
+<h2 id="switch语句和查找表-Switch-statement-vs-lookup-tables"><a href="#switch语句和查找表-Switch-statement-vs-lookup-tables" class="headerlink" title="switch语句和查找表 / Switch statement vs. lookup tables"></a>switch语句和查找表 / Switch statement vs. lookup tables</h2><p>switch语句通常用于以下情况：</p>
+<ul>
+<li>调用几个函数中的一个</li>
+<li>设置一个变量或返回值</li>
+<li>执行几个代码片断中的一个</li>
+</ul>
+<p>如果case表示是密集的，在使用switch语句的前两种情况中，可以使用效率更高的查找表。比如下面的两个实现汇编代码转换成字符串的例程：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">char</span> * <span class="title">Condition_String1</span><span class="params">(<span class="keyword">int</span> condition)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">switch</span>(condition) &#123;</span><br><span class="line">         <span class="keyword">case</span> <span class="number">0</span>: return EQ;</span><br><span class="line">         <span class="keyword">case</span> <span class="number">1</span>: return NE;</span><br><span class="line">         <span class="keyword">case</span> <span class="number">2</span>: return CS;</span><br><span class="line">         <span class="keyword">case</span> <span class="number">3</span>: return CC;</span><br><span class="line">         <span class="keyword">case</span> <span class="number">4</span>: return MI;</span><br><span class="line">         <span class="keyword">case</span> <span class="number">5</span>: return PL;</span><br><span class="line">         <span class="keyword">case</span> <span class="number">6</span>: return VS;</span><br><span class="line">         <span class="keyword">case</span> <span class="number">7</span>: return VC;</span><br><span class="line">         <span class="keyword">case</span> <span class="number">8</span>: return HI;</span><br><span class="line">         <span class="keyword">case</span> <span class="number">9</span>: return LS;</span><br><span class="line">         <span class="keyword">case</span> <span class="number">10</span>: return GE;</span><br><span class="line">         <span class="keyword">case</span> <span class="number">11</span>: return LT;</span><br><span class="line">         <span class="keyword">case</span> <span class="number">12</span>: return GT;</span><br><span class="line">         <span class="keyword">case</span> <span class="number">13</span>: return LE;</span><br><span class="line">         <span class="keyword">case</span> <span class="number">14</span>: return ;</span><br><span class="line">         <span class="keyword">default</span>: return <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">char</span> * <span class="title">Condition_String2</span><span class="params">(<span class="keyword">int</span> condition)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span>((unsigned) condition &gt;= <span class="number">15</span>) return <span class="number">0</span>;</span><br><span class="line">    return</span><br><span class="line">          EQNECSCCMIPLVSVCHILSGELTGTLE +</span><br><span class="line">           <span class="number">3</span> * condition;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>第一个例程需要240个字节，第二个只需要72个。</p>
+<h2 id="循环终止-Loop-termination"><a href="#循环终止-Loop-termination" class="headerlink" title="循环终止 / Loop termination"></a>循环终止 / Loop termination</h2><p>如果不加留意地编写循环终止条件，就可能会给程序带来明显的负担。我们应该尽量使用“倒数到零”的循环，使用简单的循环终止条件。循环终止条件相对简单，程序在执行的时候也会消耗相对少的时间。拿下面两个计算n!的例子来说，第一个例子使用递增循环，第二个使用递减循环。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fact1_func</span> <span class="params">(<span class="keyword">int</span> n)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i, fact = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">1</span>; i &lt;= n; i++)</span><br><span class="line">        fact *= i;</span><br><span class="line">    return (fact);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">fact2_func</span><span class="params">(<span class="keyword">int</span> n)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i, fact = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span> (i = n; i != <span class="number">0</span>; i--)</span><br><span class="line">        fact *= i;</span><br><span class="line">    return (fact);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>结果是，第二个例子要比第一个快得多。</p>
+<h2 id="更快的for-循环-Faster-for-loops"><a href="#更快的for-循环-Faster-for-loops" class="headerlink" title="更快的for()循环 / Faster for() loops"></a>更快的for()循环 / Faster for() loops</h2><p>这是一个简单而有效的概念，通常情况下，我们习惯把for循环写成这样：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>( i = <span class="number">0</span>;  i &lt; <span class="number">10</span>;  i++)&#123; ... &#125;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">i</span> 值依次为：<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">7</span>,<span class="number">8</span>,<span class="number">9</span></span><br><span class="line">在不在乎循环计数器顺序的情况下，我们可以这样：</span><br><span class="line">``` c</span><br><span class="line"><span class="function"><span class="title">for</span><span class="params">( i = <span class="number">10</span>;  i--; )</span></span> &#123; ... &#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight dns"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">i 值依次为: <span class="number">9,8,7,6</span>,<span class="number">5,4,3,2</span>,<span class="number">1</span>,<span class="number">0</span>,而且循环要更快</span><br><span class="line">这种方法是可行的，因为它是用更快的i&amp;#<span class="number">8211</span><span class="comment">;作为测试条件的，也就是说“i是否为非零数，如果是减一，然后继续”。相对于原先的代码，处理器不得不“把i减去10，结果是否为非零数，如果是，增加i，然后继续”，在紧密循环(tight loop)中，这会产生显著的区别。</span></span><br><span class="line">这种语法看起来有一点陌生，却完全合法。循环中的第三条语句是可选的（无限循环可以写成这样for(<span class="comment">;;)）,下面的写法也可以取得同样的效果：</span></span><br><span class="line">``` c</span><br><span class="line">for(i = <span class="number">10</span><span class="comment">;  i;  i--)&#123;&#125;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">或者:</span><br><span class="line">``` c</span><br><span class="line"><span class="keyword">for</span>(<span class="built_in">i</span> = <span class="number">10</span>;  <span class="built_in">i</span> != <span class="number">0</span>;  <span class="built_in">i</span>--)&#123;&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight gcode"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">我们唯一要小心的地方是要记住循环需要停止在<span class="number">0</span>（如果循环是从<span class="number">50</span><span class="number">-80</span>，这样做就不行了），而且循环的计数器为倒计数方式。</span><br><span class="line">另外，我们还可以把计数器分配到寄存器上，可以产生更为有效的代码。这种将循环计数器初始化成循环次数，然后递减到零的方法，同样适用于<span class="keyword">while</span>和<span class="keyword">do</span>语句。</span><br><span class="line"><span class="attr">## 混合循环/ Loop jamming</span><br><span class="line">在可以使用一个循环的场合，决不要使用两个。但是如果你要在循环中进行大量的工作，超过处理器的指令缓冲区，在这种情况下，使用两个分开的循环可能会更快，因为有可能这两个循环都被完整的保存在指令缓冲区里了。</span><br><span class="line">``` c</span><br><span class="line">//原先的代码</span><br><span class="line">for(i = 0</span>; i &lt; <span class="number">100</span>; i++)&#123;</span><br><span class="line">    stuff<span class="comment">()</span>;</span><br><span class="line">&#125;</span><br><span class="line">for<span class="comment">(i = 0; i &lt; 100; i++)</span>&#123;</span><br><span class="line">    morestuff<span class="comment">()</span>;</span><br><span class="line">&#125;        </span><br><span class="line"><span class="comment">//更好的做法</span></span><br><span class="line">for<span class="comment">(i = 0; i &lt; 100; i++)</span>&#123;</span><br><span class="line">    stuff<span class="comment">()</span>;</span><br><span class="line">    morestuff<span class="comment">()</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="函数循环-Function-Looping"><a href="#函数循环-Function-Looping" class="headerlink" title="函数循环 / Function Looping"></a>函数循环 / Function Looping</h2><p>调用函数的时候，在性能上就会付出一定的代价。不光要改变程序指针，还要将那些正在使用的变量压入堆栈，分配新的变量空间。为了提高程序的效率，在程序的函数结构上，有很多工作可以做。保证程序的可读性的同时，还要尽量控制程序的大小。<br>如果一个函数在一个循环中被频繁调用，就可以考虑将这个循环放在函数的里面，这样可以免去重复调用函数的负担，比如：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(i = <span class="number">0</span> ; i &lt; <span class="number">100</span> ; i++) </span><br><span class="line">&#123; </span><br><span class="line">    func(t,i); </span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">func</span><span class="params">(<span class="keyword">int</span> w, d)</span> </span><br><span class="line"></span>&#123; </span><br><span class="line">    lots of stuff. </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>可以写成：<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">func(t);</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">func</span><span class="params">(w)</span> </span><br><span class="line"></span>&#123; </span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123; </span><br><span class="line">        <span class="comment">//lots of stuff. </span></span><br><span class="line">    &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="展开循环-Loop-unrolling"><a href="#展开循环-Loop-unrolling" class="headerlink" title="展开循环 / Loop unrolling"></a>展开循环 / Loop unrolling</h2><p>为了提高效率，可以将小的循环解开，不过这样会增加代码的尺寸。循环被拆开后，会降低循环计数器更新的次数，减少所执行的循环的分支数目。如果循环只重复几次，那它完全可以被拆解开，这样，由循环所带来的额外开销就会消失。<br>比如:<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; <span class="number">3</span>; i++)&#123; </span><br><span class="line">    something(i);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//更高效的方式：</span></span><br><span class="line">something(<span class="number">0</span>);</span><br><span class="line">something(<span class="number">1</span>);</span><br><span class="line">something(<span class="number">2</span>);</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">因为在每次的循环中，<span class="built_in">i</span> 的值都会增加，然后检查是否有效。编译器经常会把这种简单的循环解开，前提是这些循环的次数是固定的。对于这样的循环：</span><br><span class="line">``` c</span><br><span class="line"><span class="keyword">for</span>(<span class="built_in">i</span> = <span class="number">0</span>; <span class="built_in">i</span> &lt;  limit; <span class="built_in">i</span>++) &#123; ... &#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">就不可能被拆解，因为我们不知道它循环的次数到底是多少。不过，将这种类型的循环拆解开并不是不可能的。</span><br><span class="line">与简单循环相比，下面的代码的长度要长很多，然而具有高得多的效率。选择<span class="number">8</span>作为分块大小，只是用来演示，任何合适的长度都是可行的。例子中，循环的成立条件每八次才被检验一次，而不是每次都要检验。如果需要处理的数组的大小是确定的，我们就可以使用数组的大小作为分块的大小（或者是能够整除数组长度的数值）。不过，分块的大小跟系统的缓存大小有关。</span><br><span class="line">``` c</span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.H&gt;</span> #define BLOCKSIZE (8) 	</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span><br><span class="line"></span>&#123; </span><br><span class="line">    <span class="keyword">int</span> i = <span class="number">0</span>; </span><br><span class="line">    <span class="keyword">int</span> limit = <span class="number">33</span>;  <span class="comment">/* could be anything */</span> </span><br><span class="line">    <span class="keyword">int</span> blocklimit;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* The limit may not be divisible by BLOCKSIZE, </span><br><span class="line">      go as near as we can first, then tidy up.</span><br><span class="line">     */</span> </span><br><span class="line">    blocklimit = (limit / BLOCKSIZE) * BLOCKSIZE;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* unroll the loop in blocks of 8 */</span> </span><br><span class="line">    <span class="keyword">while</span>(i &lt; blocklimit) &#123; </span><br><span class="line">        <span class="built_in">printf</span>(process(%d)\n, i); </span><br><span class="line">        <span class="built_in">printf</span>(process(%d)\n, i+<span class="number">1</span>); </span><br><span class="line">        <span class="built_in">printf</span>(process(%d)\n, i+<span class="number">2</span>); </span><br><span class="line">        <span class="built_in">printf</span>(process(%d)\n, i+<span class="number">3</span>); </span><br><span class="line">        <span class="built_in">printf</span>(process(%d)\n, i+<span class="number">4</span>); </span><br><span class="line">        <span class="built_in">printf</span>(process(%d)\n, i+<span class="number">5</span>); </span><br><span class="line">        <span class="built_in">printf</span>(process(%d)\n, i+<span class="number">6</span>); </span><br><span class="line">        <span class="built_in">printf</span>(process(%d)\n, i+<span class="number">7</span>); </span><br><span class="line">        <span class="comment">/* update the counter */</span> </span><br><span class="line">        i += <span class="number">8</span>; </span><br><span class="line">    &#125; </span><br><span class="line">    <span class="comment">/* </span><br><span class="line">     * There may be some left to do.</span><br><span class="line">     * This could be done as a simple for() loop, </span><br><span class="line">     * but a switch is faster (and more interesting) </span><br><span class="line">     */</span> </span><br><span class="line">    <span class="keyword">if</span>( i &lt; limit ) </span><br><span class="line">    &#123; </span><br><span class="line">        <span class="comment">/* Jump into the case at the place that will allow</span><br><span class="line">         * us to finish off the appropriate number of items. </span><br><span class="line">         */</span> </span><br><span class="line">        <span class="keyword">switch</span>( limit - i ) </span><br><span class="line">        &#123; </span><br><span class="line">            <span class="keyword">case</span> <span class="number">7</span> : <span class="built_in">printf</span>(process(%d)\n, i); i++; </span><br><span class="line">            <span class="keyword">case</span> <span class="number">6</span> : <span class="built_in">printf</span>(process(%d)\n, i); i++; </span><br><span class="line">            <span class="keyword">case</span> <span class="number">5</span> : <span class="built_in">printf</span>(process(%d)\n, i); i++; </span><br><span class="line">            <span class="keyword">case</span> <span class="number">4</span> : <span class="built_in">printf</span>(process(%d)\n, i); i++; </span><br><span class="line">            <span class="keyword">case</span> <span class="number">3</span> : <span class="built_in">printf</span>(process(%d)\n, i); i++; </span><br><span class="line">            <span class="keyword">case</span> <span class="number">2</span> : <span class="built_in">printf</span>(process(%d)\n, i); i++; </span><br><span class="line">            <span class="keyword">case</span> <span class="number">1</span> : <span class="built_in">printf</span>(process(%d)\n, i); </span><br><span class="line">        &#125;</span><br><span class="line">    &#125; </span><br><span class="line">    return <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>&nbsp;</p>
+<h2 id="计算非零位的个数-counting-the-number-of-bits-set"><a href="#计算非零位的个数-counting-the-number-of-bits-set" class="headerlink" title="计算非零位的个数 / counting the number of bits set"></a>计算非零位的个数 / counting the number of bits set</h2><p>例1：测试单个的最低位，计数，然后移位。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//example1</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">countbit1</span><span class="params">(uint n)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> bits = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (n != <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span>(n &amp; <span class="number">1</span>) bits++;</span><br><span class="line">            n &gt;&gt;= <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">      return bits;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>例2：先除4，然后计算被4处的每个部分。循环拆解经常会给程序优化带来新的机会。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//example - 2</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">countbit2</span><span class="params">(uint n)</span></span><br><span class="line"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> bits = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (n != <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (n &amp; <span class="number">1</span>) bits++;</span><br><span class="line">        <span class="keyword">if</span> (n &amp; <span class="number">2</span>) bits++;</span><br><span class="line">        <span class="keyword">if</span> (n &amp; <span class="number">4</span>) bits++;</span><br><span class="line">        <span class="keyword">if</span> (n &amp; <span class="number">8</span>) bits++;</span><br><span class="line">            n &gt;&gt;= <span class="number">4</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    return bits;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="尽早地退出循环-Early-loop-breaking"><a href="#尽早地退出循环-Early-loop-breaking" class="headerlink" title="尽早地退出循环 / Early loop breaking"></a>尽早地退出循环 / Early loop breaking</h2><p>通常没有必要遍历整个循环。举例来说，在数组中搜索一个特定的值，我们可以在找到我们需要值之后立刻退出循环。下面的例子在10000个数字中搜索-99。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">found = FALSE; </span><br><span class="line"><span class="keyword">for</span>(i=<span class="number">0</span>;i&lt;<span class="number">10000</span>;i++) </span><br><span class="line">&#123; </span><br><span class="line">    <span class="keyword">if</span>(<span class="built_in">list</span>[i] == <span class="number">-99</span>) &#123; </span><br><span class="line">         found = TRUE; </span><br><span class="line">    &#125; </span><br><span class="line">&#125; </span><br><span class="line"><span class="keyword">if</span>(found) <span class="built_in">printf</span>(Yes, there is a <span class="number">-99.</span> Hooray!\n);</span><br></pre></td></tr></table></figure></p>
+<p>这样做是可行的，但是不管这个被搜索到的项目出现在什么位置，都会搜索整个数组。跟好的方法是，再找到我们需要的数字以后，立刻退出循环。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">found = FALSE; </span><br><span class="line"><span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; <span class="number">10000</span>; i++) </span><br><span class="line">&#123; </span><br><span class="line">    <span class="keyword">if</span>( <span class="built_in">list</span>[i] == <span class="number">-99</span> ) &#123; </span><br><span class="line">        found = TRUE; </span><br><span class="line">        <span class="keyword">break</span>; </span><br><span class="line">    &#125; </span><br><span class="line">&#125; </span><br><span class="line"><span class="keyword">if</span>( found ) <span class="built_in">printf</span>(Yes, there is a <span class="number">-99.</span> Hooray!\n);</span><br></pre></td></tr></table></figure></p>
+<p>如果数字出现在位置23上，循环就会终止，忽略剩下的9977个。</p>
+<h2 id="函数设计-Function-Design"><a href="#函数设计-Function-Design" class="headerlink" title="函数设计 / Function Design"></a>函数设计 / Function Design</h2><p>保持函数短小精悍，是对的。这可以使编译器能够跟高效地进行其他的优化，比如寄存器分配。</p>
+<h2 id="调用函数的开销-Function-call-overhead"><a href="#调用函数的开销-Function-call-overhead" class="headerlink" title="调用函数的开销 / Function call overhead"></a>调用函数的开销 / Function call overhead</h2><p>对处理器而言，调用函数的开销是很小的，通常，在被调用函数所进行的工作中，所占的比例也很小。能够使用寄存器传递的函数参数个数是有限制的。这些参数可以是整型兼容的（char,short,int以及float都占用一个字），或者是4个字以内的结构体（包括2个字的double和long long）。假如参数的限制是4，那么第5个及后面的字都会被保存到堆栈中。这会增加在调用函数是存储这些参数的，以及在被调用函数中恢复这些参数的代价。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">f1</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b, <span class="keyword">int</span> c, <span class="keyword">int</span> d)</span> </span>&#123; </span><br><span class="line">    return a + b + c + d;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">g1</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line">    return f1(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">f2</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b, <span class="keyword">int</span> c, <span class="keyword">int</span> d, <span class="keyword">int</span> e, <span class="keyword">int</span> f)</span> </span>&#123;</span><br><span class="line">    return a + b + c + d + e + f;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function">ing <span class="title">g2</span><span class="params">(<span class="keyword">void</span>)</span> </span>&#123;</span><br><span class="line">    return f2(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>g2函数中，第5、6个参数被保存在堆栈中，在f2中被恢复，每个参数带来2次内存访问。</p>
+<h2 id="最小化参数传递的开销-Minimizing-parameter-passing-overhead"><a href="#最小化参数传递的开销-Minimizing-parameter-passing-overhead" class="headerlink" title="最小化参数传递的开销 / Minimizing parameter passing overhead"></a>最小化参数传递的开销 / Minimizing parameter passing overhead</h2><p>为了将传递参数给函数的代价降至最低，我们可以：<br>尽可能确保函数的形参不多于四个，甚至更少，这样就不会使用堆栈来传递参数。<br>如果一个函数形参多于四个，那就确保在这个函数能够做大量的工作，这样就可以抵消由传递堆栈参数所付出的代价。<br>用指向结构体的指针作形参，而不是结构体本身。<br>把相关的参数放到一个结构里里面，然后把它的指针传给函数，可以减少参数的个数，增加程序的可读性。<br>将long类型的参数的个数降到最小，因为它使用两个参数的空间。对于double也同样适用。<br>避免出现参数的一部分使用寄存器传输，另一部分使用堆栈传输的情况。这种情况下参数将被全部压到堆栈里。<br>避免出现函数的参数个数不定的情况。这种情况下，所有参数都使用堆栈。</p>
+<h2 id="叶子函数-Leaf-functions"><a href="#叶子函数-Leaf-functions" class="headerlink" title="叶子函数 / Leaf functions"></a>叶子函数 / Leaf functions</h2><p>如果一个函数不再调用其他函数，这样的函数被称为叶子函数。在许多应用程序中，大约一半的函数调用是对叶子函数的调用。叶子函数在所有平台上都可以得到非常高效的编译，因为他们不需要进行参数的保存和恢复。在入口压栈和在出口退栈的代价，跟一个足够复杂的需要4个或者5个参数的叶子函数所完成的工作相比，是非常小的。如果可能的话，我们就要尽量安排经常被调用的函数成为叶子函数。函数被调用的次数可以通过模型工具（profiling facility）来确定。这里有几种方法可以确保函数被编译成叶子函数：</p>
+<ul>
+<li>不调用其他函数：包括那些被转换成调用C语言库函数的运算，比如除法、浮点运算。</li>
+<li>使用关键字__inline修饰小的函数。</li>
+</ul>
+<h2 id="内联函数-Inline-functions"><a href="#内联函数-Inline-functions" class="headerlink" title="内联函数 / Inline functions"></a>内联函数 / Inline functions</h2><p>对于所有调试选项，内嵌函数是被禁止的。使用inline关键字修饰函数后，跟普通的函数调用不同，代码中对该函数的调用将会被函数体本身代替。这会使代码更快，另一方面它会影响代码的长度，尤其是内嵌函数比较大而且经常被调用的情况下。<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">__<span class="function"><span class="keyword">inline</span> <span class="keyword">int</span> <span class="title">square</span><span class="params">(<span class="keyword">int</span> x)</span> </span>&#123;</span><br><span class="line">    return x * x;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">length</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y)</span></span>&#123;</span><br><span class="line">    return <span class="built_in">sqrt</span>(square(x) + square(y));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>使用内嵌函数有几个优点：</p>
+<ul>
+<li>没有调用函数的开销。</li>
+</ul>
+<p>因为函数被直接代替，没有任何额外的开销，比如存储和恢复寄存器。</p>
+<ul>
+<li>更低的参数赋值开销。</li>
+</ul>
+<p>参数传递的开销通常会更低，因为它不需要复制变量。如果其中一些参数是常量，编译器还可以作进一步的优化。<br>内嵌函数的缺点是如果函数在许多地方被调用，将会增加代码的长度。长度差别的大小非常依赖于内嵌函数的大小和调用的次数。<br>仅将少数关键函数设置成内嵌函数是明智的。如果设置得当，内嵌函数可以减少代码的长度，一次函数调用需要一定数量的指令，但是，使用优化过的内嵌函数可以编译成更少的指令。</p>
+<h2 id="使用查找表-Using-Lookup-Tables"><a href="#使用查找表-Using-Lookup-Tables" class="headerlink" title="使用查找表 / Using Lookup Tables"></a>使用查找表 / Using Lookup Tables</h2><p>有些函数可以近似成查找表，这样可以显著的提高效率。查找表的精度一般比计算公式的精度低，不过在大多数程序中，这种精度就足够了。<br>许多信号处理软件（比如MODEM调制软件）会大量的使用sin和cos函数，这些函数会带来大量的数学运算。对于实时系统来说，精度不是很重要，sin/cos查找表显得更加实用。使用查找表的时候，尽量将相近的运算合并成一个查找表，这样要比使用多个查找表要更快和使用更少的空间。</p>
+<h2 id="浮点运算-Floating-Point-Arithmetic"><a href="#浮点运算-Floating-Point-Arithmetic" class="headerlink" title="浮点运算 / Floating-Point Arithmetic"></a>浮点运算 / Floating-Point Arithmetic</h2><p>尽管浮点运算对于任何处理器来讲都是很费时间的，有的时候，我们还是不得不用到浮点运算，比方说实现信号处理。尽管如此，编写浮点运算代码的时候，我们要牢记：</p>
+<ul>
+<li>浮点除法是慢的</li>
+</ul>
+<p>除法要比加法或者乘法慢两倍，我们可以把被一个常数除的运算写成被这个数的倒数乘（比如，x=x/3.0写成x=x*(1.0/3.0)）。倒数的计算在编译阶段就被完成。</p>
+<ul>
+<li>使用float代替double</li>
+</ul>
+<p>Float型变量消耗更少的内存和寄存器，而且因为它的低精度所以具有更高的效率。在精度足够的情况下，就要使用float。</p>
+<ul>
+<li>不要使用先验函数（transcendental functions），</li>
+</ul>
+<p>先验函数（比如sin，cos，log）是通过使用一系列的乘法和加法实现的，所以这些运算会比普通的乘法慢10倍以上。</p>
+<ul>
+<li>简化浮点表达式</li>
+</ul>
+<p>编译器在整型跟浮点型混合的运算中不会进行太多的优化。比如3 * (x / 3) 不会被优化成x，因为浮点运算通常会导致精度的降低，甚至表达式的顺序都是重要的： (a + b) 　　  + c 不等于 a + (b + c)。因此，进行手动的优化是有好处的。<br>不过，在特定的场合下，浮点运算的效率达不到指定的水平，这种情况下，最好的办法可能是放弃浮点运算，转而使用定点运算。当变量的变化范围足够的小，定点运算要比浮点运算精度更高、速度更快。</p>
+<h2 id="其他的技巧-Misc-tips"><a href="#其他的技巧-Misc-tips" class="headerlink" title="其他的技巧 / Misc tips"></a>其他的技巧 / Misc tips</h2><ul>
+<li>一般情况下，可以用存储空间换取时间。你可以缓存那些经常用到的数据，而不是每次都重新计算、或者重新装载。比如sin/cos表，或者伪随机数的表（如果你不是真的需要随机数，你可以在开始的时候计算1000个，在随后的代码中重复利用就是了）</li>
+<li>尽量少的使用全局变量。</li>
+<li>将一个文件内部的变量声明成静态的，除非它有必要成为全局的。</li>
+<li>不要使用递归。递归可以使代码非常整齐和美观，但会产生大量的函数调用和开销。</li>
+<li>访问单维数组要比多维数组快</li>
+<li>使用#defined宏代替经常用到的小函数。</li>
+</ul>
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/编程语言/" rel="tag">#编程语言</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/2014/12/skip-list.html" rel="next" title="skip list跳跃表实现">
+                <i class="fa fa-chevron-left"></i> skip list跳跃表实现
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/2015/02/cache.html" rel="prev" title="谈谈缓存和基本的缓存算法">
+                谈谈缓存和基本的缓存算法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="/blog/2014/12/c-code-opt.html"
+     data-title="C代码优化小贴士"
+     data-content=""
+     data-url="http://www.ezlippi.com/blog/2014/12/c-code-opt.html">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  <p>热评文章</p>
+  <div class="ds-top-threads" data-range="weekly" data-num-items="4"></div>
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="/blog/2014/12/c-code-opt.html"
+           data-title="C代码优化小贴士" data-url="http://www.ezlippi.com/blog/2014/12/c-code-opt.html">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="EZLippi" />
+          <p class="site-author-name" itemprop="name">EZLippi</p>
+          <p class="site-description motion-element" itemprop="description">Easy Lippi</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">65</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+          
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">72</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/EZLippi" target="_blank">
+                  
+                    <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/ouyanglip" target="_blank">
+                  
+                    <i class="fa fa-weibo"></i> weibo
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/lippi-ouyang" target="_blank">
+                  
+                    <i class="fa fa-weibo"></i> zhihu
+                  
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+            <p class="site-author-name">友情链接</p>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.woaitqs.cc/" target="_blank">Qisen Tang</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://szhshp.org" target="_blank">szhshp的博客</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://python.zhangwei.website" target="_blank">JuniorCoder</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/lippi-ouyang" target="_blank">友链出租</a>
+              </span>
+            
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#整型数-Integers"><span class="nav-number">1.</span> <span class="nav-text">整型数/Integers</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#除法和余数-Division-and-Remainder"><span class="nav-number">2.</span> <span class="nav-text">除法和余数 / Division and Remainder</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#合并除法运算和取余运算-Combining-division-and-remainder"><span class="nav-number">3.</span> <span class="nav-text">合并除法运算和取余运算 / Combining division and remainder</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#取模运算的替换-An-alternative-for-modulo-arithmetic"><span class="nav-number">4.</span> <span class="nav-text">取模运算的替换 / An alternative for modulo arithmetic</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用数组索引-Using-array-indices"><span class="nav-number">5.</span> <span class="nav-text">使用数组索引 / Using array indices</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#全局变量-Global-variables"><span class="nav-number">6.</span> <span class="nav-text">全局变量 / Global variables</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用别名-Using-Aliases"><span class="nav-number">7.</span> <span class="nav-text">使用别名 / Using Aliases</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#活跃变量和泄漏-Live-variables-and-spilling"><span class="nav-number">8.</span> <span class="nav-text">活跃变量和泄漏 / Live variables and spilling</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#变量类型-Variable-Types"><span class="nav-number">9.</span> <span class="nav-text">变量类型 / Variable Types</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#局部变量-Local-variables"><span class="nav-number">10.</span> <span class="nav-text">局部变量 / Local variables</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#指针-Pointers"><span class="nav-number">11.</span> <span class="nav-text">指针 / Pointers</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#指针链-Pointer-chains"><span class="nav-number">12.</span> <span class="nav-text">指针链 / Pointer chains</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#条件的执行-Conditional-Execution"><span class="nav-number">13.</span> <span class="nav-text">条件的执行 / Conditional Execution</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Boolean表达式和范围检查-Boolean-Expressions-amp-Range-checking"><span class="nav-number">14.</span> <span class="nav-text">Boolean表达式和范围检查 / Boolean Expressions & Range checking</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Boolean表达式-amp-与零的比较-Boolean-Expressions-amp-Compares-with-zero"><span class="nav-number">15.</span> <span class="nav-text">Boolean表达式&与零的比较 / Boolean Expressions & Compares with zero</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#惰性评估计算-Lazy-Evaluation-Exploitation"><span class="nav-number">16.</span> <span class="nav-text">惰性评估计算 / Lazy Evaluation Exploitation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二分分解-Binary-Breakdown"><span class="nav-number">17.</span> <span class="nav-text">二分分解 / Binary Breakdown</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#switch语句和查找表-Switch-statement-vs-lookup-tables"><span class="nav-number">18.</span> <span class="nav-text">switch语句和查找表 / Switch statement vs. lookup tables</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#循环终止-Loop-termination"><span class="nav-number">19.</span> <span class="nav-text">循环终止 / Loop termination</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#更快的for-循环-Faster-for-loops"><span class="nav-number">20.</span> <span class="nav-text">更快的for()循环 / Faster for() loops</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#函数循环-Function-Looping"><span class="nav-number">21.</span> <span class="nav-text">函数循环 / Function Looping</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#展开循环-Loop-unrolling"><span class="nav-number">22.</span> <span class="nav-text">展开循环 / Loop unrolling</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#计算非零位的个数-counting-the-number-of-bits-set"><span class="nav-number">23.</span> <span class="nav-text">计算非零位的个数 / counting the number of bits set</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#尽早地退出循环-Early-loop-breaking"><span class="nav-number">24.</span> <span class="nav-text">尽早地退出循环 / Early loop breaking</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#函数设计-Function-Design"><span class="nav-number">25.</span> <span class="nav-text">函数设计 / Function Design</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#调用函数的开销-Function-call-overhead"><span class="nav-number">26.</span> <span class="nav-text">调用函数的开销 / Function call overhead</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最小化参数传递的开销-Minimizing-parameter-passing-overhead"><span class="nav-number">27.</span> <span class="nav-text">最小化参数传递的开销 / Minimizing parameter passing overhead</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#叶子函数-Leaf-functions"><span class="nav-number">28.</span> <span class="nav-text">叶子函数 / Leaf functions</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内联函数-Inline-functions"><span class="nav-number">29.</span> <span class="nav-text">内联函数 / Inline functions</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用查找表-Using-Lookup-Tables"><span class="nav-number">30.</span> <span class="nav-text">使用查找表 / Using Lookup Tables</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#浮点运算-Floating-Point-Arithmetic"><span class="nav-number">31.</span> <span class="nav-text">浮点运算 / Floating-Point Arithmetic</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他的技巧-Misc-tips"><span class="nav-number">32.</span> <span class="nav-text">其他的技巧 / Misc tips</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2014 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">EZLippi</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+   托管在 -
+  <a class="theme-link" href="https://github.com/EZLippi/EZLippi.github.io">
+    Github
+  </a>
+
+</div>
+<div class="theme-info">
+<span id="busuanzi_container_site_pv">
+    &nbsp; | &nbsp;本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+</div>
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  
+
+
+  
+
+
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=0.5.0"></script>
+
+
+
+  
+  
+
+  
+  
+<script type="text/javascript" src="/js/src/scrollspy.js?v=0.5.0"></script>
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = NexT.utils.escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    NexT.motion.middleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+
+      if (CONFIG.sidebar.display === 'post' || CONFIG.sidebar.display === 'always') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          NexT.utils.displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=0.5.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"ezlippi"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+
+  
+  
+
+
+</body>
+</html>

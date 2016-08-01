@@ -1,0 +1,1176 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.useso.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="C" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.5.0" />
+
+
+
+
+
+
+<meta name="description" content="整形溢出和提升大部分 C 程序员都以为基本的整形操作都是安全的其实不然,看下面这个例子,你觉得输出结果是什么:
+int main(int argc, char** argv) {
+    long i = -1;
+
+    if (i &amp;lt; sizeof(i)) {
+         printf(&amp;quot;OK\n&amp;quot;);
+    }
+    else {
+         pri">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C语言高级编程指南">
+<meta property="og:url" content="http://www.ezlippi.com/blog/2014/07/c-advaced-programming.html">
+<meta property="og:site_name" content="Lippi-浮生志">
+<meta property="og:description" content="整形溢出和提升大部分 C 程序员都以为基本的整形操作都是安全的其实不然,看下面这个例子,你觉得输出结果是什么:
+int main(int argc, char** argv) {
+    long i = -1;
+
+    if (i &amp;lt; sizeof(i)) {
+         printf(&amp;quot;OK\n&amp;quot;);
+    }
+    else {
+         pri">
+<meta property="og:updated_time" content="2016-03-18T08:32:35.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="C语言高级编程指南">
+<meta name="twitter:description" content="整形溢出和提升大部分 C 程序员都以为基本的整形操作都是安全的其实不然,看下面这个例子,你觉得输出结果是什么:
+int main(int argc, char** argv) {
+    long i = -1;
+
+    if (i &amp;lt; sizeof(i)) {
+         printf(&amp;quot;OK\n&amp;quot;);
+    }
+    else {
+         pri">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> C语言高级编程指南 | Lippi-浮生志 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?340874ba9357cbe81570aa4ac1185941";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner">
+<script>
+(function(){
+    var bp = document.createElement('script');
+    bp.src = '//push.zhanzhang.baidu.com/push.js';
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+            
+<div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Lippi-浮生志</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu menu-left">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+      
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'fLM9qfxyerC6njvM7usy','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                C语言高级编程指南
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2014-07-05T00:00:00+08:00" content="2014-07-05">
+              2014-07-05
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/c/" itemprop="url" rel="index">
+                    <span itemprop="name">c</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/c/programming/" itemprop="url" rel="index">
+                    <span itemprop="name">programming</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/blog/2014/07/c-advaced-programming.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="/blog/2014/07/c-advaced-programming.html" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+        </div>
+      </header>
+    
+
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="整形溢出和提升"><a href="#整形溢出和提升" class="headerlink" title="整形溢出和提升"></a>整形溢出和提升</h2><p>大部分 C 程序员都以为基本的整形操作都是安全的其实不然,看下面这个例子,<br>你觉得输出结果是什么:</p>
+<pre><code>int main(int argc, char** argv) {
+    long i = -1;
+
+    if (i &lt; sizeof(i)) {
+         printf(&quot;OK\n&quot;);
+    }
+    else {
+         printf(&quot;error\n&quot;);
+    }
+
+    return 0;
+}
+</code></pre><a id="more"></a>
+<p>当一个变量转换成无符号整形时,i的值不再是-1,而是 size_t的最大值,因<br>为sizeof操作返回的是一个 size_t类型的无符号数。<br>在C99/C11标准里写道:</p>
+<blockquote>
+<p>“If the operand that has unsigned integer type has rank greater or<br>equal to the rank of the type of the other operand, then the operand<br>with signed integer type is converted to the type of the operand with<br>unsigned integer type.”</p>
+</blockquote>
+<p>在C标准里面 size_t至少是一个 16 位的无符号整数,对于给定的架构 size_t 一般对应long,所以sizeof（int）和size_t至少相等,这就带来了可移植性的问题,C标准没有定义 short, int,long,longlong的大小,只是说明了他们的最小长度,对于 x86_64 架构,long在Linux下是64位,而在64位Windows下是32位。一般的方法是采用固定长度的类型比如定义在C99头文件stdint.h中的uint16_t,int32_t,uint_least16_t,uint_fast16_t等。</p>
+<p>如果 int可以表示原始类型的所有值,那么这个操作数会转换成 int,否则<br>他会转换成 unsigned int。下面这个函数在 32 位平台返回 65536,但是在 16 位系统返回 0。</p>
+<pre><code>uint32_t sum()
+{
+    uint16_t a = 65535;
+    uint16_t b = 1;
+    return a+b;
+}
+</code></pre><p>对于char 类型到底是 signed 还是 unsigned 取决于硬件架构和操作系统,通常<br>由特定平台的 ABI(Application Binary Interface) 指定,如果是 signed char,下面的代码输出-128 和-127,否则输出 128,129(x86 架构)。</p>
+<pre><code>char c = 128;
+char d = 129;
+printf(&quot;%d,%d\n&quot;,c,d);
+</code></pre><h2 id="内存管理和分配"><a href="#内存管理和分配" class="headerlink" title="内存管理和分配"></a>内存管理和分配</h2><p>malloc 函数分配制定字节大小的内存,对象未被初始化,如果 size 是 0 取<br>决与系统实现。malloc(0)返回一个空指针或者 unique pointer,如果 size 是表达式的运算结果,确保没有整形溢出。</p>
+<blockquote>
+<p>“If the size of the space requested is 0, the behavior is<br>implementation- defined: the value returned shall be either a null<br>pointer or a unique pointer.”</p>
+</blockquote>
+<pre><code>size_t computed_size;
+
+if (elem_size &amp;&amp; num &gt; SIZE_MAX / elem_size) {
+    errno = ENOMEM;
+    err(1, &quot;overflow&quot;);
+}
+
+computed_size = elem_size*num;
+</code></pre><p>malloc不会给分配的内存初始化，如果要对新分配的内存初始化，可以用calloc代替malloc,一般情况下给序列分配相等大小的元素时,用calloc来代替用表达式计算大小,calloc 会把内存初始化为 0。</p>
+<p>realloc 用来对已经分配内存的对象改变大小,如果新的 size 更大,额外的空间<br>没 有 被 初 始 化 , 如 果 提 供 给 realloc 的 指 针 是 空 指 针 , realloc 就 等 效 于malloc,如果原指针非空而 new size是0,结果依赖于操作系统的具体实现。</p>
+<blockquote>
+<p>“In case of failure realloc shall return NULL and leave provided memory<br>object intact. Thus it is important not only to check for integer<br>overflow of size argument, but also to correctly handle object size if<br>realloc fails.”</p>
+</blockquote>
+<p>下面这段代码可以带你领会malloc,calloc，realloc,free的用法：</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdint.h&gt;
+#include &lt;malloc.h&gt;
+#include &lt;errno.h&gt;
+
+#define VECTOR_OK            0
+#define VECTOR_NULL_ERROR    1
+#define VECTOR_SIZE_ERROR    2
+#define VECTOR_ALLOC_ERROR   3
+
+struct vector {
+    int *data;
+    size_t size;
+};
+
+int create_vector(struct vector *vc, size_t num) {
+
+    if (vc == NULL) {
+        return VECTOR_NULL_ERROR;
+    }
+
+    vc-&gt;data = 0;
+    vc-&gt;size = 0;
+
+    /* check for integer and SIZE_MAX overflow */
+    if (num == 0 || SIZE_MAX / num &lt; sizeof(int)) {
+        errno = ENOMEM;
+        return VECTOR_SIZE_ERROR;
+    }
+
+    vc-&gt;data = calloc(num, sizeof(int));
+
+    /* calloc faild */
+    if (vc-&gt;data == NULL) {
+        return VECTOR_ALLOC_ERROR;
+    }
+
+    vc-&gt;size = num * sizeof(int);
+    return VECTOR_OK;
+}
+
+int grow_vector(struct vector *vc) {
+
+    void *newptr = 0;
+    size_t newsize;
+
+    if (vc == NULL) {
+        return VECTOR_NULL_ERROR;
+    }
+
+
+    /* check for integer and SIZE_MAX overflow */
+    if (vc-&gt;size == 0 || SIZE_MAX / 2 &lt; vc-&gt;size) {
+        errno = ENOMEM;
+        return VECTOR_SIZE_ERROR;
+    }
+
+    newsize = vc-&gt;size * 2;
+
+    newptr = realloc(vc-&gt;data, newsize);
+
+    /* realloc faild; vector stays intact size was not changed */
+    if (newptr == NULL) {
+        return VECTOR_ALLOC_ERROR;
+    }
+
+    /* upon success; update new address and size */
+    vc-&gt;data = newptr;
+    vc-&gt;size = newsize;
+    return VECTOR_OK;
+}
+</code></pre><hr>
+<h2 id="避免重大错误"><a href="#避免重大错误" class="headerlink" title="避免重大错误"></a>避免重大错误</h2><ol>
+<li><p>使用未初始化的变量，<br>C语言要求所有变量在使用之前要初始化，使用未初始化的变量会造成为定义的行为，这和C++不同，C++保证所有变量在使用之前都得到初始化，Java<strong>尽量保证</strong>变量使用前的得到初始化，如类基本数据成员会被初始化为默认值。</p>
+</li>
+<li><p>free错误<br>对空指针调用 free,对不是由 malloc family 函数分配的指针调用 free,或者对<br>已经调用 free 的指针再次调用 free。<br>一开始初始化指针为NULL可以减少错误,GCC和Clang编译器有-Wuninitialized 选项来对未初始化的变量显示警告信息,另外不要将同一个指针用于静态变量和动态变量。</p>
+</li>
+</ol>
+<blockquote>
+<pre><code>char *ptr = NULL;
+void nullfree(void **pptr) {
+    void *ptr = *pptr;
+    assert(ptr != NULL)
+    free(ptr);
+    *pptr = NULL;
+}
+</code></pre></blockquote>
+<p>3.对空指针解引用，数组越界访问</p>
+<p>对NULL指针或者free’d内存解引用，数组越界访问，是很明显的错误，为了消除这种错误，一般的做法就是增加数组越界检查的功能，比如Java里的array就有下标检查的功能，但是这样会带来严重的性能代价，我们要修改ABI（application binary interface），让每个指针都跟随着它的范围信息，在数值计算中cost is terrible。</p>
+<p>4.违反类型规则</p>
+<p>把int×指针cast成float×，然后对它解引用，在C里面会引发undefined behavior，C规定这种类型的转换需要使用memset，C++里面有个reinterpret_cast函数用于无关类型之间的转换，reinterpret_cast <new_type> (expression)</new_type></p>
+<hr>
+<h2 id="防止内存泄漏"><a href="#防止内存泄漏" class="headerlink" title="防止内存泄漏"></a>防止内存泄漏</h2><p>内存泄漏发生在程序不再使用的动态内存没有得到释放，这需要我们掌握动态分配对象的作用域，尤其是什么时候该调用free来释放内存，常用的集中方法如下：</p>
+<ol>
+<li><p>在程序启动的时候分配<br>在程序启动的时候分配需要的heap memory，程序退出时把释放的任务交给操作系统，这种方法一般适用于程序运行后马上退出的那种。</p>
+</li>
+<li><p>使用变长数组（VLA）<br>如果你需要一块变长大小的空间并且作用域在函数中，变长数组可以帮到你，但是也有一个限制，一个函数中的变长数组内存大小一般不超过几百字节，这个数字C标准没有明确的定义，最好是把内存分配到栈上，在栈上允许分配的最大VLA内存是SIZE_MAX，掌握目标平台的栈大小可以有效的防止栈溢出。</p>
+</li>
+<li><p>使用引用计数<br>引用计数是一个很好的管理内存的方法，特别是当你不希望自己定义的对象被复制时，每一次赋值把引用计数加1,每次失去引用就把引用计数减1,当引用计数等于0时，以为的对象已经不再需要了，我们需要释放对象占用的内存，由于C不提供自动的析构函数，我们必须手动释放内存，看一个例子：</p>
+<pre><code>#include &lt;stdlib.h&gt;
+#include &lt;stdint.h&gt;
+
+#define MAX_REF_OBJ 100
+#define RC_ERROR -1
+
+struct mem_obj_t{
+    void *ptr;
+    uint16_t count;
+};
+
+static struct mem_obj_t references[MAX_REF_OBJ];
+static uint16_t reference_count = 0;
+
+/* create memory object and return handle */
+uint16_t create(size_t size){
+
+    if (reference_count &gt;= MAX_REF_OBJ)
+        return RC_ERROR;
+
+if (size){
+  void *ptr = calloc(1, size);
+
+if (ptr != NULL){
+    references[reference_count].ptr = ptr;
+    references[reference_count].count = 0;
+    return reference_count++;
+                }
+        }
+
+    return RC_ERROR;
+}
+</code></pre></li>
+</ol>
+<pre><code>/* get memory object and increment reference counter */
+void* retain(uint16_t handle){
+
+if(handle &lt; reference_count &amp;&amp; handle &gt;= 0){
+    references[handle].count++;
+    return references[handle].ptr;
+    } else {
+        return NULL;
+    }
+}
+
+/* decrement reference counter */
+void release(uint16_t handle){
+printf(&quot;release\n&quot;);
+
+if(handle &lt; reference_count &amp;&amp; handle &gt;= 0){
+    struct mem_obj_t *object = &amp;references[handle];
+
+    if (object-&gt;count &lt;= 1){
+        printf(&quot;released\n&quot;);
+    free(object-&gt;ptr);
+    reference_count--;
+} else {
+    printf(&quot;decremented\n&quot;);
+    object-&gt;count--;
+        }
+     }
+}
+</code></pre><p>C++标准库有个auto_ptr智能指针，能够自动释放指针所指对象的内存，C++ boost库有个boost：：shared_ptr智能指针，内置引用计数，支持拷贝和赋值，看下面这个例子：</p>
+<blockquote>
+<p>“Objects of shared_ptr types have the ability of taking ownership of a pointer and share that ownership: once they take ownership, the group of owners of a pointer become responsible for its deletion when the last one of them releases that ownership.”</p>
+</blockquote>
+<pre><code>#include &lt;boost/smart_ptr.hpp&gt;
+#include &lt;iostream&gt;
+int main()
+{
+    // Basic useage
+    boost::shared_ptr&lt;int&gt; p1(new int(10));
+    std::cout &lt;&lt; &quot;ref count of p1: &quot; &lt;&lt; p1.use_count() &lt;&lt; std::endl;
+    boost::shared_ptr&lt;int&gt; p2(p1); // or p2 = p1;
+    std::cout &lt;&lt; &quot;ref count of p1: &quot; &lt;&lt; p1.use_count() &lt;&lt; std::endl;
+    *p1 = 999;
+    std::cout &lt;&lt; &quot;*p2: &quot; &lt;&lt; *p2 &lt;&lt; std::endl;
+    p2.reset();
+    std::cout &lt;&lt; &quot;ref count of p1: &quot; &lt;&lt; p1.use_count() &lt;&lt; std::endl;
+    return 0;
+}
+</code></pre><p> 4.内存池，有利于减少内存碎片，看下面这个例子：</p>
+<pre><code>#include &lt;stdlib.h&gt;
+#include &lt;stdint.h&gt;
+
+struct mem_pool_t{
+void* ptr;//指向内存池起始地址
+size_t size;//内存池大小
+size_t used;//已用内存大小
+};
+
+//create memory pool
+struct mem_pool_t* create_pool(size_t size){
+mem_pool_t* pool=calloc(1,sizeof(struct men_pool_t));
+if(pool!=NULL){
+void* mem=calloc(1,size);
+if(mem!=NULL){
+pool-&gt;ptr=mem;
+pool-&gt;size=size;
+pool-&gt;used=0;
+return pool;
+        }
+    }
+return NULL;
+}
+
+//allocate memory from pool
+void* pool_alloc(mem_pool_t* pool,size_t size){
+if(pool=NULL)
+    return NULL;
+size_t bytes_left=pool-&gt;size-pool-&gt;used;
+if(size&amp;&amp;size&lt;=bytes_left){
+    void* mem=pool-&gt;ptr+pool-&gt;used;
+    pool-&gt;used+=size;
+    return mem;
+    }
+return NULL；
+}
+
+／／release memory of the pool
+void pool_free(mem_pool_t* pool){
+if(pool!=NULL){
+free(pool-&gt;ptr);
+free(pool);
+ }
+}
+</code></pre><p> 5.垃圾回收机制<br> 引用计数采用的方法是当内存不再需要时得到手动释放，垃圾回收发生在内存分配失败或者内存到达一定的水位（watermarks），实现垃圾回收最简单的一个算法是MARK AND SWEEP算法，该算法的思路是遍历所有动态分配对象的内存，标记那些还能继续使用的，回收那些没有被标记的内存。<br>    Java采用的垃圾回收机制就更复杂了，思路也是回收那些不再使用的内存，JAVA的垃圾回收和C++的析构函数又不一样，C++保证对象在使用之前得到初始化，对象超出作用域之后内存得到释放，而JAVA不能保证对象一定被析构。 </p>
+<hr>
+<h2 id="指针和数组"><a href="#指针和数组" class="headerlink" title="指针和数组"></a>指针和数组</h2><p>我们一般的概念里指针和数组名是可互换的，但是在编译器里他们被不同的对待，当我们说一个对象或者表达式具有某种类型的时候我们一般是说这个对象是个左值（lvalue），当对象不是const的时候，左值是可以修改的，比如对象是复制操作符的左参数，而数组名是一个const左值，指向地一个元素的const指针，所以你不能给数组名赋值或者意图改变数组名，如果表达式是数组类型，数组名通常转换成指向地一个元素的指针。</p>
+<p>但是也有例外，什么情况下数组名不是一个指针呢？<br>1.当它是sizeof操作符的操作数时，返回数组占的内存字节数<br>2.当它是取地址操作&amp;的操作数时，返回一个数组的地址</p>
+<p>看下面这个例子：</p>
+<pre><code>short a[] = {1,2,3};
+short *pa;
+short (*px)[];
+
+void init(){
+    pa = a;
+    px = &amp;a;
+
+    printf(&quot;a:%p; pa:%p; px:%p\n&quot;, a, pa, px);
+
+    printf(&quot;a[1]:%i; pa[1]:%i (*px)[1]:%i\n&quot;, a[1], pa[1],(*px)[1]);
+}
+</code></pre><p>a是一个short类型数组，pa是一个指向short类型的指针，px呢？<br>px是一个指向数组类型的指针，在a被赋值给pa之前，他的值被转换成一个指向数组第一个元素的指针，下面那个a却没有转换，因为遇到的是&amp;操作符。<br>数组下标a[1]等价于<em>(a+1),和p[1]一样，也指向</em>(p+1)，但是两者还是有区别的，a是一个数组，它实际上存储的是第一个元素的地址，所以数组a是用来定位第一个元素的，而pa不一样，它就是一个指针，不是用来定位的。<br>再比如：</p>
+<pre><code>int a[10];
+int b[10];
+int *a;
+c=&amp;a[0];//c是指向数组a地一个元素的指针
+c=a;//a自动转换成指向第一个元素的指针，实际上是指针拷贝
+b=a;//非法的，你不能用赋值符把一个数组的所有元素赋给另一个数组
+a=c;//非法的，你不能修改const指针的值
+</code></pre>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/c/" rel="tag">#c</a>
+          
+            <a href="/tags/programming/" rel="tag">#programming</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/2014/06/26-methods-to-improve-java-performance.html" rel="next" title="Java编程Tips">
+                <i class="fa fa-chevron-left"></i> Java编程Tips
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/2014/07/markdown-basics.html" rel="prev" title="markdown 快速入门">
+                markdown 快速入门 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="/blog/2014/07/c-advaced-programming.html"
+     data-title="C语言高级编程指南"
+     data-content=""
+     data-url="http://www.ezlippi.com/blog/2014/07/c-advaced-programming.html">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  <p>热评文章</p>
+  <div class="ds-top-threads" data-range="weekly" data-num-items="4"></div>
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="/blog/2014/07/c-advaced-programming.html"
+           data-title="C语言高级编程指南" data-url="http://www.ezlippi.com/blog/2014/07/c-advaced-programming.html">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="EZLippi" />
+          <p class="site-author-name" itemprop="name">EZLippi</p>
+          <p class="site-description motion-element" itemprop="description">Easy Lippi</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">65</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+          
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">72</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/EZLippi" target="_blank">
+                  
+                    <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/ouyanglip" target="_blank">
+                  
+                    <i class="fa fa-weibo"></i> weibo
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/lippi-ouyang" target="_blank">
+                  
+                    <i class="fa fa-weibo"></i> zhihu
+                  
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+            <p class="site-author-name">友情链接</p>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.woaitqs.cc/" target="_blank">Qisen Tang</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://szhshp.org" target="_blank">szhshp的博客</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://python.zhangwei.website" target="_blank">JuniorCoder</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/lippi-ouyang" target="_blank">友链出租</a>
+              </span>
+            
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#整形溢出和提升"><span class="nav-number">1.</span> <span class="nav-text">整形溢出和提升</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内存管理和分配"><span class="nav-number">2.</span> <span class="nav-text">内存管理和分配</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#避免重大错误"><span class="nav-number">3.</span> <span class="nav-text">避免重大错误</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#防止内存泄漏"><span class="nav-number">4.</span> <span class="nav-text">防止内存泄漏</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#指针和数组"><span class="nav-number">5.</span> <span class="nav-text">指针和数组</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2014 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">EZLippi</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+   托管在 -
+  <a class="theme-link" href="https://github.com/EZLippi/EZLippi.github.io">
+    Github
+  </a>
+
+</div>
+<div class="theme-info">
+<span id="busuanzi_container_site_pv">
+    &nbsp; | &nbsp;本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+</div>
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  
+
+
+  
+
+
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=0.5.0"></script>
+
+
+
+  
+  
+
+  
+  
+<script type="text/javascript" src="/js/src/scrollspy.js?v=0.5.0"></script>
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = NexT.utils.escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    NexT.motion.middleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+
+      if (CONFIG.sidebar.display === 'post' || CONFIG.sidebar.display === 'always') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          NexT.utils.displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=0.5.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"ezlippi"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+
+  
+  
+
+
+</body>
+</html>

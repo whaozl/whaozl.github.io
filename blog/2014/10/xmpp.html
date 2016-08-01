@@ -1,0 +1,916 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.useso.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="XMPP, Jabber" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.5.0" />
+
+
+
+
+
+
+<meta name="description" content="XMPP协议简介XMPP协议（Extensible Messaging and PresenceProtocol，可扩展消息处理现场协议）是一种基于XML的协议，目的是为了解决及时通信标准而提出来的，最早是在Jabber上实现的。它继承了在XML环境中灵活的发展性。因此，基于XMPP的应用具有超强的可扩展性。并且XML很易穿过防火墙，所以用XMPP构建的应用不易受到防火墙的阻碍。利用XMPP作为通">
+<meta property="og:type" content="article">
+<meta property="og:title" content="XMPP协议分析-原理">
+<meta property="og:url" content="http://www.ezlippi.com/blog/2014/10/xmpp.html">
+<meta property="og:site_name" content="Lippi-浮生志">
+<meta property="og:description" content="XMPP协议简介XMPP协议（Extensible Messaging and PresenceProtocol，可扩展消息处理现场协议）是一种基于XML的协议，目的是为了解决及时通信标准而提出来的，最早是在Jabber上实现的。它继承了在XML环境中灵活的发展性。因此，基于XMPP的应用具有超强的可扩展性。并且XML很易穿过防火墙，所以用XMPP构建的应用不易受到防火墙的阻碍。利用XMPP作为通">
+<meta property="og:image" content="http://www.ezlippi.com/images/images/openfire/xmpp1.jpeg">
+<meta property="og:updated_time" content="2016-02-29T12:35:07.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="XMPP协议分析-原理">
+<meta name="twitter:description" content="XMPP协议简介XMPP协议（Extensible Messaging and PresenceProtocol，可扩展消息处理现场协议）是一种基于XML的协议，目的是为了解决及时通信标准而提出来的，最早是在Jabber上实现的。它继承了在XML环境中灵活的发展性。因此，基于XMPP的应用具有超强的可扩展性。并且XML很易穿过防火墙，所以用XMPP构建的应用不易受到防火墙的阻碍。利用XMPP作为通">
+<meta name="twitter:image" content="http://www.ezlippi.com/images/images/openfire/xmpp1.jpeg">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> XMPP协议分析-原理 | Lippi-浮生志 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?340874ba9357cbe81570aa4ac1185941";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner">
+<script>
+(function(){
+    var bp = document.createElement('script');
+    bp.src = '//push.zhanzhang.baidu.com/push.js';
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+            
+<div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Lippi-浮生志</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu menu-left">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+      
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'fLM9qfxyerC6njvM7usy','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                XMPP协议分析-原理
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2014-10-28T00:00:00+08:00" content="2014-10-28">
+              2014-10-28
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/web/" itemprop="url" rel="index">
+                    <span itemprop="name">web</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/blog/2014/10/xmpp.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="/blog/2014/10/xmpp.html" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+        </div>
+      </header>
+    
+
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="XMPP协议简介"><a href="#XMPP协议简介" class="headerlink" title="XMPP协议简介"></a>XMPP协议简介</h1><p>XMPP协议（Extensible Messaging and PresenceProtocol，可扩展消息处理现场协议）是一种基于XML的协议，目的是为了解决及时通信标准而提出来的，最早是在Jabber上实现的。它继承了在XML环境中灵活的发展性。因此，基于XMPP的应用具有超强的可扩展性。并且XML很易穿过防火墙，所以用XMPP构建的应用不易受到防火墙的阻碍。利用XMPP作为通用的传输机制，不同组织内的不同应用都可以进行有效的通信。<br><a id="more"></a></p>
+<h2 id="XMPP协议特点"><a href="#XMPP协议特点" class="headerlink" title="XMPP协议特点"></a>XMPP协议特点</h2><ol>
+<li><p>所有XMPP信息都是以XML为基础的，信息交换的事实标准，扩展性强</p>
+</li>
+<li><p>XMPP系统是一个分布式系统，每台服务器控制自己的资源，但是如果需要，它能与外在的系统进行通信。XMPP服务器利用开放的XML协议来进行S2S(Serverto Server)通信，就像在C2S(Client to Server)一样。相比之下，大多数的IM系统使用了只是支持C2S/S2C通信的协议，因此Jabber/XMPP服务器具有更大的灵活性。</p>
+</li>
+<li><p>XMPP协议是公开的，程序则开放源代码。定义了客户端和服务器端的交互要经由XML流。普通消息类型（message），如改变状态(presence)，传递消息内容或查询/更新(info/quey)应用则用每个指定的命名空间(namespace)来建立。</p>
+</li>
+<li><p>状态(Presence)在整个持久连接中。通过持久连接的有效维持，XMPP协议一直有在网络中维持存在和可用信息的能力。</p>
+</li>
+<li><p>XMPP允许建立并行的TCP套接字连接对所有连接上的客户端和服务器端。一旦建立连接，则只有当状态改变，例如存在的改变，通过这个连接传输数据。既然这个连接是持久的，那么设置、认证、状态查找功能都不用每次都重复执行。这种持久的套接字的连接使得XMPP能够更有效的支持高级的具有存在能力的应用在带宽和处理资源的使用中。</p>
+</li>
+<li><p>Jabber/XMPP系统是模块化的，而且Jabber/XMPP的设计强调如何实现可伸缩性、安全性和可扩展性。</p>
+</li>
+</ol>
+<h2 id="XMPP协议分析"><a href="#XMPP协议分析" class="headerlink" title="XMPP协议分析"></a>XMPP协议分析</h2><pre><code>XMPP中定义了三个角色：客户端，服务器，网关。
+</code></pre><p>通信能够在这三者的任意两个之间双向发生。服务器同时承担了客户端信息记录，连接管理和信息的路由功能。网关承担着与异构即时通信系统的互联互通，异构系统可以包括SMS<br>（短信），MSN，ICQ等。基本的网络形式是单客户端通过TCP/IP连接到单服务器，然后在之上传输XML。</p>
+<p>XMPP的基本网络结构如下：</p>
+<pre><code>C1----S1---S2---C3
+|
+C2----+--G1===FN1===FC1
+</code></pre><p>符号表示：C1,C2,C3=XMPP客户端；S1,S2=XMPP；服务端G1=在XMPP和使用外部消息网络（非XMPP）的协议之间转换的网；FN1=外部消息网络；FC1=外部消息网络的客户端。</p>
+<p><strong>（1）服务器</strong></p>
+<p>服务系统是XMPP通信的智能提取层，它主要负责：管理来自其他个体的会话连接或者XML流（streams）和来自客户端、服务器、其他个体的认证发送在XML流实体之中的适当的XML地址节点。大多数XMPP服务都允许存储一些客户端数据（比如联系人列表），在这种情况下，服务直接面向这个客户端处理XML数据，而不是其他个体。</p>
+<p><strong>（2）客户端</strong></p>
+<p>大多数客户端是通过TCP直接连接，并且使用XMPP获得服务器提供全部-12-第2章Jabber协议原理及其应用功能和其他服务。许多资源通过认证的客户端也许同时连接到服务器，定义在XMPP地址的每个资源是不同的（比如<a href="&#109;&#97;&#x69;&#x6c;&#116;&#111;&#x3a;&#110;&#111;&#x64;&#x65;&#x40;&#x64;&#111;&#x6d;&#x61;&#x69;&#x6e;&#47;&#x68;&#111;&#109;&#x65;">&#110;&#111;&#x64;&#x65;&#x40;&#x64;&#111;&#x6d;&#x61;&#x69;&#x6e;&#47;&#x68;&#111;&#109;&#x65;</a>和<a href="&#x6d;&#97;&#x69;&#x6c;&#x74;&#x6f;&#58;&#x6e;&#x6f;&#100;&#101;&#x40;&#100;&#x6f;&#109;&#97;&#x69;&#110;&#x2f;&#119;&#x6f;&#x72;&#x6b;">&#x6e;&#x6f;&#100;&#101;&#x40;&#100;&#x6f;&#109;&#97;&#x69;&#110;&#x2f;&#119;&#x6f;&#x72;&#x6b;</a>）建议服务器和客户端采用的端中是5222。</p>
+<p><strong>（3）网关</strong><br>它的主要功能是将XMPP协议转换成外部消息(non-XMPP)系统使用的协议,也将返回的数据转换成XMPP。这些通信是基于网关和服务器，基于网关和外部消息系统之间的。</p>
+<h2 id="XMPP消息格式"><a href="#XMPP消息格式" class="headerlink" title="XMPP消息格式"></a>XMPP消息格式</h2><p>Jabber/XMPP系统使用XML流在不同实体之间相互传输数据。在两个实体的连接期间，XML流将从一个实体传送到另一个实体。在实体间，有三个顶层的XML元素:<message>，<presence>和<iq>。每一个都包含属性和子节点。下面将分别描述这些元素。</iq></presence></message></p>
+<p><strong>1)消息(message)元素：</strong></p>
+<p>一个即时消息系统最基本的功能就是能够在两个用户之间实时交换消息，<message>元素就提供了这个功能。每条消息都有一个或多个属性和子元素。属性“from”和“to”分别表示了消息发送者和接收者的地址。<message>也可以包含一个“type”属性，这给接收者一个提示，这个消息是什么样的消息。表3-1给出了“type”属性的可能取值。<message>中也可以包含“id”属性，用来唯一的标识一个输出消息的响应。</message></message></message></p>
+<p><strong>2)状态(presence)元素:</strong></p>
+<p><presence>元素用来传递一个用户的存在状态的感知信息。用户可以是“available”，要么是“unavailable”，“Hide”等。当用户连接到即时消息服务器后，好友发给他的消息就立即被传递。如果用户没有连接到服务器，好友发给他的消息将被服务器存储起来直到用户连接到服务器。用户通过即时消息客户端自己控制可用性。但是，如果用户断开了同服务器的连接，服务器将发送给订阅了这个用户的存在信息的用户通知他们用户已经不可用。<presence>还包含了两个子元素：<show>和<status>。<status>包含了一个对<show>的文本描述。</show></status></status></show></presence></presence></p>
+<p><strong>3)IQ(Info&lt;Query)元素</strong></p>
+<p>IQ元素是Jabber/XMPP消息协议的第三个顶层元素。IQ代表”Info/Query”，用来发送和获取实体之间的信息。IQ消息是通过“请求/响应”机制在实体间进行交换的。IQ元素用于不同的目的，它们之间通过不同的命名空间来加以区分。在Jabber/XMPP消息协议里有许多的命名空间，但最常用的命名空间是：”jabber:iq:register”,”jabber:iq:auth”,”jabber:iq:roster”。</p>
+<p>上面描述了Jabber协议的三个顶层节点。通过这种格式Jabber消息不仅可以是简单的文本（text），而且可以携带复杂的数据和各种格式的文件，也就是说Jabber不仅可以用在人与人之间的交流，而且可以实现软件与软件或软件与人之间的交流。Jabber的这种功能大大扩展了即时通信的应用范围。</p>
+<h2 id="XMPP工作机制"><a href="#XMPP工作机制" class="headerlink" title="XMPP工作机制"></a>XMPP工作机制</h2><p>例如:一个终端名字是Remeo，通过服务器montague.lit与其他的用户相连，其他的用户通过服务器juliet@capulet.lit建立连接。</p>
+<p>第一步Romeo开始通过发送一个stream包与服务器montague.lit取得联系，这一步包含了鉴权，登录等等。</p>
+<p>第二步Romeo获取了他的联系人列表，通过向服务器montague.lit发送<iq>字段请求，按照下面的协议。</iq></p>
+<pre><code>&lt;iq type=‘get’from=‘romeo@montague.lit/pda’&gt;
+&lt;query xmlns=‘jabber:iq:roster’/&gt;
+&lt;/iq&gt;
+
+&lt;iq type=‘result’to=‘romeo@montague.lit/pda’&gt;
+&lt;query xmlns=‘jabber:iq:roster’&gt;
+&lt;item jid=‘juliet@capulet.lit’/&gt;&lt;item jid=‘mercutio@shakespeare.lit’/&gt;
+&lt;item jid=‘benvolio@shakespeare.lit’/&gt;
+&lt;/query&gt;
+&lt;/iq&gt;
+</code></pre><p>第三步Romeo发送了一个presence请求到服务器montague.lit，然后会将这个信息广播到他的所有好友。</p>
+<pre><code>&lt;presence from=‘romeo@montague.lit/pda’/&gt;
+&lt;presence from=‘romeo@montague.lit/pda’to=‘juliet@capulet.lit’/&gt;
+&lt;presence from=‘romeo@montague.lit/pda’to=‘mercutio@shakespeare.lit’
+/&gt;
+&lt;presence from=‘romeo@montague.lit/pda’to=‘benvolio@shakespeare.lit’
+/&gt;
+</code></pre><p>第四步如果Romeo的联系人都在线，就会将presence回复给Romeo，告知自己的状态。</p>
+<pre><code>&lt;presence to=‘romeo@montague.lit/pda’from=‘juliet@capulet.lit/balcony’/&gt;
+&lt;presence to=‘romeo@montague.lit/pda’from=‘juliet@capulet.lit/chamber’/&gt;
+&lt;presence to=‘romeo@montague.lit/pda’from=‘mercutio@shakespeare.lit/home’/&gt;
+</code></pre><p>第五步Romeo和Juliet开始交换信息，进行聊天。</p>
+<pre><code>&lt;message from=‘romeo@montague.lit/pda’to=‘juliet@capulet.lit’&gt;
+&lt;body&gt;hi!&lt;/body&gt;
+&lt;/message&gt;
+
+&lt;message from=‘juliet@capulet.lit/balcony’to=‘romeo@montague.lit/pda’
+  &gt; 
+&lt;body&gt;hi yourself!&lt;/body&gt;
+&lt;/message&gt;
+</code></pre><p>以文档的观点来看，客户端或服务器发送的所有XML文本连缀在一起，从<stream>到</stream>构成了一个完整的XML文档。其中的stream标签就是所谓的XML Stream。在<stream>与</stream>中间的那些<message>…</message>这样的XML元素就是所谓的XML Stanza（XML节）。XMPP核心协议通信的基本模式就是先建立一个stream，然后协商一堆安全之类的东西，中间通信过程就是客户端发送XML Stanza，一个接一个的。服务器根据客户端发送的信息以及程序的逻辑，发送XML Stanza给客户端。但是这个过程并不是一问一答的，任何时候都有可能从一个方发信给另外一方。通信的最后阶段是关闭流，关闭TCP/IP连接。</p>
+<p><img src="/images/images/openfire/xmpp1.jpeg" alt=""></p>
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/xmpp/" rel="tag">#xmpp</a>
+          
+            <a href="/tags/jabber/" rel="tag">#jabber</a>
+          
+            <a href="/tags/openfire/" rel="tag">#openfire</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/2014/10/jsp-jfreechart.html" rel="next" title="使用Jfreechart生成曲线显示到JSP中">
+                <i class="fa fa-chevron-left"></i> 使用Jfreechart生成曲线显示到JSP中
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/2014/10/how to use smack.html" rel="prev" title="Smack开发手册">
+                Smack开发手册 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="/blog/2014/10/xmpp.html"
+     data-title="XMPP协议分析-原理"
+     data-content=""
+     data-url="http://www.ezlippi.com/blog/2014/10/xmpp.html">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  <p>热评文章</p>
+  <div class="ds-top-threads" data-range="weekly" data-num-items="4"></div>
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="/blog/2014/10/xmpp.html"
+           data-title="XMPP协议分析-原理" data-url="http://www.ezlippi.com/blog/2014/10/xmpp.html">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="EZLippi" />
+          <p class="site-author-name" itemprop="name">EZLippi</p>
+          <p class="site-description motion-element" itemprop="description">Easy Lippi</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">65</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+          
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">72</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/EZLippi" target="_blank">
+                  
+                    <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/ouyanglip" target="_blank">
+                  
+                    <i class="fa fa-weibo"></i> weibo
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/lippi-ouyang" target="_blank">
+                  
+                    <i class="fa fa-weibo"></i> zhihu
+                  
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+            <p class="site-author-name">友情链接</p>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.woaitqs.cc/" target="_blank">Qisen Tang</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://szhshp.org" target="_blank">szhshp的博客</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://python.zhangwei.website" target="_blank">JuniorCoder</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/lippi-ouyang" target="_blank">友链出租</a>
+              </span>
+            
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#XMPP协议简介"><span class="nav-number">1.</span> <span class="nav-text">XMPP协议简介</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#XMPP协议特点"><span class="nav-number">1.1.</span> <span class="nav-text">XMPP协议特点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#XMPP协议分析"><span class="nav-number">1.2.</span> <span class="nav-text">XMPP协议分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#XMPP消息格式"><span class="nav-number">1.3.</span> <span class="nav-text">XMPP消息格式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#XMPP工作机制"><span class="nav-number">1.4.</span> <span class="nav-text">XMPP工作机制</span></a></li></ol></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2014 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">EZLippi</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+   托管在 -
+  <a class="theme-link" href="https://github.com/EZLippi/EZLippi.github.io">
+    Github
+  </a>
+
+</div>
+<div class="theme-info">
+<span id="busuanzi_container_site_pv">
+    &nbsp; | &nbsp;本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+</div>
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  
+
+
+  
+
+
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=0.5.0"></script>
+
+
+
+  
+  
+
+  
+  
+<script type="text/javascript" src="/js/src/scrollspy.js?v=0.5.0"></script>
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = NexT.utils.escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    NexT.motion.middleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+
+      if (CONFIG.sidebar.display === 'post' || CONFIG.sidebar.display === 'always') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          NexT.utils.displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=0.5.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"ezlippi"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+
+  
+  
+
+
+</body>
+</html>

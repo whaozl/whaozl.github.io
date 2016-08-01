@@ -1,0 +1,932 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.useso.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="LaTex, TexLive" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.5.0" />
+
+
+
+
+
+
+<meta name="description" content="LaTeX 是由美国计算机学家Lamport博士于1985年开发成功的,它是当今世界上最流行和使用最为广泛,以 TeX 为引擎的高质量格式化排版系统。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="在Ubuntu下安装和编译LaTex">
+<meta property="og:url" content="http://www.ezlippi.com/blog/2015/03/install-texlive-in-ubuntu.html">
+<meta property="og:site_name" content="Lippi-浮生志">
+<meta property="og:description" content="LaTeX 是由美国计算机学家Lamport博士于1985年开发成功的,它是当今世界上最流行和使用最为广泛,以 TeX 为引擎的高质量格式化排版系统。">
+<meta property="og:updated_time" content="2016-03-18T09:21:28.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="在Ubuntu下安装和编译LaTex">
+<meta name="twitter:description" content="LaTeX 是由美国计算机学家Lamport博士于1985年开发成功的,它是当今世界上最流行和使用最为广泛,以 TeX 为引擎的高质量格式化排版系统。">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> 在Ubuntu下安装和编译LaTex | Lippi-浮生志 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?340874ba9357cbe81570aa4ac1185941";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner">
+<script>
+(function(){
+    var bp = document.createElement('script');
+    bp.src = '//push.zhanzhang.baidu.com/push.js';
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+            
+<div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Lippi-浮生志</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu menu-left">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+      
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'fLM9qfxyerC6njvM7usy','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                在Ubuntu下安装和编译LaTex
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2015-03-15T00:00:00+08:00" content="2015-03-15">
+              2015-03-15
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/other/" itemprop="url" rel="index">
+                    <span itemprop="name">other</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/other/programming/" itemprop="url" rel="index">
+                    <span itemprop="name">programming</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/blog/2015/03/install-texlive-in-ubuntu.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="/blog/2015/03/install-texlive-in-ubuntu.html" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+        </div>
+      </header>
+    
+
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="LaTex简介"><a href="#LaTex简介" class="headerlink" title="LaTex简介"></a>LaTex简介</h2><p>1、LaTeX 是由美国计算机学家Lamport博士于1985年开发成功的。<br>2、它是当今世界上最流行和使用最为广泛,以 TeX 为引擎的高质量格式化排版系统。<br>3、它构筑在 TeX 的基础之上,并且加进了很多新功能,使得使用者可以更为方便的利用 TeX 的强大功能。<br>即使使用者并不是很了解 TeX,也可以在很短的时间内制成高质量的文件。</p>
+<p>LaTex有很多发行版，Linux下的发行版为TexLive，本文安装环境为 Ubuntu 14.04.1 64 位系统，软件版本为 TeXLive 2014，更详细的教程请看官方<a href="http://tug.org/texlive/doc/texlive-zh-cn/texlive-zh-cn.pdf" target="_blank" rel="external">TeXLive 指南</a><br><a id="more"></a></p>
+<h2 id="安装前准备"><a href="#安装前准备" class="headerlink" title="安装前准备"></a>安装前准备</h2><h3 id="下载-TeXLive-2014-镜像文件"><a href="#下载-TeXLive-2014-镜像文件" class="headerlink" title="下载 TeXLive 2014 镜像文件"></a>下载 TeXLive 2014 镜像文件</h3><p>下载地址：<a href="http://www.ctan.org/tex-archive/systems/texlive/Images" target="_blank" rel="external">TeXLive 2014</a><br>推荐厦门大学开源软件镜像，下载速度很可观:<a href="http://mirrors.xmu.edu.cn/CTAN/systems/texlive/Images/&quot;" target="_blank" rel="external">TEXLive</a></p>
+<h3 id="删除旧版"><a href="#删除旧版" class="headerlink" title="删除旧版"></a>删除旧版</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get purge tex-common</span><br></pre></td></tr></table></figure>
+<h3 id="安装-Perl-TK-模块"><a href="#安装-Perl-TK-模块" class="headerlink" title="安装 Perl::TK 模块"></a>安装 Perl::TK 模块</h3><p>install-tl 是一个 Perl 脚本，要在专家 GUI 模式下安装，需要加入 XFT 支持的 Perl::TK 模块，可用以下方法添加：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install perl-tk</span><br></pre></td></tr></table></figure></p>
+<h2 id="安装主程序"><a href="#安装主程序" class="headerlink" title="安装主程序"></a>安装主程序</h2><h3 id="挂载-iso-镜像文件"><a href="#挂载-iso-镜像文件" class="headerlink" title="挂载 iso 镜像文件"></a>挂载 iso 镜像文件</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo mount -o loop path_to.iso /mnt</span><br><span class="line"><span class="built_in">cd</span> /mnt</span><br></pre></td></tr></table></figure>
+<h3 id="启动安装程序"><a href="#启动安装程序" class="headerlink" title="启动安装程序"></a>启动安装程序</h3><p>在加入了 XFT 支持的 Perl::TK 模块后，可以用以下方法启动专家 GUI 模式进行安装：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ./install-tl -gui</span><br></pre></td></tr></table></figure></p>
+<p>在图形界面中将<code>Create symlinks in system directories</code>选项更改为<code>Yes</code>，点击 <code>Install TeX Live</code> 开始安装。</p>
+<h2 id="配置环境变量"><a href="#配置环境变量" class="headerlink" title="配置环境变量"></a>配置环境变量</h2><p>可根据安装结束时的文本提示进行相应的环境变量配置，我在安装时进行了如下配置。</p>
+<p>在 ～/.bashrc 和 ～/.profile 文件结尾添加如下代码：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#自己为texlive配置的环境变量</span></span><br><span class="line">PATH=/usr/<span class="built_in">local</span>/texlive/2014/bin/x86_64-linux:<span class="variable">$PATH</span>; <span class="built_in">export</span> PATH</span><br><span class="line">MANPATH=/usr/<span class="built_in">local</span>/texlive/2014/texmf-dist/doc/man:<span class="variable">$MANPATH</span>; <span class="built_in">export</span> MANPATH</span><br><span class="line">INFOPATH=/usr/<span class="built_in">local</span>/texlive/2014/texmf-dist/doc/info:<span class="variable">$INFOPATH</span>; <span class="built_in">export</span> INFOPATH</span><br></pre></td></tr></table></figure>
+<p>为了配置全局的环境变量，可在 /etc/manpath.config 文件的 <em># set up PATH to MANPATH mapping.</em> 下添加:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MANPATH_MAP /usr/<span class="built_in">local</span>/texlive/2014/bin/x86_64-linux /usr/<span class="built_in">local</span>/texlive/2014/texmf-dist/doc/man</span><br></pre></td></tr></table></figure></p>
+<p>之后注销即可。</p>
+<blockquote>
+<p>注：如果环境变量配置出错导致无法登录，可以参见最下面的Linux配置环境变量后无法登录的解决方案</p>
+</blockquote>
+<h2 id="测试安装是否成功"><a href="#测试安装是否成功" class="headerlink" title="测试安装是否成功"></a>测试安装是否成功</h2><p>首先确认你可以执行 tex 程序:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">tex --version</span><br><span class="line">    TeX 3.14159265 (TeX Live ...)</span><br><span class="line">    Copyright ... D.E. Knuth.</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure></p>
+<p>如果你安装了 xetex 包,可以按如下步骤测试它能否访问系统字体（会生成文件，可在无用目录下执行）:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">xetex opentype-info.tex</span><br><span class="line">    This is XeTeX, Version 3.14...</span><br><span class="line">    ...</span><br><span class="line">    Output written on opentype-info.pdf (1 page).</span><br><span class="line">    Transcript written on opentype-info.log.</span><br></pre></td></tr></table></figure></p>
+<p>如果你收到 “Invalid fontname ‘Latin Modern Roman/ICU’…” 这样的错误信息,就说明需要配置系统才能找到 TEX Live 自带的字体。</p>
+<h3 id="XeTEX-和-LuaTEX-的系统字体配置"><a href="#XeTEX-和-LuaTEX-的系统字体配置" class="headerlink" title="XeTEX 和 LuaTEX 的系统字体配置"></a>XeTEX 和 LuaTEX 的系统字体配置</h3><p>XeTEX 和 LuaTEX 可以使用任何系统安装的字体,而不只是 TEX 目录树中的那些。它们使用类似但不完全一致的方式实现这一功能。</p>
+<p>在 Windows 下 TEX Live 提供的字体会自动为 XeTEX 所用。但如果你在 Unix 兼容的系统中安装了 xetex 软件包,则需要把系统配置一番 XeTEX 才能找到随 TEX Live 安装的那些字体。</p>
+<p>要在整个系统中使用 TEX Live 的字体 (假定你有足够的权限),请依照下面的步骤来做:</p>
+<ul>
+<li><p>将 texlive-fontconfig.conf 文件复制到 /etc/fonts/conf.d/09-texlive.conf。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo cp /usr/<span class="built_in">local</span>/texlive/2014/texmf-var/fonts/conf/texlive-fontconfig.conf /etc/fonts/conf.d/09-texlive.conf</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>运行 fc-cache -fsv。<br>如果你没有足够的权限执行上述操作,或者只需要把 TEX Live 字体提供给你自己,可以这么做:</p>
+</li>
+<li><p>将 texlive-fontconfig.conf 文件复制到 ~/.fonts.conf,其中 ~ 是你的主目录。</p>
+</li>
+<li>运行 fc-cache -fv。<br>此时执行第2步，问题已经解决。</li>
+</ul>
+<h2 id="中文字体安装与配置"><a href="#中文字体安装与配置" class="headerlink" title="中文字体安装与配置"></a>中文字体安装与配置</h2><h3 id="中文字体安装"><a href="#中文字体安装" class="headerlink" title="中文字体安装"></a>中文字体安装</h3><p>先写一个简单的测试 tex 文件。起名为 test.tex<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">\documentclass[UTF8]&#123;ctexart&#125;</span><br><span class="line">\begin&#123;document&#125;</span><br><span class="line">我爱中国！</span><br><span class="line">\end&#123;document&#125;</span><br></pre></td></tr></table></figure></p>
+<p>然后执行如下命令编译<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ xelatex test.tex</span><br></pre></td></tr></table></figure></p>
+<p>系统会报错，大致信息如下：</p>
+<pre><code>! fontspec error: &quot;font-not-found&quot;
+
+! The font &quot;SimSun&quot; cannot be found.
+! See the fontspec documentation for further information.
+
+! For immediate help type H 
+!...............................................
+</code></pre><p>下面就要解决这个问题，错误里说了，”font-not-found”!</p>
+<ul>
+<li>首先创建字体文件夹<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo mkdir /usr/share/fonts/winfonts</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>然后把 Windows 下的六种中意字体复制到该文件夹，比如从Windows的C:/Windows/Fonts下拷贝最常使用的几种字体：<br>msyh.ttf（微软雅黑）  simfang.ttf（仿宋）  simhei.ttf（黑体）  simkai.ttf（楷体）  simsun.ttc（宋体）,并更改字体权限<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo chmod 644 /usr/share/fonts/winfonts/*</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>刷新字体库 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo mkfontscale</span><br><span class="line">$ sudo mkfontdir</span><br><span class="line">$ sudo <span class="built_in">fc</span>-cache -fsv</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="xeLaTeX-中文字体配置"><a href="#xeLaTeX-中文字体配置" class="headerlink" title="xeLaTeX 中文字体配置"></a>xeLaTeX 中文字体配置</h3><p>如果使用 xeLaTeX 的话，需要 xeCJK 宏包的支持，需要修改 /usr/local/texlive/2014/texmf-dist/tex/latex/ctex/fontset 下的 ctex-xecjk-winfonts.def 文件。</p>
+<p>下面，打开新的终端，执行如下命令：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">fc</span>-list :lang=zh-cn</span><br></pre></td></tr></table></figure></p>
+<p>输出大约如下</p>
+<pre><code>NSimSun,新宋体:style=Regular  
+KaiTi,楷             体:style=Regular,Normal,obyčejné,Standard,Κανονικά,Normaali,Normál,Normale,Standaard,Normalny,Обычный,Normálne,Navadno,Arrunta  
+SimSun,宋体:style=RegularUnibit:style=Regular  
+</code></pre><p>WenQuanYi Zen Hei,文泉驛正黑,文泉驿正黑:style=Regular<br>    ……</p>
+<p>下面需要做的就是将 ctex-xecjk-winfonts.def 中的字体名字改成上面四行的行首的内容，注意，要将原文件中的 [SIMKAI.TTF] 中括号同时删去。<br>重新编译以下，发现成功了。</p>
+<p>另外，若想添加 Adobe 字体，设置方法与 Windows 字体大致相同，此处不再赘述。</p>
+<h3 id="pdfLaTeX-中文字体配置"><a href="#pdfLaTeX-中文字体配置" class="headerlink" title="pdfLaTeX 中文字体配置"></a>pdfLaTeX 中文字体配置</h3><p>在上边添加了 Windows 字体的基础之上可以为 pdfLaTeX 添加中文字体支持 </p>
+<p>在 /usr/local/texlive/2014/texmf.cnf 文件中设置 OSFONTDIR 变量，即添加如下信息：<br>    自己为pdflatex设置的OSFONTDIR变量指向中文字体文件<br>    OSFONTDIR=/usr/share/fonts/winfonts<br>    论文中正常显示中文</p>
+<p>新建一个.tex文件，在文件里面添加下面两句就能正常显示中文了：<br>    \usepackage{xeCJK}<br>    \setCJKmainfont{STSong}</p>
+<h2 id="LaTeX-学习文档下载："><a href="#LaTeX-学习文档下载：" class="headerlink" title="LaTeX 学习文档下载："></a>LaTeX 学习文档下载：</h2><p><a href="http://download.csdn.net/detail/longerzone/4703133" target="_blank" rel="external">http://download.csdn.net/detail/longerzone/4703133</a></p>
+<h2 id="Linux-配置环境变量后无法登录的解决方案"><a href="#Linux-配置环境变量后无法登录的解决方案" class="headerlink" title="Linux 配置环境变量后无法登录的解决方案"></a>Linux 配置环境变量后无法登录的解决方案</h2><h2 id="Linux-的环境变量读取机制"><a href="#Linux-的环境变量读取机制" class="headerlink" title="Linux 的环境变量读取机制"></a>Linux 的环境变量读取机制</h2><ul>
+<li>在登陆时，操作系统定制用户环境时读取的第一个文件是 /etc/profile，此文件为系统的每个用户设置环境信息，当用户第一次登陆时，该文件被执行。 </li>
+<li>在登陆时操作系统读取的第二个文件是 /etc/environment，系统在读取用户自己的 profile 前，设置环境文件的环境变量。 </li>
+<li>在登陆时用到的第三个文件是 ～/.profile 文件，每个用户都可使用该文件输入专用于自己使用的 shell 信息，该文件仅仅执行一次。默认情况下，它设置一些环境变量，执行用户的 .bashrc 文件。/etc/bashrc 为每一个运行 bash shell 的用户执行此文件，当 bash shell 被打开时，该文件被读取。 </li>
+</ul>
+<h2 id="无法登录的原因"><a href="#无法登录的原因" class="headerlink" title="无法登录的原因"></a>无法登录的原因</h2><p>由上可知，系统启动时会先读取 /etc/profile，然后读取 /etc/environment，最后才是 ～/.profile 文件，而在 /etc/environment 中也设置有环境变量 PATH，如果你在 ~/.profile 中也设置了环境变量 PATH，那么就会覆盖原来的 /etc/environment 中设置的环境变量 PATH。</p>
+<p>因此，～/.profile 文件中的环境变量设置一定不可大意，且在其设置的环境变量中要重新载入之前的环境变量，即添加 $PATH，且以冒号分割。</p>
+<p>比如以我安装的 TeXLive 为例，正确的环境变量设置应该为:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">PATH=/usr/<span class="built_in">local</span>/texlive/2014/bin/x86_64-linux:<span class="variable">$PATH</span>; <span class="built_in">export</span> PATH</span><br><span class="line">MANPATH=/usr/<span class="built_in">local</span>/texlive/2014/texmf-dist/doc/man:<span class="variable">$MANPATH</span>; <span class="built_in">export</span> MANPATH</span><br><span class="line">INFOPATH=/usr/<span class="built_in">local</span>/texlive/2014/texmf-dist/doc/info:<span class="variable">$INFOPATH</span>; <span class="built_in">export</span> INFOPATH</span><br></pre></td></tr></table></figure>
+<h2 id="解决方法一"><a href="#解决方法一" class="headerlink" title="解决方法一"></a>解决方法一</h2><p>在登录界面可以通过 <code>Ctrl + Alt + F1～F6&lt;</code> 的方式进入命令行，再通过<code>Ctrl + Alt + F7</code>的方式进入图形界面。</p>
+<p>因此我们可以进入图形界面登录 root 账户，将之前修改的环境变量删除或者更正即可。</p>
+<p>注意事项：我们在登录不同的账户时，～所对应的目录是不同的，例如 John 用户对应 /home/John/，而 root 用户对应 /root/，因此在以 root 用户登陆时，一定要注意环境变量文件的路径。</p>
+<h2 id="解决方法二"><a href="#解决方法二" class="headerlink" title="解决方法二"></a>解决方法二</h2><p>若命令行下打开文件乱码，可考虑新建用户并登录，然后以 root 权限修改之前用户的配置文件，关于如何新建用户此处不再赘述。</p>
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/编程/" rel="tag">#编程</a>
+          
+            <a href="/tags/学习/" rel="tag">#学习</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/2015/03/github-pages-blog.html" rel="next" title="利用github-pages建立个人博客">
+                <i class="fa fa-chevron-left"></i> 利用github-pages建立个人博客
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/2015/03/android-studio-prefrence.html" rel="prev" title="Android Studio多渠道打包和代码混淆教程">
+                Android Studio多渠道打包和代码混淆教程 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="/blog/2015/03/install-texlive-in-ubuntu.html"
+     data-title="在Ubuntu下安装和编译LaTex"
+     data-content=""
+     data-url="http://www.ezlippi.com/blog/2015/03/install-texlive-in-ubuntu.html">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  <p>热评文章</p>
+  <div class="ds-top-threads" data-range="weekly" data-num-items="4"></div>
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="/blog/2015/03/install-texlive-in-ubuntu.html"
+           data-title="在Ubuntu下安装和编译LaTex" data-url="http://www.ezlippi.com/blog/2015/03/install-texlive-in-ubuntu.html">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="EZLippi" />
+          <p class="site-author-name" itemprop="name">EZLippi</p>
+          <p class="site-description motion-element" itemprop="description">Easy Lippi</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">65</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+          
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">72</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/EZLippi" target="_blank">
+                  
+                    <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/ouyanglip" target="_blank">
+                  
+                    <i class="fa fa-weibo"></i> weibo
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/lippi-ouyang" target="_blank">
+                  
+                    <i class="fa fa-weibo"></i> zhihu
+                  
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+            <p class="site-author-name">友情链接</p>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.woaitqs.cc/" target="_blank">Qisen Tang</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://szhshp.org" target="_blank">szhshp的博客</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://python.zhangwei.website" target="_blank">JuniorCoder</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/lippi-ouyang" target="_blank">友链出租</a>
+              </span>
+            
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#LaTex简介"><span class="nav-number">1.</span> <span class="nav-text">LaTex简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装前准备"><span class="nav-number">2.</span> <span class="nav-text">安装前准备</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#下载-TeXLive-2014-镜像文件"><span class="nav-number">2.1.</span> <span class="nav-text">下载 TeXLive 2014 镜像文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除旧版"><span class="nav-number">2.2.</span> <span class="nav-text">删除旧版</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装-Perl-TK-模块"><span class="nav-number">2.3.</span> <span class="nav-text">安装 Perl::TK 模块</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装主程序"><span class="nav-number">3.</span> <span class="nav-text">安装主程序</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#挂载-iso-镜像文件"><span class="nav-number">3.1.</span> <span class="nav-text">挂载 iso 镜像文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#启动安装程序"><span class="nav-number">3.2.</span> <span class="nav-text">启动安装程序</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置环境变量"><span class="nav-number">4.</span> <span class="nav-text">配置环境变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#测试安装是否成功"><span class="nav-number">5.</span> <span class="nav-text">测试安装是否成功</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#XeTEX-和-LuaTEX-的系统字体配置"><span class="nav-number">5.1.</span> <span class="nav-text">XeTEX 和 LuaTEX 的系统字体配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#中文字体安装与配置"><span class="nav-number">6.</span> <span class="nav-text">中文字体安装与配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#中文字体安装"><span class="nav-number">6.1.</span> <span class="nav-text">中文字体安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#xeLaTeX-中文字体配置"><span class="nav-number">6.2.</span> <span class="nav-text">xeLaTeX 中文字体配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pdfLaTeX-中文字体配置"><span class="nav-number">6.3.</span> <span class="nav-text">pdfLaTeX 中文字体配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LaTeX-学习文档下载："><span class="nav-number">7.</span> <span class="nav-text">LaTeX 学习文档下载：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Linux-配置环境变量后无法登录的解决方案"><span class="nav-number">8.</span> <span class="nav-text">Linux 配置环境变量后无法登录的解决方案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Linux-的环境变量读取机制"><span class="nav-number">9.</span> <span class="nav-text">Linux 的环境变量读取机制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#无法登录的原因"><span class="nav-number">10.</span> <span class="nav-text">无法登录的原因</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解决方法一"><span class="nav-number">11.</span> <span class="nav-text">解决方法一</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解决方法二"><span class="nav-number">12.</span> <span class="nav-text">解决方法二</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2014 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">EZLippi</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+   托管在 -
+  <a class="theme-link" href="https://github.com/EZLippi/EZLippi.github.io">
+    Github
+  </a>
+
+</div>
+<div class="theme-info">
+<span id="busuanzi_container_site_pv">
+    &nbsp; | &nbsp;本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+</div>
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  
+
+
+  
+
+
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=0.5.0"></script>
+
+
+
+  
+  
+
+  
+  
+<script type="text/javascript" src="/js/src/scrollspy.js?v=0.5.0"></script>
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = NexT.utils.escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    NexT.motion.middleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+
+      if (CONFIG.sidebar.display === 'post' || CONFIG.sidebar.display === 'always') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          NexT.utils.displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=0.5.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"ezlippi"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+
+  
+  
+
+
+</body>
+</html>

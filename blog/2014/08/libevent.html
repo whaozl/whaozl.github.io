@@ -1,0 +1,1066 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.useso.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="并发， 事件驱动， 网络库" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.5.0" />
+
+
+
+
+
+
+<meta name="description" content="bufferevent这个结构体
+struct bufferevent {
+    struct event_base *ev_base;  
+    const struct bufferevent_ops *be_ops;  
+    struct event ev_read;  
+    struct event ev_write;  
+    struct evbuffer *input">
+<meta property="og:type" content="article">
+<meta property="og:title" content="处理并发之二：libevent的eventbuffer">
+<meta property="og:url" content="http://www.ezlippi.com/blog/2014/08/libevent.html">
+<meta property="og:site_name" content="Lippi-浮生志">
+<meta property="og:description" content="bufferevent这个结构体
+struct bufferevent {
+    struct event_base *ev_base;  
+    const struct bufferevent_ops *be_ops;  
+    struct event ev_read;  
+    struct event ev_write;  
+    struct evbuffer *input">
+<meta property="og:updated_time" content="2016-02-29T12:34:20.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="处理并发之二：libevent的eventbuffer">
+<meta name="twitter:description" content="bufferevent这个结构体
+struct bufferevent {
+    struct event_base *ev_base;  
+    const struct bufferevent_ops *be_ops;  
+    struct event ev_read;  
+    struct event ev_write;  
+    struct evbuffer *input">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> 处理并发之二：libevent的eventbuffer | Lippi-浮生志 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?340874ba9357cbe81570aa4ac1185941";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner">
+<script>
+(function(){
+    var bp = document.createElement('script');
+    bp.src = '//push.zhanzhang.baidu.com/push.js';
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+            
+<div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Lippi-浮生志</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu menu-left">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+      
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'fLM9qfxyerC6njvM7usy','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                处理并发之二：libevent的eventbuffer
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2014-08-24T00:00:00+08:00" content="2014-08-24">
+              2014-08-24
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/c/" itemprop="url" rel="index">
+                    <span itemprop="name">c</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/blog/2014/08/libevent.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="/blog/2014/08/libevent.html" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+        </div>
+      </header>
+    
+
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p> bufferevent这个结构体</p>
+<pre><code>struct bufferevent {
+    struct event_base *ev_base;  
+    const struct bufferevent_ops *be_ops;  
+    struct event ev_read;  
+    struct event ev_write;  
+    struct evbuffer *input;  
+    struct evbuffer *output;                                                                                  
+    bufferevent_data_cb readcb;                                                                                                                 bufferevent_data_cb writecb;                                                                                         bufferevent_event_cb errorcb;  
+    }  
+</code></pre><a id="more"></a>
+<p>可以看出struct bufferevent内置了两个event（读/写）和对应的缓冲区。当有数据被读入(input)的时候，readcb被调用，当output被输出完成的时候，writecb被调用，当网络I/O出现错误，如链接中断，超时或其他错误时，errorcb被调用。<br>使用bufferevent的过程：</p>
+<p><strong>1. 设置sock为非阻塞的</strong></p>
+<pre><code>eg:  evutil_make_socket_nonblocking(fd);  
+</code></pre><p><strong>2. 使用bufferevent_socket_new创建一个structbufferevent *bev，关联该sockfd，托管给event_base</strong></p>
+<p>函数原型为：</p>
+<blockquote>
+<p>   struct bufferevent <em> bufferevent_socket_new(struct event_base
+</em>base, evutil_socket_t fd,  int options)<br>            eg:  struct bufferevent *bev;<br>            bev = bufferevent_socket_new(base, fd, BEV_OPT_CLOSE_ON_FREE);</p>
+</blockquote>
+<p><strong>3. 设置读写对应的回调函数</strong></p>
+<p>函数原型为：</p>
+<blockquote>
+<p>void bufferevent_setcb(struct bufferevent <em>bufev,<br>bufferevent_data_cb readcb, bufferevent_data_cb writecb,<br>bufferevent_event_cb eventcb, void </em>cbarg)   eg.<br>bufferevent_setcb(bev, readcb, NULL, errorcb, NULL);</p>
+</blockquote>
+<p><strong>4. 启用读写事件,其实是调用了event_add将相应读写事件加入事件监听队列poll。正如文档所说，如果相应事件不置为true，bufferevent是不会读写数据的</strong></p>
+<p>函数原型：</p>
+<blockquote>
+<pre><code>int bufferevent_enable(struct bufferevent *bufev, short event)       eg.
+</code></pre><p>bufferevent_enable(bev, EV_READ|EV_WRITE);</p>
+</blockquote>
+<p><strong>5. 进入bufferevent_setcb回调函数：</strong></p>
+<p> 在readcb里面从input中读取数据，处理完毕后填充到output中；     writecb对于服务端程序，只需要readcb就可以了，可以置为NULL；     errorcb用于处理一些错误信息。</p>
+<p>针对这些使用过程进入源码进行分析：</p>
+<p><strong>1. bufferevent_socket_new</strong>     </p>
+<ul>
+<li>在bufferevent_init_common中调用evbuffer_new()初始化input和output</li>
+<li>在event_assign中初始化bufferevent中的ev_read和ev_write事件。</li>
+<li>在evbuffer_add_cb中给output添加了一个callback bufferevent_socket_outbuf_cb</li>
+</ul>
+<p><strong>2. bufferevent_setcb</strong></p>
+<pre><code>该函数的作用主要是赋值，把该函数后面的参数，赋值给第一个参数struct bufferevent *bufev定义的变量
+</code></pre><p><strong>3. bufferevent_enable</strong></p>
+<p>调用event_add将读写事件加入到事件监听队列中。</p>
+<p>对bufferevent常用的几个函数进行分析：</p>
+<blockquote>
+<pre><code>char *evbuffer_readln(struct evbuffer*buffer, size_t *n_read_out,enum
+</code></pre><p>evbuffer_eol_style eol_style);</p>
+</blockquote>
+<p>含义：Read a single line from an evbuffer.<br>    返回值：读到的一行内容</p>
+<blockquote>
+<p>int evbuffer_add(struct evbuffer <em>buf,const void </em>data, size_t<br>datlen);</p>
+</blockquote>
+<pre><code>含义：将数据添加到evbuffer的结尾
+返回值：成功返回0，失败返回-1
+</code></pre><blockquote>
+<p>int evbuffer_remove(struct evbuffer<em>buf, void </em>data, size_t datlen);</p>
+</blockquote>
+<p>含义：从evbuffer读取数据到data<br>返回值：成功返回0，失败返回-1</p>
+<blockquote>
+<p>size_t evbuffer_get_length(const structevbuffer *buf);</p>
+</blockquote>
+<p>含义：返回evbuffer中存储的字节长度<br>    暂时先分析到这里，下面是代码，客户端发送消息：HTTP/1.0, Client 0 send Message:<br>    Request: Hello Server! over，服务端一条消息收完成后，会回复：Response ok! Hello Client!<br>    服务端从bufferevent中取出消息是按行取的。代码可能有不完善的地方，由于才疏学浅，研究时间短（3天），希望高手提出宝贵意见。</p>
+<p>buffer_server.c</p>
+<pre><code>#include &lt;netinet/in.h&gt;  
+#include &lt;sys/socket.h&gt;  
+#include &lt;fcntl.h&gt;             
+#include &lt;event2/event.h&gt;  
+#include &lt;event2/buffer.h&gt;  
+#include &lt;event2/bufferevent.h&gt;                
+#include &lt;assert.h&gt;  
+#include &lt;unistd.h&gt;  
+#include &lt;string.h&gt;  
+#include &lt;stdlib.h&gt;  
+#include &lt;stdio.h&gt;  
+#include &lt;errno.h&gt;  
+   void do_read(evutil_socket_t fd, short events, void *arg);  
+   //struct bufferevent内建了两个event(read/write)和对应的缓冲区(struct evbuffer *input, *output)，并提供相应的函数用来操作缓冲区(或者直接操作bufferevent)   
+
+   //接收到数据后，判断是不一样一条消息的结束，结束标志为&quot;over&quot;字符
+
+void readcb(struct bufferevent *bev, void *ctx)  
+{     
+    printf(&quot;called readcb!\n&quot;);           
+    struct evbuffer *input, *output;  
+    char *request_line;  
+    size_t len;  
+    //其实就是取出bufferevent中的input  
+    input = bufferevent_get_input(bev);
+    //其实就是取出bufferevent中的output 
+    output = bufferevent_get_output(bev);                          
+    size_t input_len = evbuffer_get_length(input);                                      
+    printf(&quot;input_len: %d\n&quot;, input_len);  
+    size_t output_len = evbuffer_get_length(output);                                             
+    printf(&quot;output_len: %d\n&quot;, output_len);                                                                                               
+    while(1){                                                                                                                            
+        //从evbuffer前面取出一行，用一个新分配的空字符结束        
+        //的字符串返回这一行,EVBUFFER_EOL_CRLF表示行尾是一个可选的回车，后随一个换行符
+        request_line = evbuffer_readln(input, &amp;len, EVBUFFER_EOL_CRLF);
+        if(NULL == request_line){         
+            printf(&quot;The first line has not arrived yet.\n&quot;);                                                                                                                     
+            free(request_line);//之所以要进行free是因为 line = mm_malloc(n_to_copy+1))，在这里进行了malloc                                                                                                                      
+            break;                                                                                                                                        
+        } else {                                                                                                                                                                     
+                printf(&quot;Get one line date: %s\n&quot;, request_line);                                                                                          
+                //用于判断是不是一条消息的结束                                                                                                                       
+                if(strstr(request_line, &quot;over&quot;) != NULL)                    {                                                                                                                                                                                                                                                         
+                    char *response = &quot;Response ok! Hello Client!\r\n&quot;;                                                                                                                                                                   
+                    //Adds data to an event buffer  
+                    evbuffer_add(output, response, strlen(response));
+
+                    printf(&quot;服务端接收一条数据完成，回复客户端一条消息: %s\n&quot;, response);                                                                                                                                                                                                 
+                    free(request_line);                                                                                                                                                                                             
+                    break;                                                                                                                                                                                                                       
+                    }                                                                                                                 
+                }                                                                            
+        free(request_line);                                                                               
+        }                                                   
+        size_t input_len1 = evbuffer_get_length(input);                                                         
+        printf(&quot;input_len1: %d\n&quot;, input_len1);                                                             
+        size_t output_len1 = evbuffer_get_length(output);                                                                  
+        printf(&quot;output_len1: %d\n\n&quot;, output_len1);  
+}         
+
+void errorcb(struct bufferevent *bev, short error, void *ctx)  
+{  
+    if (error &amp; BEV_EVENT_EOF) { 
+        /* connection has been closed, do any clean up here */        
+        printf(&quot;connection closed\n&quot;);  
+        }else if (error &amp; BEV_EVENT_ERROR){                        
+            /* check errno to see what error occurred */  
+            printf(&quot;some other error\n&quot;);  
+            } else if (error &amp; BEV_EVENT_TIMEOUT) 
+                /* must be a timeout event handle, handle it */  
+                printf(&quot;Timed out\n&quot;);  
+                  }  
+    bufferevent_free(bev);   
+}
+
+void do_accept(evutil_socket_t listener, short event, void *arg)  
+{
+    struct event_base *base = arg;  
+    struct sockaddr_storage ss;  
+    socklen_t slen = sizeof(ss);  
+    int fd = accept(listener, (struct sockaddr*)&amp;ss, &amp;slen);  
+    if (fd &lt; 0){
+        perror(&quot;accept&quot;);  
+    }else if (fd &gt; FD_SETSIZE){  
+        close(fd);  
+     }else {
+         struct bufferevent *bev;
+         evutil_make_socket_nonblocking(fd);                                                                                                                           
+         //使用bufferevent_socket_new创建一个struct bufferevent*bev，
+         //关联该sockfd，托管给event_base                                                               
+         //BEV_OPT_CLOSE_ON_FREE表示释放bufferevent时关闭底层传输端口。
+         //这将关闭底层套接字，释放底层bufferevent等。                                                                   
+         bev = bufferevent_socket_new(base, fd, BEV_OPT_CLOSE_ON_FREE);                                                                                                                                       
+         //设置读写对应的回调函数  
+         bufferevent_setcb(bev, readcb, NULL, errorcb, NULL);  
+         bufferevent_setwatermark(bev, EV_READ, 0, MAX_LINE);                                                                                                                                                      
+         //启用读写事件,其实是调用了event_add将相应读写事件加入事件监听队列poll。
+         //正如文档所说，如果相应事件不置为true，bufferevent是不会读写数据的                                                                                       
+         bufferevent_enable(bev, EV_READ|EV_WRITE);                                                                          
+     }  
+}     
+
+void run(void){      
+    evutil_socket_t listener;           
+    struct sockaddr_in sin;  
+    struct event_base *base;  
+    struct event *listener_event;                
+    base = event_base_new();  
+    if (!base)  
+    return; 
+     sin.sin_family = AF_INET;  
+     sin.sin_addr.s_addr = 0;              
+     sin.sin_port = htons(8000);                                                                       
+     listener = socket(AF_INET, SOCK_STREAM, 0);  
+     evutil_make_socket_nonblocking(listener);          
+
+    #ifndef WIN32{                    
+
+
+int one = 1;                                                                        
+setsockopt(listener, SOL_SOCKET, SO_REUSEADDR, 
+&amp;one, sizeof(one));  
+}    
+#endif  
+if(bind(listener, (struct sockaddr*)&amp;sin, sizeof(sin)) &lt; 0){                                                                                                                                        
+    perror(&quot;bind&quot;);                                                                                   
+    return;                                                                                      
+}                                                          
+if (listen(listener, 16)&lt;0){                                                                                                                                             
+    perror(&quot;listen&quot;);                                                                                                                                                  
+    return;     
+}                                            
+
+listener_event = event_new(base, listener, EV_READ|EV_PERSIST, do_accept, (void*)base);
+event_add(listener_event, NULL);                                                                                                                                                                  
+event_base_dispatch(base);  
+}  
+int main(int argc, char **argv){          
+    setvbuf(stdout, NULL, _IONBF, 0);       
+    run();  
+    return 0; 
+}
+</code></pre>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/c/" rel="tag">#c++</a>
+          
+            <a href="/tags/concurrent/" rel="tag">#concurrent</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/2014/08/linux-epoll.html" rel="next" title="处理并发之一：LINUX Epoll机制介绍">
+                <i class="fa fa-chevron-left"></i> 处理并发之一：LINUX Epoll机制介绍
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/2014/08/why-jdk-string-is-final.html" rel="prev" title="为什么 jdk 中把 String 类设计成 final">
+                为什么 jdk 中把 String 类设计成 final <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="/blog/2014/08/libevent.html"
+     data-title="处理并发之二：libevent的eventbuffer"
+     data-content=""
+     data-url="http://www.ezlippi.com/blog/2014/08/libevent.html">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  <p>热评文章</p>
+  <div class="ds-top-threads" data-range="weekly" data-num-items="4"></div>
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="/blog/2014/08/libevent.html"
+           data-title="处理并发之二：libevent的eventbuffer" data-url="http://www.ezlippi.com/blog/2014/08/libevent.html">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="EZLippi" />
+          <p class="site-author-name" itemprop="name">EZLippi</p>
+          <p class="site-description motion-element" itemprop="description">Easy Lippi</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">65</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+          
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">72</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/EZLippi" target="_blank">
+                  
+                    <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/ouyanglip" target="_blank">
+                  
+                    <i class="fa fa-weibo"></i> weibo
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/lippi-ouyang" target="_blank">
+                  
+                    <i class="fa fa-weibo"></i> zhihu
+                  
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+            <p class="site-author-name">友情链接</p>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.woaitqs.cc/" target="_blank">Qisen Tang</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://szhshp.org" target="_blank">szhshp的博客</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://python.zhangwei.website" target="_blank">JuniorCoder</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/lippi-ouyang" target="_blank">友链出租</a>
+              </span>
+            
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <p class="post-toc-empty">此文章未包含目录</p>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2014 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">EZLippi</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+   托管在 -
+  <a class="theme-link" href="https://github.com/EZLippi/EZLippi.github.io">
+    Github
+  </a>
+
+</div>
+<div class="theme-info">
+<span id="busuanzi_container_site_pv">
+    &nbsp; | &nbsp;本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+</div>
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  
+
+
+  
+
+
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=0.5.0"></script>
+
+
+
+  
+  
+
+  
+  
+<script type="text/javascript" src="/js/src/scrollspy.js?v=0.5.0"></script>
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = NexT.utils.escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    NexT.motion.middleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+
+      if (CONFIG.sidebar.display === 'post' || CONFIG.sidebar.display === 'always') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          NexT.utils.displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=0.5.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"ezlippi"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+
+  
+  
+
+
+</body>
+</html>

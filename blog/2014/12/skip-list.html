@@ -1,0 +1,1081 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  <link href="//fonts.useso.com/css?family=Lato:300,400,700,400italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=0.5.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="skip-list" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=0.5.0" />
+
+
+
+
+
+
+<meta name="description" content="skip—list原理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="skip list跳跃表实现">
+<meta property="og:url" content="http://www.ezlippi.com/blog/2014/12/skip-list.html">
+<meta property="og:site_name" content="Lippi-浮生志">
+<meta property="og:description" content="skip—list原理">
+<meta property="og:image" content="http://www.ezlippi.com/images/images/githubpages/skiplist1.jpg">
+<meta property="og:image" content="http://www.ezlippi.com/images/images/githubpages/skiplist2.jpg">
+<meta property="og:image" content="http://www.ezlippi.com/images/images/githubpages/skiplist3.jpg">
+<meta property="og:image" content="http://www.ezlippi.com/images/images/githubpages/skiplist4.jpg">
+<meta property="og:image" content="http://www.ezlippi.com/images/images/githubpages/skiplist5.jpg">
+<meta property="og:image" content="http://www.ezlippi.com/images/images/githubpages/skiplist6.jpg">
+<meta property="og:updated_time" content="2016-02-29T12:38:16.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="skip list跳跃表实现">
+<meta name="twitter:description" content="skip—list原理">
+<meta name="twitter:image" content="http://www.ezlippi.com/images/images/githubpages/skiplist1.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> skip list跳跃表实现 | Lippi-浮生志 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?340874ba9357cbe81570aa4ac1185941";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner">
+<script>
+(function(){
+    var bp = document.createElement('script');
+    bp.src = '//push.zhanzhang.baidu.com/push.js';
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+            
+<div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Lippi-浮生志</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu menu-left">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-th fa-fw"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+      
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <form class="site-search-form">
+  <input type="text" id="st-search-input" class="st-search-input st-default-search-input" />
+</form>
+
+<script type="text/javascript">
+  (function(w,d,t,u,n,s,e){w['SwiftypeObject']=n;w[n]=w[n]||function(){
+    (w[n].q=w[n].q||[]).push(arguments);};s=d.createElement(t);
+    e=d.getElementsByTagName(t)[0];s.async=1;s.src=u;e.parentNode.insertBefore(s,e);
+  })(window,document,'script','//s.swiftypecdn.com/install/v2/st.js','_st');
+
+  _st('install', 'fLM9qfxyerC6njvM7usy','2.0.0');
+</script>
+
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                skip list跳跃表实现
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2014-12-18T00:00:00+08:00" content="2014-12-18">
+              2014-12-18
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/algorithm/" itemprop="url" rel="index">
+                    <span itemprop="name">algorithm</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/blog/2014/12/skip-list.html#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="/blog/2014/12/skip-list.html" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+        </div>
+      </header>
+    
+
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>跳表(skip List)是一种随机化的数据结构，基于并联的链表，实现简单，插入、删除、查找的复杂度均为O(logN)。跳表的具体定义，<br> 跳表是由William Pugh发明的，这位确实是个大牛，搞出一些很不错的东西。简单说来跳表也是</p>
+<p>链表的一种，只不过它在链表的基础上增加了跳跃功能，正是这个跳跃的功能，使得在查找元素时，跳表能够提供O(log n)的时间复杂<br><a id="more"></a><br>度。红黑树等这样的平衡数据结构查找的时间复杂度也是O(log n)，并且相对于红黑树这样的平衡二叉树skiplist的优点是更好的支持并</p>
+<p>发操作，但是要实现像红黑树这样的数据结构并非易事,但是只要你熟悉链表的基本操作,再加之对跳表原理的理解，实现一个跳表数据</p>
+<p>结构就是一个很自然的事情了。</p>
+<p>此外，跳表在当前热门的开源项目中也有很多应用，比如LevelDB的核心数据结构memtable是用跳表实现的，redis的sorted set数据</p>
+<p>结构也是有跳表实现的。</p>
+<h2 id="skiplist主要思想"><a href="#skiplist主要思想" class="headerlink" title="skiplist主要思想"></a>skiplist主要思想</h2><p>先从链表开始，如果是一个简单的链表（不一定有序），那么我们在链表中查找一个元素X的话，需要将遍历整个链表直到找到元素X为止。</p>
+<p>现在我们考虑一个有序的链表：</p>
+<p> <img src="/images/images/githubpages/skiplist1.jpg" alt=""></p>
+<p>从该有序表中搜索元素 {13, 39} ，需要比较的次数分别为 {3, 5}，总共比较的次数为 3 + 5 = 8 次。我们想下有没有更优的算法?  我们想到了对于</p>
+<p>有序数组查找问题我们可以使用二分查找算法，但对于有序链表却不能使用二分查找。这个时候我们在想下平衡树,比如BST,他们都是通过把一些</p>
+<p>节点取出来作为其节点下某种意义的索引，比如父节点一般大于左子节点而小于右子节点。因此这个时候我们想到类似二叉搜索树的做法把一些</p>
+<p>节点提取出来，作为索引。得到如下结构：<br> <img src="/images/images/githubpages/skiplist2.jpg" alt=""></p>
+<p>在这个结构里我们把{3, 18, 77}提取出来作为一级索引，这样搜索的时候就可以减少比较次数了,比如在搜索39时仅比较了3次(通过比较3,18,39)。</p>
+<p>当然我们还可以再从一级索引提取一些元素出来，作为二级索引,这样更能加快元素搜索。</p>
+<p>这基本上就是跳表的核心思想，其实是一种通过“空间来换取时间”的一个算法，通过在每个节点中增加了向前的指针(即层)，从而提升查找的效率。</p>
+<p>跳跃列表是按层建造的。底层是一个普通的有序链表。每个更高层都充当下面列表的「快速跑道」，这里在层 i 中的元素按某个固定的概率 p (通常</p>
+<p>为0.5或0.25)出现在层 i+1 中。平均起来，每个元素都在 1/(1-p) 个列表中出现, 而最高层的元素（通常是在跳跃列表前端的一个特殊的头元素）</p>
+<p>在 O(log1/p n) 个列表中出现。</p>
+<h2 id="SkipList基本数据结构及其实现"><a href="#SkipList基本数据结构及其实现" class="headerlink" title="SkipList基本数据结构及其实现"></a>SkipList基本数据结构及其实现</h2><p>一个跳表，应该具有以下特征：</p>
+<p>1,一个跳表应该有几个层（level）组成；</p>
+<p>2,跳表的第一层包含所有的元素；</p>
+<p>3,每一层都是一个有序的链表；</p>
+<p>4,如果元素x出现在第i层，则所有比i小的层都包含x；</p>
+<p>5,每个节点包含key及其对应的value和一个指向同一层链表的下个节点的指针数组</p>
+<p>如图所示。<br> <img src="/images/images/githubpages/skiplist3.jpg" alt=""></p>
+<p><strong>跳表基本数据结构</strong></p>
+<p>定义跳表数据类型：</p>
+<pre><code>//跳表结构  
+typedef struct skip_list  
+{  
+    int level;// 层数  
+    Node *head;//指向头结点  
+} skip_list;  
+</code></pre><p>其中level是当前跳表最大层数,head是指向跳表的头节点如上图。</p>
+<p>跳表的每个节点的数据结构：</p>
+<pre><code>typedef struct node  
+{  
+    keyType key;// key值  
+    valueType value;// value值  
+    struct node *next[1];// 后继指针数组，柔性数组 可实现结构体的变长  
+} Node;  
+</code></pre><p>对于这个结构体重点说说，struct node *next[1] 其实它是个柔性数组，主要用于使结构体包含可变长字段。我们可以通过如下方法得到包含可变</p>
+<p>层数(n)的Node *类型的内存空间:</p>
+<pre><code>#define new_node(n)((Node*)malloc(sizeof(Node)+n*sizeof(Node*)))
+</code></pre><p>通过上面我们可以根据层数n来申请指定大小的内存，从而节省了不必要的内存空间(比如固定大小的next数组就会浪费大量的内存空间)。</p>
+<p><strong>跳表节点的创建</strong></p>
+<pre><code>// 创建节点  
+Node *create_node(int level, keyType key, valueType val)  
+{  
+    Node *p=new_node(level);  
+    if(!p)  
+        return NULL;  
+    p-&gt;key=key;  
+    p-&gt;value=val;  
+    return p;  
+}  
+</code></pre><p><strong>跳表的创建</strong></p>
+<p>列表的初始化需要初始化头部，并使头部每层（根据事先定义的MAX_LEVEL）指向末尾（NULL）</p>
+<pre><code>//创建跳跃表  
+skip_list *create_sl()  
+{  
+    skip_list *sl=(skip_list*)malloc(sizeof(skip_list));//申请跳表结构内存  
+    if(NULL==sl)  
+        return NULL;  
+
+    sl-&gt;level=0;// 设置跳表的层level，初始的层为0层（数组从0开始）  
+
+    Node *h=create_node(MAX_L-1, 0, 0);//创建头结点  
+    if(h==NULL)  
+    {  
+        free(sl);  
+        return NULL;  
+    }  
+    sl-&gt;head = h;  
+    int i;  
+     // 将header的next数组清空  
+    for(i=0; i&lt;MAX_L; ++i)  
+    {  
+        h-&gt;next[i] = NULL;  
+    }  
+    srand(time(0));  
+    return sl;  
+}  
+</code></pre><p><strong>跳表插入操作</strong></p>
+<p>我们知道跳表是一种随机化数据结构，其随机化体现在插入元素的时候元素所占有的层数完全是随机的，层数是通过随机算法产生的:</p>
+<pre><code>//插入元素的时候元素所占有的层数完全是随机算法  
+int randomLevel()  
+{  
+    int level=1;  
+    while (rand()%2)  
+        level++;  
+    level=(MAX_L&gt;level)? level:MAX_L;  
+    return level;  
+}  
+</code></pre><p>相当与做一次丢硬币的实验，如果遇到正面(rand产生奇数)，继续丢，遇到反面，则停止，用实验中丢硬币的次数level作为元素占有的层数。</p>
+<p>显然随机变量 level 满足参数为 p = 1/2 的几何分布，level 的期望值 E[level] = 1/p = 2. 就是说，各个元素的层数，期望值是 2 层。</p>
+<p>由于跳表数据结构整体上是有序的，所以在插入时，需要首先查找到合适的位置，然后就是修改指针（和链表中操作类似），然后更新跳表的</p>
+<p>level变量。 跳表的插入总结起来需要三步:</p>
+<p>1:查找到待插入位置, 每层跟新update数组;</p>
+<p>2:需要随机产生一个层数;</p>
+<p>3:从高层至下插入,与普通链表的插入完全相同;</p>
+<p>比如插入key为25的节点，如下图:<br> <img src="/images/images/githubpages/skiplist4.jpg" alt=""></p>
+<p>对于步骤1,我们需要对于每一层进行遍历并保存这一层中下降的节点(其后继节点为NULL或者后继节点的key大于等于要插入的key)，如下图,<br> <img src="/images/images/githubpages/skiplist5.jpg" alt=""><br>节点中有白色星花标识的节点保存到update数组。</p>
+<p>对于步骤2我们上面已经说明了是通过一个随机算法产生一个随机的层数，但是当这个随机产生的层数level大于当前跳表的最大层数时，我们</p>
+<p>此时需要更新当前跳表最大层数到level之间的update内容，这时应该更新其内容为跳表的头节点head，想想为什么这么做,呵呵。然后就是更</p>
+<p>新跳表的最大层数。</p>
+<p>对于步骤3就和普通链表插入一样了，只不过现在是对每一层链表进行插入节点操作。最终的插入结果如图所示，因为新插入key为25的节点level随机</p>
+<p>为4大于插入前的最大层数，所以此时跳表的层数为4。</p>
+<p>  实现代码如下:</p>
+<pre><code>bool insert(skip_list *sl, keyType key, valueType val)  
+{  
+    Node *update[MAX_L];  
+    Node *q=NULL,*p=sl-&gt;head;//q,p初始化  
+    int i=sl-&gt;level-1;  
+    /******************step1*******************/  
+    //从最高层往下查找需要插入的位置,并更新update  
+    //即把降层节点指针保存到update数组  
+    for( ; i&gt;=0; --i)  
+    {  
+        while((q=p-&gt;next[i])&amp;&amp; q-&gt;key&lt;key)  
+            p=q;  
+        update[i]=p;  
+    }  
+    if(q &amp;&amp; q-&gt;key == key)//key已经存在的情况下  
+    {  
+        q-&gt;value = val;  
+        return true;  
+    }  
+    /******************step2*******************/  
+    //产生一个随机层数level  
+    int level = randomLevel();  
+    //如果新生成的层数比跳表的层数大  
+    if(level&gt;sl-&gt;level)  
+    {  
+        //在update数组中将新添加的层指向header  
+        for(i=sl-&gt;level; i&lt;level; ++i)  
+        {  
+            update[i]=sl-&gt;head;  
+        }  
+        sl-&gt;level=level;  
+    }  
+    //printf(&quot;%d\n&quot;, sizeof(Node)+level*sizeof(Node*));  
+    /******************step3*******************/  
+    //新建一个待插入节点,一层一层插入  
+    q=create_node(level, key, val);  
+    if(!q)  
+        return false;  
+
+    //逐层更新节点的指针,和普通链表插入一样  
+    for(i=level-1; i&gt;=0; --i)  
+    {  
+        q-&gt;next[i]=update[i]-&gt;next[i];  
+            update[i]-&gt;next[i]=q;  
+        }  
+        return true;  
+}  
+</code></pre><p><strong>跳表删除节点操作</strong></p>
+<p>删除节点操作和插入差不多，找到每层需要删除的位置，删除时和操作普通链表完全一样。不过需要注意的是，如果该节点的level是最大的，</p>
+<p>则需要更新跳表的level。实现代码如下:</p>
+<pre><code>bool erase(skip_list *sl, keyType key)  
+{  
+    Node *update[MAX_L];  
+    Node *q=NULL, *p=sl-&gt;head;  
+    int i = sl-&gt;level-1;  
+    for(; i&gt;=0; --i)  
+    {  
+        while((q=p-&gt;next[i]) &amp;&amp; q-&gt;key &lt; key)  
+        {  
+            p=q;  
+        }  
+        update[i]=p;  
+    }  
+    //判断是否为待删除的key  
+    if(!q || (q&amp;&amp;q-&gt;key != key))  
+        return false;  
+
+    //逐层删除与普通链表删除一样  
+    for(i=sl-&gt;level-1; i&gt;=0; --i)  
+    {  
+        if(update[i]-&gt;next[i]==q)//删除节点  
+        {  
+            update[i]-&gt;next[i]=q-&gt;next[i];  
+            //如果删除的是最高层的节点,则level--  
+            if(sl-&gt;head-&gt;next[i]==NULL)  
+                sl-&gt;level--;  
+        }  
+    }  
+    free(q);  
+    q=NULL;  
+    return true;  
+}  
+</code></pre><p><strong>跳表的查找操作</strong></p>
+<p>跳表的优点就是查找比普通链表快，其实查找操已经在插入、删除操作中有所体现，代码如下：</p>
+<pre><code>valueType *search(skip_list *sl, keyType key)  
+{  
+    Node *q,*p=sl-&gt;head;  
+    q=NULL;  
+    int i=sl-&gt;level-1;  
+    for(; i&gt;=0; --i)  
+    {  
+        while((q=p-&gt;next[i]) &amp;&amp; q-&gt;key&lt;key)  
+        {  
+            p=q;  
+        }  
+        if(q &amp;&amp; key==q-&gt;key)  
+            return &amp;(q-&gt;value);  
+    }  
+    return NULL;  
+}  
+</code></pre><p><strong>跳表的销毁</strong></p>
+<p>上面分别介绍了跳表的创建、节点插入、节点删除，其中涉及了内存的动态分配，在使用完跳表后别忘了释放所申请的内存，不然会内存泄露的。</p>
+<p>不多说了，代码如下:</p>
+<pre><code>// 释放跳跃表  
+void sl_free(skip_list *sl)  
+{  
+    if(!sl)  
+        return;  
+
+    Node *q=sl-&gt;head;  
+    Node *next;  
+    while(q)  
+    {  
+        next=q-&gt;next[0];  
+        free(q);  
+        q=next;  
+    }  
+    free(sl);  
+}  
+</code></pre><p>skiplist复杂度分析</p>
+<p>skiplist分析如下图<br>  <img src="/images/images/githubpages/skiplist6.jpg" alt=""></p>
+<p>参考:</p>
+<p><a href="https://www.cs.auckland.ac.nz/software/AlgAnim/niemann/s_skl.htm" target="_blank" rel="external">https://www.cs.auckland.ac.nz/software/AlgAnim/niemann/s_skl.htm</a></p>
+<p><a href="http://www.cnblogs.com/xuqiang/archive/2011/05/22/2053516.html" target="_blank" rel="external">http://www.cnblogs.com/xuqiang/archive/2011/05/22/2053516.html</a></p>
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/algorithm/" rel="tag">#algorithm</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/2014/12/c-open-project.html" rel="next" title="值得推荐的C/C++框架和库">
+                <i class="fa fa-chevron-left"></i> 值得推荐的C/C++框架和库
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blog/2014/12/c-code-opt.html" rel="prev" title="C代码优化小贴士">
+                C代码优化小贴士 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="/blog/2014/12/skip-list.html"
+     data-title="skip list跳跃表实现"
+     data-content=""
+     data-url="http://www.ezlippi.com/blog/2014/12/skip-list.html">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  <p>热评文章</p>
+  <div class="ds-top-threads" data-range="weekly" data-num-items="4"></div>
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="/blog/2014/12/skip-list.html"
+           data-title="skip list跳跃表实现" data-url="http://www.ezlippi.com/blog/2014/12/skip-list.html">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="EZLippi" />
+          <p class="site-author-name" itemprop="name">EZLippi</p>
+          <p class="site-description motion-element" itemprop="description">Easy Lippi</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">65</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+          
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">23</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">72</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/EZLippi" target="_blank">
+                  
+                    <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/ouyanglip" target="_blank">
+                  
+                    <i class="fa fa-weibo"></i> weibo
+                  
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.zhihu.com/people/lippi-ouyang" target="_blank">
+                  
+                    <i class="fa fa-weibo"></i> zhihu
+                  
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+            <p class="site-author-name">友情链接</p>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.woaitqs.cc/" target="_blank">Qisen Tang</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://szhshp.org" target="_blank">szhshp的博客</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://python.zhangwei.website" target="_blank">JuniorCoder</a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/lippi-ouyang" target="_blank">友链出租</a>
+              </span>
+            
+          
+        </div>
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator">
+            <i class="fa fa-angle-double-up"></i>
+          </div>
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#skiplist主要思想"><span class="nav-number">1.</span> <span class="nav-text">skiplist主要思想</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SkipList基本数据结构及其实现"><span class="nav-number">2.</span> <span class="nav-text">SkipList基本数据结构及其实现</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator">
+            <i class="fa fa-angle-double-down"></i>
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2014 - 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">EZLippi</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+   托管在 -
+  <a class="theme-link" href="https://github.com/EZLippi/EZLippi.github.io">
+    Github
+  </a>
+
+</div>
+<div class="theme-info">
+<span id="busuanzi_container_site_pv">
+    &nbsp; | &nbsp;本站总访问量<span id="busuanzi_value_site_pv"></span>次
+</span>
+</div>
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+
+
+      </div>
+    </footer>
+
+    <div class="back-to-top"></div>
+  </div>
+
+  
+
+
+  
+
+
+
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js"></script>
+
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=0.5.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=0.5.0"></script>
+
+
+
+  
+  
+
+  
+  
+<script type="text/javascript" src="/js/src/scrollspy.js?v=0.5.0"></script>
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.motion.complete', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      var $indicator = $(indicator);
+      var opacity = action === 'show' ? 1 : 0;
+      $indicator.velocity ?
+        $indicator.velocity('stop').velocity({
+          opacity: opacity
+        }, { duration: 100 }) :
+        $indicator.stop().animate({
+          opacity: opacity
+        }, 100);
+    }
+
+  });
+</script>
+
+<script type="text/javascript" id="sidebar.nav">
+  $(document).ready(function () {
+    var html = $('html');
+    var TAB_ANIMATE_DURATION = 200;
+    var hasVelocity = $.isFunction(html.velocity);
+
+    $('.sidebar-nav li').on('click', function () {
+      var item = $(this);
+      var activeTabClassName = 'sidebar-nav-active';
+      var activePanelClassName = 'sidebar-panel-active';
+      if (item.hasClass(activeTabClassName)) {
+        return;
+      }
+
+      var currentTarget = $('.' + activePanelClassName);
+      var target = $('.' + item.data('target'));
+
+      hasVelocity ?
+        currentTarget.velocity('transition.slideUpOut', TAB_ANIMATE_DURATION, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', TAB_ANIMATE_DURATION)
+            .addClass(activePanelClassName);
+        }) :
+        currentTarget.animate({ opacity: 0 }, TAB_ANIMATE_DURATION, function () {
+          currentTarget.hide();
+          target
+            .stop()
+            .css({'opacity': 0, 'display': 'block'})
+            .animate({ opacity: 1 }, TAB_ANIMATE_DURATION, function () {
+              currentTarget.removeClass(activePanelClassName);
+              target.addClass(activePanelClassName);
+            });
+        });
+
+      item.siblings().removeClass(activeTabClassName);
+      item.addClass(activeTabClassName);
+    });
+
+    $('.post-toc a').on('click', function (e) {
+      e.preventDefault();
+      var targetSelector = NexT.utils.escapeSelector(this.getAttribute('href'));
+      var offset = $(targetSelector).offset().top;
+      hasVelocity ?
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        }) :
+        $('html, body').stop().animate({
+          scrollTop: offset
+        }, 500);
+    });
+
+    // Expand sidebar on post detail page by default, when post has a toc.
+    NexT.motion.middleWares.sidebar = function () {
+      var $tocContent = $('.post-toc-content');
+
+      if (CONFIG.sidebar.display === 'post' || CONFIG.sidebar.display === 'always') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          NexT.utils.displaySidebar();
+        }
+      }
+    };
+  });
+</script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=0.5.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"ezlippi"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+
+  
+  
+
+
+</body>
+</html>
