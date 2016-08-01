@@ -5125,7 +5125,7 @@ a.thumbnail:hover, a.thumbnail:focus, a.thumbnail.active {
 
 .alert-info {
     background-color: #d9edf7;
-    border-color: #bce8f1;
+    border-color: #006B2D;
     color: #31708f
 }
 
@@ -5826,7 +5826,7 @@ a.list-group-item-danger.active:focus {
 }
 
 .panel-info {
-    border-color: #bce8f1
+    border-color: #006B2D
 }
 
 .panel-info>.panel-heading {
@@ -5836,7 +5836,7 @@ a.list-group-item-danger.active:focus {
 }
 
 .panel-info>.panel-heading+.panel-collapse>.panel-body {
-    border-top-color: #bce8f1
+    border-top-color: #006B2D
 }
 
 .panel-info>.panel-heading .badge {
@@ -5845,7 +5845,7 @@ a.list-group-item-danger.active:focus {
 }
 
 .panel-info>.panel-footer+.panel-collapse>.panel-body {
-    border-bottom-color: #bce8f1
+    border-bottom-color: #006B2D
 }
 
 .panel-warning {
