@@ -5840,8 +5840,8 @@ a.list-group-item-danger.active:focus {
 }
 
 .panel-info>.panel-heading .badge {
-    color: #d9edf7;
-    background-color: #31708f
+    color: #000;
+    background-color: #fff
 }
 
 .panel-info>.panel-footer+.panel-collapse>.panel-body {
