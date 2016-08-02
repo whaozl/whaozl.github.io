@@ -66,6 +66,10 @@ $(document).ready(function() {
     $('.aside3').scrollTop(0);
     contentEffects();
   });
+  $(document).on("pjax:complete",function(){
+    pjax_loadDuoshuo();
+  })
+
   $('body').on('click', '.show-commend', function(){
     var ds_loaded = false;
     window.disqus_shortname = $('.show-commend').attr('name');
@@ -94,5 +98,22 @@ function contentEffects(){
     $('#content_btn').show();
   }else{
     $('#content_btn').hide();
+  }
+}
+
+/*多说pjax*/
+function pjax_loadDuoshuo(){
+  var duoshuoQuery = {short_name:"whaozl"};
+  var dus=$(".ds-thread");
+  if($(dus).length==1){
+    var el = document.createElement('div');
+    el.setAttribute('data-thread-key',$(dus).attr("data-thread-key"));//必选参数
+    el.setAttribute('data-url',$(dus).attr("data-url"));
+    el.setAttribute('data-title',$(dus).attr("data-title"));
+    if (typeof DUOSHUO !== 'undefined'){
+      $.getScript("//static.duoshuo.com/embed.js");
+    }
+    DUOSHUO.EmbedThread(el);
+    $(dus).html(el);
   }
 }
