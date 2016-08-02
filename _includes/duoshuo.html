@@ -3,7 +3,6 @@
 </div>
 <!-- 多说评论框 end -->
 <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
-<script type="text/javascript" src="/public/js/jquery.js"></script>
 <script type="text/javascript">
 var duoshuoQuery = {short_name:"whaozl"};
 /*
@@ -33,9 +32,5 @@ $(function() {
 			$(dus).html(el);
 		}
 	}
-  /*自己添加部分 pjax加载完加载多说*/
-  $(document).on("pjax:complete",function(){
-  	pjax_loadDuoshuo();
-  })
 </script>
 <!-- 多说公共JS代码 end -->
