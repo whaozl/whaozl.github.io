@@ -2,23 +2,16 @@
 <div class='ds-thread' data-thread-key='{{ page.url }}' data-title='{{ page.title }}' data-url='http://whaozl.github.io/{{ page.url }}'>
 </div>
 <!-- 多说评论框 end -->
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 <script type="text/javascript">
-	//异步加载多说js
-	var duoshuoQuery = {short_name:"whaozl"};
-	$.getScript("http://static.duoshuo.com/embed.js",function(){
-	//代码高亮
-	$('pre code').each(function(i, block) {
-	      hljs.highlightBlock(block);
-	}); 
-	//创建dom
-	var dus=$(".ds-thread");
-	var dr=$("#ds-thread");
-	if($(dus).length==1 && $(dr).length==0){
-	    var el = document.createElement('div');
-	    el.setAttribute('data-thread-key',$(dus).attr("data-thread-key"));//必选参数
-	    el.setAttribute('data-url',$(dus).attr("data-url"));
-	    DUOSHUO.EmbedThread(el);
-	    $(dus).html(el);
-	}
-	});
- </script>
+var duoshuoQuery = {short_name:"whaozl"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+</script>
+<!-- 多说公共JS代码 end -->
