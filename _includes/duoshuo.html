@@ -5,7 +5,7 @@
 <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 <script type="text/javascript">
 var duoshuoQuery = {short_name:"whaozl"};
-/*
+
 $(function() {
 		var ds = document.createElement('script');
 		ds.type = 'text/javascript';ds.async = true;
@@ -14,23 +14,6 @@ $(function() {
 		(document.getElementsByTagName('head')[0] 
 		 || document.getElementsByTagName('body')[0]).appendChild(ds);
 })();
-*/
 
- /*多说pjax*/
-	var duoshuoQuery = {short_name:"whaozl"};
-	function pjax_loadDuoshuo(){
-		var dus=$(".ds-thread");
-		if($(dus).length==1){
-			var el = document.createElement('div');
-			el.setAttribute('data-thread-key',$(dus).attr("data-thread-key"));//必选参数
-			el.setAttribute('data-url',$(dus).attr("data-url"));
-			el.setAttribute('data-title',$(dus).attr("data-title"));
-			if (typeof DUOSHUO !== 'undefined'){
-				$.getScript("//static.duoshuo.com/embed.js");
-			}
-			DUOSHUO.EmbedThread(el);
-			$(dus).html(el);
-		}
-	}
 </script>
 <!-- 多说公共JS代码 end -->
