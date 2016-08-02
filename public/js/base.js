@@ -65,6 +65,10 @@ $(document).ready(function() {
     $('.aside3').scrollTop(0);
     contentEffects();
   });
+  /*自己添加部分 pjax加载完加载多说*/
+  $(document).on("pjax:complete",function(){
+  	pjax_loadDuoshuo();
+  })
   $('body').on('click', '.show-commend', function(){
     var ds_loaded = false;
     window.disqus_shortname = $('.show-commend').attr('name');
