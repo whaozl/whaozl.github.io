@@ -40,23 +40,6 @@ function content_click(is_show){
 }
 
 
-/*多说pjax*/
-var duoshuoQuery = {short_name:"whaozl"};
-function pjax_loadDuoshuo(){
-	var dus=$(".ds-thread");
-	if($(dus).length==1){
-		var el = document.createElement('div');
-		el.setAttribute('data-thread-key',$(dus).attr("data-thread-key"));//必选参数
-		el.setAttribute('data-url',$(dus).attr("data-url"));
-		el.setAttribute('data-title',$(dus).attr("data-title"));
-		if (typeof DUOSHUO !== 'undefined'){
-			$.getScript("//static.duoshuo.com/embed.js");
-		}
-		DUOSHUO.EmbedThread(el);
-		$(dus).html(el);
-	}
-}
-
 $(document).ready(function() {
   /* 控制左侧 aside 的动作 */
   $("#nav_btn").on('click', function() {
@@ -82,12 +65,7 @@ $(document).ready(function() {
       $('#nav_btn').click();
     $('.aside3').scrollTop(0);
     contentEffects();
-    pjax_loadDuoshuo();
   });
-  /*自己添加部分 pjax加载完加载多说
-  $(document).on("pjax:complete",function(){
-  	pjax_loadDuoshuo();
-  })*/
   $('body').on('click', '.show-commend', function(){
     var ds_loaded = false;
     window.disqus_shortname = $('.show-commend').attr('name');
