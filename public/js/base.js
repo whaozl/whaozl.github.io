@@ -64,11 +64,12 @@ $(document).ready(function() {
       $('#nav_btn').click();
     $('.aside3').scrollTop(0);
     contentEffects();
+    pjax_loadDuoshuo();
   });
-  /*自己添加部分 pjax加载完加载多说*/
+  /*自己添加部分 pjax加载完加载多说
   $(document).on("pjax:complete",function(){
   	pjax_loadDuoshuo();
-  })
+  })*/
   $('body').on('click', '.show-commend', function(){
     var ds_loaded = false;
     window.disqus_shortname = $('.show-commend').attr('name');
