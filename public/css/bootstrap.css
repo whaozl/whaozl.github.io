@@ -3118,6 +3118,10 @@ textarea.input-lg, select[multiple].input-lg {
     }
 }
 
+.whaozl{
+	background: #303030;
+}
+
 .btn {
     display: inline-block;
     margin-bottom: 0;
@@ -5335,7 +5339,7 @@ a.thumbnail:hover, a.thumbnail:focus, a.thumbnail.active {
     border-left: 0px;
     border-right: 0px;
     /*border: 0px solid #ddd;*/
-    margin-right: 0px; margin-left: 35px; 
+    margin-right: 0px; margin-left: 10px; 
 }
 
 a.list-group-item-lay:hover, a.list-group-item-lay:focus {
