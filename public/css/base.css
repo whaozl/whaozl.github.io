@@ -1,4 +1,7 @@
 /* 页面配置 */
+#identifier{
+	font-weight: bold;
+}
 .container {
   width: 100%;
   height: 100%;
