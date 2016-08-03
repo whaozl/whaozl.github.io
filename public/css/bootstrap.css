@@ -1241,31 +1241,32 @@ h4 small, .h4 small, h5 small, .h5 small, h6 small, .h6 small, h4 .small,
 }
 
 h1, .h1 {
-    font-size: 26px;
+    font-size: 30px;
     font-weight: bold;
 }
 
 h2, .h2 {
-    font-size: 22px;
+    font-size: 26px;
     font-weight: bold;
 }
 
 h3, .h3 {
-    font-size: 18px;
+    font-size: 22px;
     font-weight: bold;
 }
 
 h4, .h4 {
-    font-size: 16px;
+    font-size: 20px;
     font-weight: bold;
 }
 
 h5, .h5 {
-    font-size: 14px
+    font-size: 16px;
+    font-weight: bold;
 }
 
 h6, .h6 {
-    font-size: 12px
+    font-size: 16px;
 }
 
 p {
