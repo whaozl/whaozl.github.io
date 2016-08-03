@@ -1241,7 +1241,8 @@ h4 small, .h4 small, h5 small, .h5 small, h6 small, .h6 small, h4 .small,
 }
 
 h1, .h1 {
-    font-size: 26px
+    font-size: 26px;
+    font-weight: bold;
 }
 
 h2, .h2 {
@@ -1255,7 +1256,8 @@ h3, .h3 {
 }
 
 h4, .h4 {
-    font-size: 16px
+    font-size: 16px;
+    font-weight: bold;
 }
 
 h5, .h5 {
