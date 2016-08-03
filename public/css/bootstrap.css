@@ -1241,19 +1241,21 @@ h4 small, .h4 small, h5 small, .h5 small, h6 small, .h6 small, h4 .small,
 }
 
 h1, .h1 {
-    font-size: 36px
-}
-
-h2, .h2 {
-    font-size: 30px
-}
-
-h3, .h3 {
     font-size: 26px
 }
 
+h2, .h2 {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+h3, .h3 {
+    font-size: 18px;
+    font-weight: bold;
+}
+
 h4, .h4 {
-    font-size: 18px
+    font-size: 16px
 }
 
 h5, .h5 {
