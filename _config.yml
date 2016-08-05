@@ -1,10 +1,10 @@
 permalink: /:year/:month/:day/:title.html
 paginate: 10
-markdown: kramdown
-#markdown: redcarpet
+#markdown: kramdown
+markdown: redcarpet
 
 # 作者信息
-author: 
+author:
   name: whaozl
   email: whaozl@163.com
   link: http://whaozl.github.io
@@ -25,7 +25,7 @@ favicon: /public/img/deer3.png
 
 # google analytics 设置
 #ga:
-#  id: UA-54262064-1 
+#  id: UA-54262064-1
 #  url: whaozl.github.io
 
 # disqus 设置
