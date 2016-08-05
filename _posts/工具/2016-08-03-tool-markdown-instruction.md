@@ -172,7 +172,9 @@ void main()
 
 ## 13.公式
 
-$\frac{1}{2}$
+$x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}$
+
+\\(x=\frac{-b\pm\sqrt{b^2-4ac}}{2a})\\
 
 $$\frac{-b\pm\sqrt{b^2-4ac}}{2a}$$
 
