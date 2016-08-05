@@ -33,7 +33,6 @@ markdown语法主要包1括：**标题、段落，区块引用，代码区块，
 **注意** ： `#`与后面的标题之间须**存在一个空行**。  
 
 > \# 一级标题
-> \## 二级标题
 > \### 三级标题
 > \#### 四级标题
 > \##### 五级标题
@@ -68,7 +67,7 @@ markdown语法主要包1括：**标题、段落，区块引用，代码区块，
 效果：
 
 > 区块引用
-> 
+>
 >> 嵌套引用
 
 ## 4.代码区块
@@ -166,8 +165,11 @@ void main()
 效果：
 
 > [younghz的Markdown库1][1]
+>
 > [younghz的Markdown库2][2]
+>
 [1]: https:://github.com/younghz/Markdown "Markdown"
+
 [2]: https:://github.com/younghz/Markdown "Markdown"
 
 **注意**：上述的`[1]:https:://github.com/younghz/Markdown "Markdown"`不出现在区块中。
