@@ -4,8 +4,8 @@ title: OpenJDK源码阅读之Java I/O字节流输入
 category: Java
 tags: JavaIO
 comments: true
-keywords: 
-description: 
+keywords:
+description:
 ---
 
 Java 的输入输出总是给人一种很混乱的感觉，要想把这个问题搞清楚，必须对各种与输入输出相关的类之间的关系有所了解。只有你了解了他们之间的关系，知道设计这个类的目的是什么，才能更从容的使用他们。
@@ -15,9 +15,7 @@ Java 的输入输出总是给人一种很混乱的感觉，要想把这个问题
 
 
 ## Java I/O 的主要结构
-
-Java 的输入输出，主要分为以下几个部分：
-
+Java 的输入输出，主要分为以下几个部分：  
 * 字节流
 * 字符流
 * Socket
@@ -71,7 +69,7 @@ public synchronized int read() {
 FileInputStream 的数据来源是文件，即从文件中读取字节。初始化时，需要指定一个文件：
 
 ```java
-public FileInputStream(File file) 
+public FileInputStream(File file)
 throws FileNotFoundException {
     String name = (file != null ? file.getPath() : null);
     SecurityManager security = System.getSecurityManager();
@@ -305,7 +303,7 @@ protected synchronized void receive(int b) throws IOException {
 
 注意注意的是，这两个类相互关联的对象，应该属于两个不同的线程，否则，容易造成死锁。
 
-## 扩展阅读 
+## 扩展阅读
 
 * [深入分析 Java I/O 的工作机制](http://www.ibm.com/developerworks/cn/java/j-lo-javaio/)
 
