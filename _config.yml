@@ -1,7 +1,7 @@
 permalink: /:year/:month/:day/:title.html
 paginate: 10
-#markdown: kramdown
-markdown: redcarpet
+markdown: kramdown
+#markdown: redcarpet
 
 # 作者信息
 author:

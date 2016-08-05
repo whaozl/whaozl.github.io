@@ -39,19 +39,20 @@ markdown语法主要包1括：**标题、段落，区块引用，代码区块，
 效果：
 
 > 区块引用
+> 
 >> 嵌套引用
 
 ## 4.代码区块
 
 【书写方式】代码区块的建立是在每行加上4个空格或者一个制表符（如同写代码一样），最佳办法是写\`\`\`，切记要和普通段落之间**存在空行**
 
-\```java
-	public ByteArrayInputStream(byte buf[]){
-		this.buf = buf;
-		this.pos = 0;
-		this.count = buf.length;
+\`\`\`java
+	public ByteArrayInputStream(byte buf[]){    
+		this.buf = buf;    
+		this.pos = 0;    
+		this.count = buf.length;    
 	}
-\```
+\`\`\`
 
 
 效果：
