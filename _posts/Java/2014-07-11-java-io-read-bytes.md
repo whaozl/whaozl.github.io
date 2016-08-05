@@ -15,7 +15,9 @@ Java 的输入输出总是给人一种很混乱的感觉，要想把这个问题
 
 
 ## Java I/O 的主要结构
-Java 的输入输出，主要分为以下几个部分：  
+
+Java 的输入输出，主要分为以下几个部分：
+
 * 字节流
 * 字符流
 * Socket
@@ -28,7 +30,6 @@ Java 的输入输出，主要分为以下几个部分：
 这里只给出每个类的实现概要，具体每个类的实现分析，可以参见我的 [GitHub-SourceLearning-OpenJDK](https://github.com/minixalpha/SourceLearning/tree/master/openjdk) 页面。根据导航中的链接，进入 [java.io](https://github.com/minixalpha/SourceLearning/tree/master/openjdk/notes/openjdk/jdk/src/share/classes/java/io) ，即可看到对每个类的分析。
 
 ### 字节流输入
-
 
 ![java_io_read_bytes](/assets/Java/java_io_read_bytes.png)
 
