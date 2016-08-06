@@ -110,27 +110,12 @@ markdown语法主要包1括：**标题、段落，区块引用，代码区块，
 
 【书写方式】链接可以由两种形式生成：**行内式**和**参考式**
 
-### 8.1 行内式
-
 > \[whaozl的Markdown解析库\]\(https:://github.com/whaozl/markdown\)
 
 效果：
 
 > [whaozl的Markdown解析库](https:://github.com/whaozl/markdown)
 
-**参考式**：
-
-> \[whaozl的Markdown解析库\]\[1\]
-> \[whaozl的个人博客\]\[2\]
-> \[1\]:https:://github.com/whaozl/markdown
-> \[2\]:https:://github.com/whaozl
-
-效果：
-
-> [whaozl的Markdown解析库][1]
-> [whaozl的个人博客][2]
-[1]:https://github.com/whaozl/markdown
-[2]:https://github.co m/whaozl
 
 ## 9.图片
 
