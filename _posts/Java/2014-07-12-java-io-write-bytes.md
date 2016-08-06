@@ -4,14 +4,14 @@ title: OpenJDK源码阅读之Java I/O字节流输出
 category: Java
 tags: [JavaIO,OpenJDK]
 comments: true
-keywords: 
-description: 
+keywords:
+description:
 ---
 ### 字节流输出
 
 ![java_io_write_bytes](/assets/Java/java_io_write_bytes.png)
 
-图1 Java 字节输出类
+######图1 Java 字节输出类
 
 * OutputStream
 
@@ -25,7 +25,7 @@ OutputStream是所有字节输出类的超类，这是个抽象类，需要实�
 
 
 ```java
-public void write(byte b[], int off, int len) 
+public void write(byte b[], int off, int len)
 throws IOException {
     if (b == null) {
         throw new NullPointerException();
@@ -202,7 +202,7 @@ short 是两个字节，需要将其中的两个字节分离出来，分别写�
 
 另外，我觉得在这里，有必要说一下那几个用于压缩和解压缩的类，实现就不说了，就讲下他们的功能与关系。
 
-## JAVA IO 压缩与解压缩 
+## JAVA IO 压缩与解压缩
 
 
 * InflaterInputStream: 用于解压 deflate 格式的压缩数据，底层流为压缩后的数据，read 返回解压后的数据。

@@ -96,6 +96,8 @@ body, html {
   padding-right: 30px;
   text-align: center;
   color: #303030;
+  padding-top: 10px;
+  padding-bottom: 10px
 }
 .aside3-content {
 /*  padding-left: 40px;
@@ -158,4 +160,9 @@ td{
 
 p{
 	text-indent: 2em !important;
+}
+
+#identifier{
+	margin-top: 0px !important;
+	margin-bottom: 0px !important;
 }
