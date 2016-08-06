@@ -1,6 +1,7 @@
 ---
 layout: "post"
 title: "测试15"
+category: Java
 date: "2016-08-06 15:15"
 tags: Java内存
 comments: true

@@ -2,6 +2,7 @@
 layout: "post"
 title: "测试12"
 date: "2016-08-06 15:15"
+category: Java
 tags: Java内存
 comments: true
 keywords:
