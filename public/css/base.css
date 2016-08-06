@@ -9,7 +9,7 @@
 body, html {
   margin: 0px;
   height: 100%;
-  overflow: hidden; 
+  overflow: hidden;
   background-color: #FFF;
   font-family: 微软雅黑, Arial, Helvetica, sans-serif;
 }
@@ -127,4 +127,22 @@ blockquote p {
 .show-commend {
   width: 100%;
   margin-bottom: 40px;
+}
+
+
+/**让markdown显示table,设置其样式**/
+
+table{
+	border-collapse: collapse;
+   	border-spacing: 0 !important;
+   	border:1px solid #000 !important;
+}
+
+th{
+    border:2px solid #000 !important;
+}
+
+td{
+	padding: 10px !important;
+    border: 1px solid #000 !important;
 }
