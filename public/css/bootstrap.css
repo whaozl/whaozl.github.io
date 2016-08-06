@@ -1162,7 +1162,7 @@ img {
     padding: 4px;
     line-height: 1.42857143;
     background-color: #fff;
-    border: 0px solid #ddd;         
+    border: 0px solid #ddd;
     border-radius: 4px;
     -webkit-transition: all .2s ease-in-out;
     -o-transition: all .2s ease-in-out;
@@ -3214,8 +3214,8 @@ textarea.input-lg, select[multiple].input-lg {
 .btn-primary:hover, .btn-primary:focus, .btn-primary:active, .btn-primary.active,
 .open>.dropdown-toggle.btn-primary {
     color: #fff;
-    background-color: #006B2D;
-    border-color: #006B2D;
+    background-color: #1abc9c;
+    border-color: #1abc9c;
 }
 
 .btn-primary:active, .btn-primary.active, .open>.dropdown-toggle.btn-primary {
@@ -5134,7 +5134,7 @@ a.thumbnail:hover, a.thumbnail:focus, a.thumbnail.active {
 
 .alert-info {
     background-color: #d9edf7;
-    border-color: #006B2D;
+    border-color: #1abc9c;
     color: #31708f
 }
 
@@ -5339,12 +5339,12 @@ a.thumbnail:hover, a.thumbnail:focus, a.thumbnail.active {
     padding: 10px 15px;
     margin-bottom: -1px;
     color: #fff;
-    background-color: #006B2D;
-    border: 0px solid #006B2D;/*115449;*/
+    background-color: #1abc9c;
+    border: 0px solid #1abc9c;/*115449;*/
     border-left: 0px;
     border-right: 0px;
     /*border: 0px solid #ddd;*/
-    margin-right: 0px; margin-left: 10px; 
+    margin-right: 0px; margin-left: 10px;
 }
 
 a.list-group-item-lay:hover, a.list-group-item-lay:focus {
@@ -5737,7 +5737,7 @@ a.list-group-item-danger.active:focus {
 
 .panel-group {
     margin-bottom: 20px;
-    margin-left: 35px;
+    margin-left: 10px;
 }
 
 .panel-group .panel {
@@ -5835,17 +5835,17 @@ a.list-group-item-danger.active:focus {
 }
 
 .panel-info {
-    border-color: #006B2D
+    border-color: #1abc9c
 }
 
 .panel-info>.panel-heading {
     color: #FFF;
-    background-color: #006B2D;
+    background-color: #1abc9c;
     border-color: #B7F4ED;
 }
 
 .panel-info>.panel-heading+.panel-collapse>.panel-body {
-    border-top-color: #006B2D
+    border-top-color: #1abc9c
 }
 
 .panel-info>.panel-heading .badge {
@@ -5854,7 +5854,7 @@ a.list-group-item-danger.active:focus {
 }
 
 .panel-info>.panel-footer+.panel-collapse>.panel-body {
-    border-bottom-color: #006B2D
+    border-bottom-color: #1abc9c
 }
 
 .panel-warning {
@@ -6865,4 +6865,3 @@ button.close {
         display: none !important
     }
 }
-
