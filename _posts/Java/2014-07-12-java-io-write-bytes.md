@@ -11,7 +11,7 @@ description:
 
 ![java_io_write_bytes](/assets/Java/java_io_write_bytes.png)
 
-######图1 Java 字节输出类
+###### 图1 Java 字节输出类
 
 * OutputStream
 
