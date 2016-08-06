@@ -167,12 +167,22 @@ markdown语法主要包1括：**标题、段落，区块引用，代码区块，
 > `$$`
 
 效果：
-
 > $$
-> f& = \frac{-b\pm\sqrt{b^2-4ac}}{2a}\\
+> \begin{align}
+> f& = \frac{-b\pm\sqrt{b^2-4ac}}{2a} \\
 >  & = \frac{1}{2}
+> \end{align}
+> $$
+> $$
+> \begin{align}
+> \sqrt{37} & = \sqrt{\frac{73^2-1}{12^2}} \\
+> & = \sqrt{\frac{73^2}{12^2}\cdot\frac{73^2-1}{73^2}} \\
+> & = \frac{73}{12}\sqrt{1 - \frac{1}{73^2}} \\
+> & \approx \frac{73}{12}\left(1 - \frac{1}{2\cdot73^2}\right)
+> \end{align}
 > $$
 
+这需要使用形如`\begin{align}…\end{align}`的格式，其中需要使用&来指示需要对齐的位置。请使用右键查看上述公式的代码。
 
 ## 工具
 
