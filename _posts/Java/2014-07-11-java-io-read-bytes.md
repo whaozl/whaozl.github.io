@@ -33,7 +33,7 @@ Java 的输入输出，主要分为以下几个部分：
 
 ![java_io_read_bytes](/assets/Java/java_io_read_bytes.png)
 
-图1 Java 字节输入类
+###### 图1 Java 字节输入类
 
 * InputStream
 
