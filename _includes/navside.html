@@ -3,10 +3,7 @@
     <div class="col-md-2 col-xs-2 aside1">
       <br>
       <a class="pjaxlink" href="/"><img src="{{ site.gavatar }}" class="img-ronuded avatar" style="border-width:0px; border-color:#000"></a>
-	  <a href="{{ site.author.github }}" target="_blank" style="display: inline-block;font-size:2em;">
-		<i class="fa fa-github fa-lg" style="color:#FFF;"></i>
-	  </a>
-      <br><br>
+      <br><br><br><br>
       <ul class="nav nav-pills nav-stacked">
         {% for category in site.categories %}     <!-- 这里是aside1的读书、生活、科研、技术、绘画-->
          <li><a href="#{{ category | first }}" data-toggle="tab">{{ category[0] }}</a></li>
@@ -19,6 +16,12 @@
         <li><a class="pjaxlink" href="/pages/about.html"><i class="fa fa-user fa-lg"></i></a></li>
         这是原来现实汉字的代码，我改为了图标 -->
       </ul>
+      <div class="aside1_bottom">
+		  <a href="{{ site.author.github }}" target="_blank">
+		    <i class="fa fa-github fa-lg" style="color:#fff;"></i>
+		  </a>
+      </div>
+    </div>
 
 	<span id="busuanzi_container_site_pv" class="benzhantongji">
 		本站总访问量<span id="busuanzi_value_site_pv"></span>次
