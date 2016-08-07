@@ -124,12 +124,12 @@ $$
 | 其他              | $\overline {xyz} \quad \vec  a \quad \overrightarrow {x} \quad \dot x \quad \ddot x$  | `$\overline {xyz} \quad \vec  a \quad \overrightarrow {x} \quad \dot x \quad \ddot x$` |
 
 ### 2.7 特殊函数与符号
-|   	名称         |      显示              |    	   LaTex         |
+|   	名称         |      显示              |    	   LaTex        |
 |---------------|---------------------|---------------|
-| 常见的三角函数           | $\sin x$、$\arctan x$               | `$\sin x$、$\arctan x$` |
-| 求极限                        | $\lim_{1\to\infty}$                    | `$\lim_{1\to\infty}$`      |
-| 比较运算符                 |$\lt \gt \le \ge \neq \not\lt$     | `\lt \gt \le \ge \neq \not\lt` |
-| 操作运算符                | $\times \div \pm \mp x \cdot y$   | `\times \div \pm \mp  x \cdot y`  |
+| 常见的三角函数        | $\sin x$、$\arctan x$      | `$\sin x$、$\arctan x$` |
+| 求极限                     | $\lim_{1\to\infty}$          | `$\lim_{1\to\infty}$`      |
+| 比较运算符         |$\lt \gt \le \ge \neq \not\lt$     | `\lt \gt \le \ge \neq \not\lt` |
+| 操作运算符       | $\times \div \pm \mp x \cdot y$   | `\times \div \pm \mp  x \cdot y`  |
 | 省略号   | $a_1+a_2+\cdots+a_n$，$a_1, a_2, \ldots ,a_n$ | `$a_1+a_2+\cdots+a_n$，$a_1, a_2, \ldots ,a_n$`|
 | 集合关系与运算 | $\cup \cap \setminus \subset \subseteq \subsetneq \supset \in \notin \emptyset \varnothing$ | `\cup \cap \setminus \subset \subseteq \subsetneq \supset \in \notin \emptyset \varnothing`|
 | 排列符号  |   ${n+1 \choose 2k} {\binom{n+1}{2k}}$ | `${n+1 \choose 2k} {\binom{n+1}{2k}}$`
