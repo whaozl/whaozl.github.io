@@ -68,7 +68,6 @@ $(document).ready(function() {
   });
   $(document).on("pjax:complete",function(){
     pjax_loadDuoshuo();/*载入多说*/
-	pjax_loadBUSUANZI();/*载入不蒜子*/
   })
 
   $('body').on('click', '.show-commend', function(){
@@ -117,12 +116,4 @@ function pjax_loadDuoshuo(){
     DUOSHUO.EmbedThread(el);
     $(dus).html(el);
   }
-}
-
-/*不蒜子*/
-function pjax_loadBUSUANZI(){
-	var busuanzi=$(".busuanzi");
-	if($(busuanzi).length==1){
-		$(busuanzi).html("<span id='busuanzi_container_page_pv'> 本文总阅读量<span id='busuanzi_value_page_pv'></span>次</span>");
-	}
 }
