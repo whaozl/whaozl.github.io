@@ -25,7 +25,7 @@ function nav_click(is_show) {
     /* 修改文字排版 */
     $('.aside3-content')
       .removeClass('col-md-13')
-      .addClass('col-md-10 col-lg-8 col-md-offset-1 col-lg-offset-2'); 
+      .addClass('col-md-10 col-lg-8 col-md-offset-1 col-lg-offset-2');
   }  /*col-md-offset-1 col-lg-offset-2*/
 }
 /* 控制文章章节列表按钮 */
@@ -67,7 +67,8 @@ $(document).ready(function() {
     contentEffects();
   });
   $(document).on("pjax:complete",function(){
-    pjax_loadDuoshuo();
+    pjax_loadDuoshuo();/*载入多说*/
+	pjax_loadBUSUANZI();/*载入不蒜子*/
   })
 
   $('body').on('click', '.show-commend', function(){
@@ -91,9 +92,9 @@ function contentEffects(){
         current.attr("id", "title" + i);
         tag = current.prop('tagName').substr(-1);
         $("#nav").append("<div style='margin-left:"+15*(tag-1)+"px'><a id='link" + i + "' href='#title" +i + "'>" + current.html() + "</a></div>");
-    }); 
+    });
     $("pre").addClass("prettyprint");
-    prettyPrint(); 
+    prettyPrint();
     $('#content img').addClass('img-thumbnail').parent('p').addClass('center');
     $('#content_btn').show();
   }else{
@@ -116,4 +117,12 @@ function pjax_loadDuoshuo(){
     DUOSHUO.EmbedThread(el);
     $(dus).html(el);
   }
+}
+
+/*不蒜子*/
+function pjax_loadBUSUANZI(){
+	var busuanzi=$(".busuanzi");
+	if($(dus).length==1){
+		busuanzi.html("<span id="busuanzi_container_page_pv"> 本文总阅读量<span id="busuanzi_value_page_pv"></span>次</span>");
+	}
 }
