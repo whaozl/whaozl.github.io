@@ -124,6 +124,7 @@ $$
 | 其他              | $\overline {xyz} \quad \vec  a \quad \overrightarrow {x} \quad \dot x \quad \ddot x$  | `$\overline {xyz} \quad \vec  a \quad \overrightarrow {x} \quad \dot x \quad \ddot x$` |
 
 ### 2.7 特殊函数与符号
+
 |   	名称         |      显示              |    	   LaTex        |
 |---------------|---------------------|---------------|
 | 常见的三角函数        | $\sin x$、$\arctan x$      | `$\sin x$、$\arctan x$` |
