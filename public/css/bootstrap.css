@@ -3150,7 +3150,7 @@ textarea.input-lg, select[multiple].input-lg {
 
 .btn:focus, .btn:active:focus, .btn.active:focus {
     outline: thin dotted;
-    outline: 5px auto -webkit-focus-ring-color;
+    outline: 5px auto ##1abc9c;
     outline-offset: -2px
 }
 
