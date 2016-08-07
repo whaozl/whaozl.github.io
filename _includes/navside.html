@@ -30,43 +30,45 @@
 		本站总访问量<span id="busuanzi_value_site_pv"></span>次
 	</span>
 
-    <div class="col-md-10 col-xs-10 aside2">
-      <div class="row">
-        <div class="tab-content">
-          {% for category in site.categories %}
-            <div class="tab-pane" id="{{ category[0] }}">
-              <div class="list-group">
-                <!--<h2 class="center">{{ category[0] }}</h2>-->     <!--原来aside2上面的大标题-->
-                {% for post in category[1] %}
-                  <a href="{{ post.url }}" class="list-group-item-lay pjaxlink">{{post.title}}</a>
-                {% endfor %}
-              </div>
-            </div>
-          {% endfor %}
-          <div class="tab-pane" id="tags">
-            <div class="panel-group" id="accordion">
-              <!--<h2 class="center">{{ site.locals.tags }}</h2>-->
-              {% for tag in site.tags %}
-                <div class="panel panel-info">
-                  <div class="panel-heading">
-                    <h4 class="panel-title">
-                      <a data-toggle="collapse" data-toggle="collapse" data-parent="#accordion" href="#{{ tag[0] }}">{{ tag[0] }}</a>
-                      <span class="badge pull-right">{{ tag[1].size }}</span>
-                    </h4>
-                  </div>
-                  <div id="{{ tag[0] }}" class="panel-collapse collapse">
-                    {% for post in tag[1] %}
-                      <a  href='{{ post.url }}' class="list-group-item pjaxlink">
-                        {{post.title}}
-                      </a>
-                    {% endfor %}
-                  </div>
-                </div>
-              {% endfor %}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+	<div style="overflow: hidden;">
+	    <div class="col-md-10 col-xs-10 aside2">
+	      <div class="row">
+	        <div class="tab-content">
+	          {% for category in site.categories %}
+	            <div class="tab-pane" id="{{ category[0] }}">
+	              <div class="list-group">
+	                <!--<h2 class="center">{{ category[0] }}</h2>-->     <!--原来aside2上面的大标题-->
+	                {% for post in category[1] %}
+	                  <a href="{{ post.url }}" class="list-group-item-lay pjaxlink">{{post.title}}</a>
+	                {% endfor %}
+	              </div>
+	            </div>
+	          {% endfor %}
+	          <div class="tab-pane" id="tags">
+	            <div class="panel-group" id="accordion">
+	              <!--<h2 class="center">{{ site.locals.tags }}</h2>-->
+	              {% for tag in site.tags %}
+	                <div class="panel panel-info">
+	                  <div class="panel-heading">
+	                    <h4 class="panel-title">
+	                      <a data-toggle="collapse" data-toggle="collapse" data-parent="#accordion" href="#{{ tag[0] }}">{{ tag[0] }}</a>
+	                      <span class="badge pull-right">{{ tag[1].size }}</span>
+	                    </h4>
+	                  </div>
+	                  <div id="{{ tag[0] }}" class="panel-collapse collapse">
+	                    {% for post in tag[1] %}
+	                      <a  href='{{ post.url }}' class="list-group-item pjaxlink">
+	                        {{post.title}}
+	                      </a>
+	                    {% endfor %}
+	                  </div>
+	                </div>
+	              {% endfor %}
+	            </div>
+	          </div>
+	        </div>
+	      </div>
+	    </div>
+	</div>
   </div>
 </div>
