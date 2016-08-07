@@ -122,7 +122,7 @@ function pjax_loadDuoshuo(){
 /*不蒜子*/
 function pjax_loadBUSUANZI(){
 	var busuanzi=$(".busuanzi");
-	if($(dus).length==1){
-		busuanzi.html("<span id='busuanzi_container_page_pv'> 本文总阅读量<span id='busuanzi_value_page_pv'></span>次</span>");
+	if($(busuanzi).length==1){
+		$(busuanzi).html("<span id='busuanzi_container_page_pv'> 本文总阅读量<span id='busuanzi_value_page_pv'></span>次</span>");
 	}
 }
