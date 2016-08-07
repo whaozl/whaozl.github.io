@@ -160,7 +160,7 @@ td{
 }
 
 p{
-	text-indent: 2em !important;
+	/*text-indent: 2em !important;*/
 }
 
 #identifier{
