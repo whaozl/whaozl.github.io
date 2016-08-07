@@ -75,7 +75,8 @@ body, html {
   height: 100%;
   border-right: 2px solid #303030;
   overflow-x: hidden;
-  overflow-y: auto;;
+  /*overflow-y: auto;*/
+  overflow-y: hidden;
   font-color: #fff;
   margin-top: 5px;
 }
