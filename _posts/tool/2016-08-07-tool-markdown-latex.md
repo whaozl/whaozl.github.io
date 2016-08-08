@@ -91,6 +91,7 @@ tex2jax: {
 【注意】因为大括号`{}`用来在上下标中用来分组,所以需要使用转义来显示
 
 原始符号不会随着公式大小缩放，如`(\frac{1}{2})` ：$\frac{1}{2}$，采用`\left(…\right)`来自适应调整括号大小，即在`左边括号类型`加上`\left`，在`右边括号类型`加上`\right`
+
 $$
 \left \lbrace \sum_{i=0}^n i^2 = \frac{(n^2+n)(2n+1)}{6} \right\rbrace
 $$
@@ -132,14 +133,6 @@ $$
 | 操作运算符         | $\times \div \pm \mp x \cdot y$   | `\times \div \pm \mp  x \cdot y`  |
 | 省略号                | $a_1+a_2+\cdots+a_n$，$a_1, a_2, \ldots ,a_n$ | `$a_1+a_2+\cdots+a_n$，$a_1, a_2, \ldots ,a_n$`|
 | 集合关系与运算  | $\cup \cap \setminus \subset \subseteq \subsetneq \supset \in \notin \emptyset \varnothing$ | `\cup \cap \setminus \subset \subseteq \subsetneq \supset \in \notin \emptyset \varnothing`  |
-| 排列符号            |   ${n+1 \choose 2k} {\binom{n+1}{2k}}$ | `${n+1 \choose 2k} {\binom{n+1}{2k}}$` |
-| 箭头                   | $\to \rightarrow \leftarrow \Rightarrow \Leftarrow \mapsto$ | `\to \rightarrow \leftarrow \Rightarrow \Leftarrow \mapsto` |
-| 逻辑运算符        | $\land \lor \lnot \forall \exists \top \bot \vdash \vDash$ | `\land \lor \lnot \forall \exists \top \bot \vdash \vDash` |
-| 模运算               | $a\equiv b\pmod n$ | `a\equiv b\pmod n` |
-| 等式符号            |$\approx \sim \cong \equiv \prec$ | `\approx \sim \cong \equiv \prec` |
-| 点符号               | $\star \ast \oplus \circ \bullet$ | ` \star \ast \oplus \circ \bullet` |
-|数学特殊符号      | $\infty  \aleph_0 \nabla \partial Im \Re$ | `\infty \aleph_0  \nabla \partial \Im \Re` |
-| 常见希腊字母变体形式 | $\epsilon \varepsilon \phi \varphi$ | `\epsilon \varepsilon \phi \varphi ` |
 
 ## 3. 表格
 
