@@ -69,6 +69,7 @@ $(document).ready(function() {
   $(document).on("pjax:complete",function(){
     pjax_loadDuoshuo();/*载入多说*/
 	MathJax.Hub.Queue(["Typeset", MathJax.Hub]);/*pjax后重新渲染latex*/
+	pjax_loadTongji();/*访问量统计刷新问题*/
   })
 
   $('body').on('click', '.show-commend', function(){
@@ -117,4 +118,11 @@ function pjax_loadDuoshuo(){
     DUOSHUO.EmbedThread(el);
     $(dus).html(el);
   }
+}
+
+/*访问量统计刷新问题*/
+function pjax_loadTongji(){
+	var c=document.createElement('script');
+	c.src='https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js';
+	document.body.appendChild(c);
 }
