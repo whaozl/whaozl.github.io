@@ -39,7 +39,7 @@ comments :
     short_name : whaozl
 
 # 主题设置，自动激活某个标签
-active: 读书
+active: book
 
 # 中文本地化
 locals:
