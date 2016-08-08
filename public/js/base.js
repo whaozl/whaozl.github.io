@@ -68,6 +68,7 @@ $(document).ready(function() {
   });
   $(document).on("pjax:complete",function(){
     pjax_loadDuoshuo();/*载入多说*/
+	MathJax.Hub.Queue(["Typeset", MathJax.Hub]);/*pjax后重新渲染latex*/
   })
 
   $('body').on('click', '.show-commend', function(){
