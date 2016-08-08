@@ -133,6 +133,11 @@ $$
 | 操作运算符         | $\times \div \pm \mp x \cdot y$   | `\times \div \pm \mp  x \cdot y`  |
 | 省略号                | $a_1+a_2+\cdots+a_n$，$a_1, a_2, \ldots ,a_n$ | `$a_1+a_2+\cdots+a_n$，$a_1, a_2, \ldots ,a_n$`|
 | 集合关系与运算  | $\cup \cap \setminus \subset \subseteq \subsetneq \supset \in \notin \emptyset \varnothing$ | `\cup \cap \setminus \subset \subseteq \subsetneq \supset \in \notin \emptyset \varnothing`  |
+| 排列符号            |   ${n+1 \choose 2k}{\binom{n+1}{2k}}$ | `${n+1 \choose 2k}{\binom{n+1}{2k}}$` |
+| 箭头                   | $\to \rightarrow \leftarrow \Rightarrow \Leftarrow \mapsto$ | `\to \rightarrow \leftarrow \Rightarrow \Leftarrow \mapsto` |
+| 逻辑运算符        | $\land \lor \lnot \forall \exists \top \bot \vdash \vDash$ | `\land \lor \lnot \forall \exists \top \bot \vdash \vDash` |
+| 模运算               | $a\equiv b\pmod n$ | `a\equiv b\pmod n` |
+| 等式符号            |$\approx \sim \cong \equiv \prec$ | `\approx \sim \cong \equiv \prec` |
 
 ## 3. 表格
 
