@@ -13,7 +13,7 @@ description:
 
 ### 1.1 markdown-preview-plus
 
-atom内置了markdown-preview插件，这个插件不支持latex显示，因此将其禁用掉(File-Settings)，在Setting->Install中在线搜索插件markdown-preview-plus，将其安装。然后打开一个markdown格式文件(md或markdown)，
+atom内置了markdown-preview插件，这个插件不支持latex显示，因此将其禁用掉(File-Settings)，在Setting->Install中在线搜索插件markdown-preview-plus，将其安装。然后打开一个markdown格式文件(md或markdown)
 
 > 预览——然后点击菜单Package->markdown-preview-plus->toggle-preview(ctr+shift+M)
 > latex显示——上一步下的toggle-render-latex(ctr+shift+X)
