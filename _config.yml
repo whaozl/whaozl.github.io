@@ -1,5 +1,6 @@
 permalink: /:year/:month/:day/:title.html
-paginate: 5
+#显示最新的10篇文章
+paginate: 10
 markdown: kramdown
 #markdown: redcarpet
 
@@ -47,3 +48,7 @@ locals:
   about: 关于
   newest: 最新
   archive: 归档
+  friendslink: 友情链接
+  friendslinks:
+      title: 夏涛博客
+      url: https://shartoo.github.io

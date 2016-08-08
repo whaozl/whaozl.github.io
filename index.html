@@ -49,3 +49,16 @@ titlename: 首页
     </div>
   {% endfor %}
 </div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel panel-primary">
+      <div class="panel-heading">{{ site.locals.friendslink }}</div>
+      {% for friend in site.locals.friendslinks %}
+        <a  href='{{ friend.url }}' class="list-group-item pjaxlink clearfix">
+          {{friend.title}}
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</div>
