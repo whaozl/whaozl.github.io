@@ -136,7 +136,7 @@ atom必须安装的工具栏插件
 
 html预览插件，默认快捷键：CTRL-SHIFT-H
 
-[2016-08-08-tool-atom-plugin](/assets/tool/2016-08-08-tool-atom-plugin.png)
+![2016-08-08-tool-atom-plugin](/assets/tool/2016-08-08-tool-atom-plugin.png)
 
 ###### 图1 安装之后的效果图
 
