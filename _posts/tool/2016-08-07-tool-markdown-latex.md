@@ -145,23 +145,43 @@ $$
 
 ## 3. 表格
 
+
+
 ## 4. 矩阵
+
+
 
 ## 5. 公式对齐
 
+
+
 ## 6. 分段函数
+
+
 
 ## 7. 连分数
 
+
+
 ## 8.方程组
+
+
 
 ## 9.公式颜色
 
+
+
 ## 10.公式序号标记
+
+
 
 ## 11. 公式排版建议
 
+
+
 ## 参考
+
+
 
 > [1] [Mathjax与LaTex公式简介](http://mlworks.cn/posts/introduction-to-mathjax-and-latex-expression/)    
 > [2] [Mathjax官网](https://www.mathjax.org/)    
