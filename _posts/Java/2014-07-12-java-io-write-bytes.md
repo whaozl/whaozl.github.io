@@ -1,15 +1,15 @@
 ---
 layout: post
 title: OpenJDK源码阅读之Java I/O字节流输出
-category: Java
-tags: [JavaIO,OpenJDK]
+category: java
+tags: [javaIO,OpenJDK]
 comments: true
 keywords:
 description:
 ---
 ### 字节流输出
 
-![java_io_write_bytes](/assets/Java/java_io_write_bytes.png)
+![java_io_write_bytes](/assets/java/java_io_write_bytes.png)
 
 ###### 图1 Java 字节输出类
 

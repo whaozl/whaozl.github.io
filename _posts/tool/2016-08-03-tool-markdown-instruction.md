@@ -1,7 +1,7 @@
 ---
 layout: post
 title: markdown基本教程
-category: 工具
+category: tool
 tags: markdown
 comments: true
 keywords:

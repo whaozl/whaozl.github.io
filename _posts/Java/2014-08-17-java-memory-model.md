@@ -1,11 +1,11 @@
 ---
 layout: post
 title: 对Java内存模型的理解
-category: Java
-tags: Java内存
+category: java
+tags: java内存
 comments: true
-keywords: 
-description: 
+keywords:
+description:
 ---
 
 ## Java 内存模型
@@ -57,7 +57,7 @@ Java 内存模型其实定义了好几个概念来说明什么是正确的同步
 
 所有存在冲突访问的操作之间都有 happen-before order，那么此多线程程序满足 data race free
 
-* 正确同步 
+* 正确同步
 
 假如多线程程序在顺序一致性模型下执行，如果它满足 data race free，那么此程序进行了正确的同步。
 
@@ -80,6 +80,3 @@ C0 -> C1 -> C2 -> ... -> C
 其中 C_i 是 C_(i+1) 的子集。你可能注意到了，之前说的“操作能被添加”，什么叫操作能被添加呢？语言规范中规定了，每一个 Ci 都对应一个 Ei，所有 Ei 都要满足 Well-Formed Executions。也就是说，如果你添加了操作后，对应的 Ei 不满足 Well-Formed Executions，那么这个操作就不能被添加。如果最终，你的多线程程序无法构造出这样一个执行链，那么，它的执行结果是非法的。
 
 另外，Java 内存模型最初论文作者维护了一个页面 [The Java Memory Model](http://www.cs.umd.edu/~pugh/java/memoryModel/)，其中有一个条目叫 [Causality Test Cases](http://www.cs.umd.edu/~pugh/java/memoryModel/CausalityTestCases.html)，给出了一些小例子，以便人们明白哪些行为是满足 Causality Requirements 的，哪些是不满足的。此外，在 Java 并发领域内著名的 Doug Lea 也给出了一个 [The JSR-133 Cookbook for Compiler Writers](http://gee.cs.oswego.edu/dl/jmm/cookbook.html)，为编译器作者们提供参考。不过据说这份规范有些地方要求太严格了，开发者们还是根据Java语言规范和虚拟机规范来开发。
-
-
-

@@ -1,8 +1,8 @@
 ---
 layout: post
 title: OpenJDK源码阅读之Java I/O字节流输入
-category: Java
-tags: JavaIO
+category: java
+tags: javaIO
 comments: true
 keywords:
 description:
@@ -31,7 +31,7 @@ Java 的输入输出，主要分为以下几个部分：
 ### 字节流输入
 
 
-![java_io_read_bytes](/assets/Java/java_io_read_bytes.png)
+![java_io_read_bytes](/assets/java/java_io_read_bytes.png)
 
 ###### 图1 Java 字节输入类
 
