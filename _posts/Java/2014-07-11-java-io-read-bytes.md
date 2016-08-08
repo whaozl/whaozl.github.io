@@ -31,7 +31,7 @@ Java 的输入输出，主要分为以下几个部分：
 ### 字节流输入
 
 
-![java_io_read_bytes](/assets/java/java_io_read_bytes.png)
+![java_io_read_bytes](/assets/java/2014-07-11-java-io-read-bytes.png)
 
 ###### 图1 Java 字节输入类
 

@@ -9,7 +9,7 @@ description:
 ---
 ### 字节流输出
 
-![java_io_write_bytes](/assets/java/java_io_write_bytes.png)
+![java_io_write_bytes](/assets/java/2014-07-12-java-io-write-bytes.png)
 
 ###### 图1 Java 字节输出类
 
