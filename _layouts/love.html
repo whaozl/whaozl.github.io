@@ -19,21 +19,21 @@ table, th, td{
     </div>
     <br />
     <div class="row">
-      {% for book in page.books %}
+      {% for love in page.loves %}
         <div class="col-md-12">
           <div class="panel panel-primary">
-            <div class="panel-heading">{{ book.title }}</div>
+            <div class="panel-heading">{{ love.title }}</div>
             <div class="panel-body">
               <div class="row">
                 <div class="col-md-4 col-xs-12 center">
-                  <img src="{{ book.cover }}" alt="cover" class="img-thumbnail">
+                  <img src="{{ love.cover }}" alt="cover" class="img-thumbnail">
                 </div>
                 <div class="col-md-8 col-xs-12">
                   <table class="table table-bordered">
                     <tbody>
-                      <tr><td style="width:80px;">标题</td><td>{{ book.title }}</td></tr>
-                      <tr><td>出版地</td><td>{{ book.publisher }}</td></tr>
-                      <tr><td>评论</td><td>{{ book.description }}</td></tr>
+                      <tr><td style="width:80px;">标题</td><td>{{ love.title }}</td></tr>
+                      <tr><td>出版地</td><td>{{ love.publisher }}</td></tr>
+                      <tr><td>评论</td><td>{{ love.description }}</td></tr>
                     </tbody>
                   </table>
                 </div>
