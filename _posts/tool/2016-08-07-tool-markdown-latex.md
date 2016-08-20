@@ -319,7 +319,7 @@ $$
 ## 7.公式序号标记
 
 【标记公式书写方式】`\tag{yourtag}`     
-【引用上面公式方式】加上`\label{yourlabel}`在`\tag`之后——这个MathJax暂时不支持
+【引用上面公式方式】加上`\label{yourlabel}`在`\tag`之后——这个MathJax支持但是Atom的markdown插件markdown-preview-plus暂时不支持
 
 $$
  a := x^2-y^3 \tag{1}\label{1}
@@ -385,12 +385,7 @@ $$
 	\mathrm{不建议使用} & \mathrm{建议使用} \\
 	\hline \\
 	\int\int_S f(x)\,dy\,dx & \iint_S f(x)\,dy\,dx \\
-	\int\int\int_V f(x)\,dz\,dy\,dx & \iiint_V f(x)\,dz\,dy\,dx
-\end{array}
-\\
-\begin{array}{cc}
-	\mathrm{不建议使用} & \mathrm{建议使用} \\
-	\hline \\
+	\int\int\int_V f(x)\,dz\,dy\,dx & \iiint_V f(x)\,dz\,dy\,dx \\
 	\iiint_V f(x)dz dy dx & \iiint_V f(x)\,dz\,dy\,dx
 \end{array}
 $$
@@ -403,7 +398,8 @@ $$
 x = a_0 + \cfrac{1^2}{a_1
           + \cfrac{2^2}{a_2
           + \cfrac{3^2}{a_3 + \cfrac{4^4}{a_4 + \cdots}}}} \tag{\cfrac}
-\\
+$$
+$$
 x = a_0 + \frac{1^2}{a_1
           + \frac{2^2}{a_2
           + \frac{3^2}{a_3 + \frac{4^4}{a_4 + \cdots}}}} \tag{\frac}
@@ -422,7 +418,7 @@ $$
 	\end{array}
 \right.
 \\
-$$\begin{cases}
+\begin{cases}
 	a_1x+b_1y+c_1z=d_1 \\
 	a_2x+b_2y+c_2z=d_2 \\
 	a_3x+b_3y+c_3z=d_3
