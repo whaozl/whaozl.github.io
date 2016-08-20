@@ -35,9 +35,9 @@ atom内置了markdown-preview插件，这个插件不支持latex显示，因此�
 
 安装这个插件之后，直接ctr+shift+p 输入命令 git-plus-commit提交报错，这时需要在git-plus插件的属性下配置git.exe(安装的github桌面端)的位置。
 
-安装的github桌面端在登陆自己账户之后，git.exe位置在C:/Users/aool/AppData/Local/GitHub/PortableGit_c2ba306e536fdf878271f7fe636a147ff37326ad/bin/git.exe下。然后设置这个路径即可(注意：路径是/)。
+安装的github桌面端在登陆自己账户之后，git.exe位置在C:/Users/aool/AppData/Local/GitHub/PortableGit_c2ba306e536fdf878271f7fe636a147ff37326ad/bin/git.exe下。然后设置这个路径即可(注意：`路径是/`)。
 
-再使用atom的导航 右键 Add Project Folder ——> clone下的github项目，对该项目进行编辑，进行git正常的提交就行了。
+再使用atom的导航 右键 Add Project Folder ——> clone下的github项目(注意：最要用TortoiseGit可以正常提交一次，让其记住用户名和密码)，对该项目进行编辑，进行git正常的提交就行了。
 
 ### 2.2 tree-view-git-status
 
