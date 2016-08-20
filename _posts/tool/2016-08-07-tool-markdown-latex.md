@@ -213,22 +213,24 @@ $$
 
 |      名称          |   	符号         |      显示              |    	   LaTex        |
 |----------------|------------------|-----------------|-----------------|
-|   小括号矩阵   |     pmatrix      |    $\begin{pmatrix}1&2\\3&4\\ \end{pmatrix}$        | `\begin{pmatrix}1&2\\3&4\\ \end{pmatrix}` |
-|   中括号矩阵   |     bmatrix      |    $\begin{bmatrix}1&2\\3&4\\ \end{bmatrix}$        | `\begin{bmatrix}1&2\\3&4\\ \end{bmatrix}` |
-|  大括号矩阵    |     Bmatrix      |    $\begin{Bmatrix}1&2\\3&4\\ \end{Bmatrix}$        | `\begin{Bmatrix}1&2\\3&4\\ \end{Bmatrix}` |
-|    行列式        |     vmatrix      |    $\begin{vmatrix}1&2\\3&4\\ \end{vmatrix}$        | `\begin{vmatrix}1&2\\3&4\\ \end{vmatrix}` |
-|   矩阵的模     |     Vmatrix      |    $\begin{Vmatrix}1&2\\3&4\\ \end{Vmatrix}$        | `\begin{Vmatrix}1&2\\3&4\\ \end{Vmatrix}` |
+|   小括号矩阵   |     pmatrix      |    $\begin{pmatrix} 1 & 2 \\ 3 & 4 \\ \end{pmatrix}$        | `\begin{pmatrix}1&2\\3&4\\ \end{pmatrix}` |
+|   中括号矩阵   |     bmatrix      |    $\begin{bmatrix} 1 & 2 \\ 3 & 4 \\ \end{bmatrix}$        | `\begin{bmatrix}1&2\\3&4\\ \end{bmatrix}` |
+|  大括号矩阵    |     Bmatrix      |    $\begin{Bmatrix} 1 & 2 \\ 3 & 4 \\ \end{Bmatrix}$        | `\begin{Bmatrix}1&2\\3&4\\ \end{Bmatrix}` |
+|    行列式        |     vmatrix      |    $\begin{vmatrix} 1 & 2 \\ 3 & 4 \\ \end{vmatrix}$        | `\begin{vmatrix}1&2\\3&4\\ \end{vmatrix}` |
+|   矩阵的模     |     Vmatrix      |    $\begin{Vmatrix} 1 & 2 \\ 3 & 4 \\ \end{Vmatrix}$        | `\begin{Vmatrix}1&2\\3&4\\ \end{Vmatrix}` |
 
 ### 4.3 矩阵的省略元素
 
 【书写方式】`\cdots` $\cdots$ 、`\ddots` $\ddots$、`\vdots` $\vdots$
 
+$$
 \begin{pmatrix}
      1 & a_1 & a_1^2 & \cdots & a_1^n \\
      1 & a_2 & a_2^2 & \cdots & a_2^n \\
      \vdots  & \vdots& \vdots & \ddots & \vdots \\
      1 & a_m & a_m^2 & \cdots & a_m^n    
 \end{pmatrix}
+$$
 
 ### 4.4 增广矩阵
 
