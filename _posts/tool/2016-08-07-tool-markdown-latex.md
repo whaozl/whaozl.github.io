@@ -455,8 +455,7 @@ $$
 
 ## 参考
 
-
-
 > [1] [Mathjax与LaTex公式简介](http://mlworks.cn/posts/introduction-to-mathjax-and-latex-expression/)    
 > [2] [Mathjax官网](https://www.mathjax.org/)    
-> [3] [markdown语法之如何使用LaTeX语法编写数学公式](http://blog.csdn.net/lanxuezaipiao/article/details/44341645#math)
+> [3] [markdown语法之如何使用LaTeX语法编写数学公式](http://blog.csdn.net/lanxuezaipiao/article/details/44341645#math)    
+> [4] [mathjax-basic-tutorial-and-quick-reference](http://meta.math.stackexchange.com/questions/5020/mathjax-basic-tutorial-and-quick-reference)
