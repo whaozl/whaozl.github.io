@@ -126,8 +126,8 @@ atom必须安装的工具栏插件
 
 该插件可以与github上同步所有的插件。下次重装atom后只需要github的token和github的gist服务id,可以同步Atom的设置文件,自定义快捷键,用户风格,初始化脚本及代码片段,还支持已安装的插件同步.
 
-> (1) 打开自己的github创建一个[a new person access token](https://github.com/settings/tokens/new),复制生成的token序列,粘贴到sync-settings插件的setting里面    
-> (2) [再打开github的gist服务](gist.github.com)，创建一个gist，并复制生成gist id（注意这个id就是你创建的gist服务对应的URL中除去你的用户名，之后的部分，一串abcd之类），也粘贴到sync-settings插件的setting里面    
+> (1) 打开自己的github创建一个[a new person access token](https://github.com/settings/tokens/new),复制生成的token序列,粘贴到sync-settings插件的setting里面,如果已经有了之前backup的token，打开原来的token，点击Regenerate Token即可。    
+> (2) [再打开github的gist服务](https://gist.github.com/whaozl/155cdb802224eaf2aa5314eb3b71931e)，创建一个gist，并复制生成gist id（注意这个id就是你创建的gist服务对应的URL中除去你的用户名，之后的部分，一串abcd之类），也粘贴到sync-settings插件的setting里面    
 > (3) 配置完毕后，你可以在菜单栏中的Packages下看得到。
 
 ## 4. 其他插件
