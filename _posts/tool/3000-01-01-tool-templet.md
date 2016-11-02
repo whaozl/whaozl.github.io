@@ -2,7 +2,7 @@
 layout: "post"
 title: "文章发表模板"
 date: "2016-10-26 12:31"
-category: nlp
+category: tool
 tags: templet,paper
 comments: true
 keywords:

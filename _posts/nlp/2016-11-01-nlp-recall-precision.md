@@ -5,7 +5,7 @@ date: "2016-10-26 12:31"
 category: nlp
 tags: 准确率,召回率
 comments: true
-keywords:准确率,召回率,混淆矩阵
+keywords: 准确率,召回率,混淆矩阵
 description:
 ---
 
