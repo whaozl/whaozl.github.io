@@ -68,7 +68,7 @@ protobuf
 
 ### 4.Python2个版本切换工具
 
-【工具下载地址】http://download.csdn.net/download/zhulinniao/9702476
+【工具下载地址】[PYTHON系统环境变量PYTHON_HOME脚本修改程序](http://download.csdn.net/download/zhulinniao/9702476)
 
 【注意】两个版本要分别安装和升级pip，以及分别切换到各自下去安装依赖库
 
