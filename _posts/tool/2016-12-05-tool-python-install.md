@@ -19,7 +19,7 @@ python27win64安装：https://www.python.org/downloads/  安装中一路下一�
 > Path 前面加上  %PYTHON_HOME%;%PYTHON_HOME%\Scripts
 
 
-##2.升级pip
+## 2.升级pip
 
 python自带pip版本过久，需要升级安装：参考http://blog.sina.com.cn/s/blog_76cb58fb0102vfs0.html
 
@@ -57,6 +57,14 @@ protobuf
 【注意】python3用 pip3
 
 【在window下只需要修改环境变量PYTHON_HOME的值即可】我写了个程序，直接程序以管理员身份运行即可随意切换版本(其实就是通过脚本来修改PYTHON_HOME的对应PYTHON路径值(如C:\Python27)
+
+### 4.安装jupyter
+
+> pip install jupyter#安装notebook    
+> pip install jupyterlab#安装lab    
+> jupyter serverextension enable --py jupyterlab --sys-prefix    
+> jupyter lab#启动lab    
+> jupyter notebook#启动notebook    
 
 ### 4.Python2个版本切换工具
 
