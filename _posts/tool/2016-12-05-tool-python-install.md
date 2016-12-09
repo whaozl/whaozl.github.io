@@ -58,6 +58,9 @@ protobuf
 
 【在window下只需要修改环境变量PYTHON_HOME的值即可】我写了个程序，直接程序以管理员身份运行即可随意切换版本(其实就是通过脚本来修改PYTHON_HOME的对应PYTHON路径值(如C:\Python27)
 
+【注意】python除了numpy外，其他都可以通过pip install 库名去翻墙的互联网去下载并安装，但是numpy 请自己手动去http://www.lfd.uci.edu/~gohlke/pythonlibs下载(或者使用我下载好的cp27或cp35下的，因为发现64位python通过互联网下载的numpy安装不上，会报错)。然后进入下载的目录，执行：    
+pip install numpy-1.11.2+mkl-cp27-cp27m-win_amd64.whl
+
 ### 4.安装jupyter
 
 > pip install jupyter#安装notebook    
